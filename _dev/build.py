@@ -57,4 +57,13 @@ mf["theme_color"] = THEME
 mf["background_color"] = "#0a0a0a"
 json.dump(mf, open(mf_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
+# 管理画面（/admin）の「変更の履歴」：git の記録から作る
+import subprocess
+try:
+    out = subprocess.run(["git", "-C", ROOT, "log", "-n", "120", "--date=iso-strict", "--pretty=format:%h%x09%ad%x09%s"], capture_output=True, text=True).stdout
+    log = [dict(zip(("c", "at", "t"), l.split("\t", 2))) for l in out.splitlines() if l.count("\t") >= 2]
+except Exception:
+    log = []
+import datetime
+json.dump({"version": VER, "built": datetime.datetime.now(datetime.timezone.utc).isoformat(), "log": log}, open(os.path.join(ROOT, "changelog.json"), "w", encoding="utf-8"), ensure_ascii=False)
 print("index.html / sw.js / manifest.webmanifest を更新しました（" + VER + "）")

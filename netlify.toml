@@ -6,6 +6,18 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# 管理画面
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+    X-Robots-Tag = "noindex"
+
 # 開発用の元ファイル（_dev）は公開しない
 [[redirects]]
   from = "/_dev/*"
