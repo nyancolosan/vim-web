@@ -67,6 +67,7 @@ q("mjg").onclick=function(){box.hidden=true;TPLPLACE=S.place;var lb=q("tpla")&&q
 function say(m,bad){var e=q("mjst");if(!e)return;e.textContent=m;e.className="mjst "+(bad?"bad":"ok");e.hidden=false}
 function act(b){say("押しました。配置しています…");var p=MC[+b.getAttribute("data-mp")];if(!p){say("商品が見つかりません",1);return}
  var k=-1;try{try{document.activeElement&&document.activeElement.blur()}catch(x){}
+  if(!plan||typeof plan!=="object")plan={rw:4000,rd:3000,p:[]};["p","o","hm","cut","fl","views","cols","bms"].forEach(function(z){if(!Array.isArray(plan[z]))plan[z]=[]});if(!plan.rw)plan.rw=4000;if(!plan.rd)plan.rd=3000;if(!Array.isArray(items))items=[];
   var o=toItem(p);k=placeTpl(o);
   if(items[k]){items[k].jan=p.jan;items[k].url=p.url;if(p.price)items[k].price=p.price;try{save()}catch(x){}}
  }catch(err){say("置けませんでした（配置）："+(err&&err.message||err),1);return}
