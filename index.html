@@ -3268,7 +3268,7 @@ function billOpen(){billUI();document.getElementById("bill").hidden=false}
  try{BILL.lic=JSON.parse(localStorage.getItem("bimini-lic"))}catch(e){}billApply(BILL.lic,true);
  q("prob").onclick=billOpen;q("billx").onclick=function(){q("bill").hidden=true};
  q("billbuy").addEventListener("click",function(e){var b=e.target.closest("[data-plan]");if(!b)return;var lid=billLid(true);
-  busy(b,function(){return billApi("/checkout",{lid:lid,plan:b.getAttribute("data-plan")})}).then(function(d){if(d&&d.url)location.href=d.url},function(){q("billm").textContent="申し込みページを開けませんでした。通信状況を確認して、もう一度お試しください。"})});
+  busy(b,function(){return billApi("/checkout",{lid:lid,plan:b.getAttribute("data-plan")})}).then(function(d){if(d&&d.url)location.href=d.url},function(e){q("billm").textContent="申し込みページを開けませんでした。通信状況を確認して、もう一度お試しください。"+(e&&e.error?"（"+e.error+(e.detail?"："+e.detail:"")+"）":"")})});
  q("billpt").onclick=function(){var b=this;busy(b,function(){return billApi("/portal",{lid:billLid(false)})}).then(function(d){if(d&&d.url)location.href=d.url},function(){q("billm").textContent="手続きのページを開けませんでした。"})};
  q("billcp").onclick=function(){var t=q("billcode").value,b=this;try{navigator.clipboard.writeText(t).then(function(){lbl(b,"コピーしました")})}catch(e){q("billcode").select()}};
  q("billrs").onclick=function(){var v=q("billrc").value.replace(/[^0-9a-f]/gi,"").toLowerCase(),b=this;if(v.length!==32){q("billm").textContent="復元コードは32文字（ハイフンを除く）です。";return}

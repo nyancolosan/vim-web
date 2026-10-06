@@ -34,8 +34,8 @@ export default async (req, context) => {
   const cors = corsHeaders(req, env);
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
   if (!env.STRIPE_KEY) return json({ disabled: true }, 200, cors);
-  env.LIC = globalThis.__BIMINI_LIC || licStore();
   try {
+    env.LIC = globalThis.__BIMINI_LIC || licStore();
     if (url.pathname === "/webhook" && req.method === "POST") return await webhook(req, env);
     if (url.pathname === "/checkout" && req.method === "POST") return json(await checkout(await req.json(), env), 200, cors);
     if (url.pathname === "/license" && req.method === "GET") return json(await license(url.searchParams.get("lid"), env), 200, cors);
@@ -44,7 +44,7 @@ export default async (req, context) => {
   } catch (e) {
     // キーや個人情報はログに出さない
     console.error("error", e && e.code ? e.code : "unknown", url.pathname);
-    return json({ error: e && e.code ? e.code : "server_error" }, e && e.status ? e.status : 500, cors);
+    return json({ error: e && e.code ? e.code : "server_error", detail: e && e.detail ? e.detail : (e && !e.code ? String(e.message || "").replace(/(rk|sk|pk|whsec)_[A-Za-z0-9_*]+/g, "***").slice(0, 160) : undefined) }, e && e.status ? e.status : 500, cors);
   }
 };
 export const config = { path: "/api/*" };
@@ -156,7 +156,7 @@ async function stripe(env, method, path, params) {
   if (params) { init.headers["Content-Type"] = "application/x-www-form-urlencoded"; init.body = new URLSearchParams(params).toString(); }
   const r = await fetch(API + path, init);
   const d = await r.json();
-  if (!r.ok) { const e = new Error("stripe_error"); e.code = "stripe_" + (d.error && d.error.type || r.status); e.status = 502; throw e; }
+  if (!r.ok) { const e = new Error("stripe_error"); e.code = "stripe_" + (d.error && d.error.type || r.status); e.status = 502; e.detail = String(d.error && (d.error.code || d.error.message) || "").replace(/(rk|sk|pk|whsec)_[A-Za-z0-9_*]+/g, "***").slice(0, 160); throw e; }
   return d;
 }
 
