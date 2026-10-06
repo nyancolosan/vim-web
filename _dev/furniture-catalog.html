@@ -1012,6 +1012,12 @@ var MJ=[{name:"ソファA",w:650,d:650,h:430,fs:"sofa",sst:"b",col:"#9a9389"},{n
  {name:"シェルフC",w:880,d:282,h:720,fs:"shelf",st:"t",tiers:3,tex:"oak"},{name:"シェルフD",w:880,d:282,h:450,fs:"shelf",st:"t",tiers:2,tex:"oak"},{name:"シェルフE",w:880,d:282,h:1000,fs:"shelf",st:"t",tiers:4,tex:"oak"},
  {name:"シェルフF",w:420,d:285,h:1210,fs:"shelf",st:"s",tiers:3,tex:"oak"}];
 var NEWT=[
+ {g:"観葉植物",name:"パキラ",kind:"p",shape:"r",w:700,d:300,h:1300,pot:"white",glb:"pachira_aquatica_01"},
+ {g:"観葉植物",name:"観葉植物A",kind:"p",shape:"u",w:500,d:250,h:800,pot:"white",glb:"potted_plant_01"},
+ {g:"観葉植物",name:"観葉植物B",kind:"p",shape:"r",w:450,d:220,h:600,pot:"white",glb:"potted_plant_02"},
+ {g:"観葉植物",name:"観葉植物C",kind:"p",shape:"p",w:550,d:260,h:1000,pot:"white",glb:"potted_plant_04"},
+ {g:"観葉植物",name:"カラテア",kind:"p",shape:"w",w:600,d:240,h:600,pot:"white",glb:"calathea_orbifolia_01"},
+ {g:"観葉植物",name:"アンスリウム",kind:"p",shape:"t",w:450,d:200,h:550,pot:"white",glb:"anthurium_botany_01"},
  {g:"什器",name:"平台A",w:1800,d:900,h:700,fs:"table",tt:"m",tex:"oak"},
  {g:"什器",name:"平台B（低め）",w:1200,d:900,h:450,fs:"table",tt:"l",tex:"oak"},
  {g:"什器",name:"ネストテーブル",w:900,d:600,h:600,fs:"table",tt:"b",tex:"beech"},
@@ -1070,13 +1076,13 @@ var NEWT=[
  {g:"家電",name:"電子レンジA",w:440,d:350,h:260,fs:"ap",apt:"m"},
  {g:"家電",name:"空気清浄機A",w:250,d:250,h:500,fs:"ap",apt:"a"},
  {g:"家電",name:"サーキュレーターA",w:250,d:250,h:350,fs:"ap",apt:"c"}];
-var TPG=["什器","テーブル","ローテーブル","椅子","スツール・ベンチ","ソファ","デスク","ベッド","収納","照明","家電","その他"];
-function tplGroup(m){if(m.g)return m.g;if(/^(スツール|ベンチ)/.test(m.name||""))return"スツール・ベンチ";return({table:"テーブル",lt:"ローテーブル",chair:"椅子",bench:"スツール・ベンチ",c:"スツール・ベンチ",sofa:"ソファ",desk:"デスク",bed:"ベッド",shelf:"収納",l:"照明",ap:"家電"})[m.fs]||"その他"}
+var TPG=["什器","観葉植物","テーブル","ローテーブル","椅子","スツール・ベンチ","ソファ","デスク","ベッド","収納","照明","家電","その他"];
+function tplGroup(m){if(m.g)return m.g;if(m.kind==="p")return"観葉植物";if(/^(スツール|ベンチ)/.test(m.name||""))return"スツール・ベンチ";return({table:"テーブル",lt:"ローテーブル",chair:"椅子",bench:"スツール・ベンチ",c:"スツール・ベンチ",sofa:"ソファ",desk:"デスク",bed:"ベッド",shelf:"収納",l:"照明",ap:"家電"})[m.fs]||"その他"}
 function tplOptions(){var G={};function add(m,v){var g=tplGroup(m);(G[g]=G[g]||[]).push('<option value="'+v+'">'+m.name+'</option>')}
  NEWT.forEach(function(m,i){add(m,"n:"+i)});MJ.forEach(function(m,i){add(m,"m:"+i)});LMP.forEach(function(m,i){add(m,"l:"+i)});SMP.forEach(function(m,i){add(m,"s:"+i)});
  var Y=mymList();return'<option value="">テンプレートを選ぶ…</option>'+(Y.length?'<optgroup label="マイモデル（AIでつくった3D）">'+Y.map(function(m,i){return'<option value="y:'+i+'">'+esc(m.name)+'</option>'}).join("")+'</optgroup>':'')+TPG.filter(function(g){return G[g]}).map(function(g){return'<optgroup label="'+g+'">'+G[g].join("")+'</optgroup>'}).join("")}
 document.getElementById("mj").innerHTML=tplOptions();
-var TPLF=["col","sst","st","tiers","tex","wtex","wcol","tst","lts","bst","lst","tt","cht","bnt","dkt","apt","price","ccol","kind","shape","pot","m3d"];
+var TPLF=["glb","col","sst","st","tiers","tex","wtex","wcol","tst","lts","bst","lst","tt","cht","bnt","dkt","apt","price","ccol","kind","shape","pot","m3d"];
 function tplItem(sm){var n={name:sm.name,w:sm.w,d:sm.d,h:sm.h,q:1,img:"",fs:sm.fs};TPLF.forEach(function(f){if(sm[f]!==undefined)n[f]=JSON.parse(JSON.stringify(sm[f]))});if(sm.sst||sm.st||sm.tex)n.mj=1;return n}
 function addPreset(sm){var n=tplItem(sm),k=-1;
  items.forEach(function(it,i){if(k<0&&!it.name&&!it.w&&!it.d&&!it.h&&!it.img)k=i});
@@ -1085,7 +1091,7 @@ function addPreset(sm){var n=tplItem(sm),k=-1;
 function placeTpl(e){var k=-1;items.forEach(function(it,i){if(k<0&&it.name===e.name&&(it.fs||"")===(e.fs||"")&&(it.kind||"")===(e.kind||""))k=i});
  if(k<0)k=addPreset(e);else{var c=plan.p.filter(function(p){return p.n===k}).length;if(c>=(+items[k].q||1)){items[k].q=c+1;save();render()}}
  var cx=Math.round(plan.rw/2),cy=Math.round(plan.rd/2),z=0;plan.p.forEach(function(p){if(Math.abs(p.x-cx-z)<50&&Math.abs(p.y-cy-z)<50)z+=150});
- plan.p.push({n:k,x:cx+z,y:cy+z,r:0});sel=plan.p.length-1;psave();rplan();after3d();try{ev("place",{fs:e.fs||e.kind||""})}catch(x){}return k}
+ plan.p.push({n:k,x:cx+z,y:cy+z,r:0});sel=plan.p.length-1;psave();rplan();after3d();if(e.glb)glbSync(e.glb);try{ev("place",{fs:e.fs||e.kind||""})}catch(x){}return k}
 function tplAdd(v){if(!v){toast("家具を選んでください。");return}var e=v[0]==="y"?mymList()[+v.slice(2)]:v[0]==="s"?SMP[+v.slice(2)]:v[0]==="l"?LMP[+v.slice(2)]:v[0]==="n"?NEWT[+v.slice(2)]:MJ[+v.slice(2)];if(!e)return;if(TPLPLACE){placeTpl(e);toast(e.name+" を置きました。ドラッグで動かせます。");return}addPreset(e);toast(e.name+" を一覧に追加しました。"+(v[0]==="y"&&!isPro()?"（形の表示は有料プランです）":""))}
 var TPLPLACE=false;
 document.getElementById("addsmp").onclick=function(){addPreset(SMP[+document.getElementById("smp").value])};
@@ -1522,7 +1528,23 @@ function leafTex(k){T.lt=T.lt||{};if(T.lt[k])return T.lt[k];var W0=128,H0=256,c=
   for(var i=1;i<11;i++){var vy=H0-i*H0/11;[-1,1].forEach(function(sg){x.strokeStyle="rgba(255,255,255,.42)";x.lineWidth=1.6;x.beginPath();x.moveTo(W0/2,vy);x.quadraticCurveTo(W0/2+sg*W0*.25,vy-14,W0/2+sg*W0*.48,vy-34);x.stroke()})}
   for(i=0;i<500;i++){x.fillStyle="rgba(0,0,0,"+(R()*.05)+")";x.fillRect(R()*W0,R()*H0,2,2)}}
  var t=new THREE.CanvasTexture(c);T.lt[k]=t;return t}
+/* ===== glTF（Poly Haven の観葉植物など）：公開時に models/ に同梱したものを読む ===== */
+var GLB={c:{},p:{},bad:{},L:null};
+function glbLoader(){if(GLB.L)return GLB.L;GLB.L=(THREE.GLTFLoader?Promise.resolve():new Promise(function(res,rej){var sc=document.createElement("script");sc.src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)}))
+ .then(function(){return new THREE.GLTFLoader()});GLB.L.catch(function(){GLB.L=null});return GLB.L}
+function glbLoad(id){if(GLB.c[id])return Promise.resolve(GLB.c[id]);if(GLB.p[id])return GLB.p[id];
+ GLB.p[id]=glbLoader().then(function(L){return new Promise(function(res,rej){L.load("models/"+id+"/"+id+".gltf",res,undefined,rej)})}).then(function(gl){var s=gl.scene;
+  s.traverse(function(o){if(!o.isMesh)return;o.castShadow=true;o.receiveShadow=true;var M=o.material;(Array.isArray(M)?M:[M]).forEach(function(m){m._lin=1;if(m.envMapIntensity!==undefined)m.envMapIntensity*=.35})});
+  var bb=new THREE.Box3().setFromObject(s);GLB.c[id]={s:s,sz:bb.getSize(new THREE.Vector3()),ct:bb.getCenter(new THREE.Vector3()),min:bb.min.clone()};return GLB.c[id]})
+ .catch(function(e){delete GLB.p[id];GLB.bad[id]=1;throw e});return GLB.p[id]}
+/* 高さに合わせて全体を比例で大きさを変え、床に置く（足もと中心が原点） */
+function glbObj(it){var c=GLB.c[it.glb];if(!c)return null;var k=(+it.h?+it.h/1000:c.sz.y)/(c.sz.y||1),o=c.s.clone(true),g=new THREE.Group();o.scale.setScalar(k);o.position.set(-c.ct.x*k,-c.min.y*k,-c.ct.z*k);g.add(o);g.userData.glb=1;return g}
+/* 初めて読んだとき、モデルの実寸を一覧に入れる（葉張り・鉢径の目安・樹高） */
+function glbFit(it){var c=GLB.c[it.glb];if(!c||it.glbz)return false;it.h=Math.round(c.sz.y*100)*10;it.w=Math.round(Math.max(c.sz.x,c.sz.z)*100)*10;it.d=Math.max(120,Math.round(Math.min(c.sz.x,c.sz.z)*45)*10);it.glbz=1;return true}
+function glbSync(id){if(GLB.bad[id])return;glbLoad(id).then(function(){var ch=false;items.forEach(function(x){if(x.glb===id&&glbFit(x))ch=true});if(ch){save();render();table();if(!document.getElementById("v2").hidden)rplan()}
+ if(!document.getElementById("v3").hidden)r3d()}).catch(function(){})}
 function plant3d(sc,pc,it){
+ if(it.glb&&!GLB.bad[it.glb]){var gg=glbObj(it);if(gg){gg.position.set(pc.x/1000,0,pc.y/1000);gg.rotation.y=-(pc.r||0)*Math.PI/180;sc.add(gg);return}glbSync(it.glb)}
  var W=(+it.w||500)/1000,H=(+it.h||1000)/1000,sh=it.shape||"r",ph=Math.min(.35,Math.max(.1,H*.2)),pr=(+it.d?it.d/1000:Math.min(W*.5,.3))/2,g=new THREE.Group(),
  sd=((pc.n+1)*9301+(it.name||"").length*4973)%4294967296,rest=H-ph,sy=ph*.93,i,j,k;
  function R(){sd=(sd*1664525+1013904223)%4294967296;return sd/4294967296}
@@ -3295,10 +3317,11 @@ function tplOpen(){var q=function(i){return document.getElementById(i)};var L=tp
  q("tpld").hidden=true;q("tplg").hidden=false;q("tpl").hidden=false;tplGrid()}
 function tplGrid(){var g=document.getElementById("tplg"),L=tplList().filter(function(e){return e.g===TPLS.g});
  L.sort(function(a,b){return a.m.name.localeCompare(b.m.name,"ja")});
- g.innerHTML=L.map(function(e){var u=TPLS.c[e.id+"|"+e.m.name];return'<button type="button" class="tplcard" data-id="'+e.id+'"><span class="tpli"'+(u?' style="background-image:url('+u+')"':'')+'></span><b>'+esc(e.m.name)+'</b><small>'+tplSize(e.m)+'</small></button>'}).join("")||'<p class="lead">ありません。</p>';
+ g.innerHTML=L.map(function(e){var u=e.m.glb?"models/"+e.m.glb+"/thumb.png":TPLS.c[e.id+"|"+e.m.name];return'<button type="button" class="tplcard" data-id="'+e.id+'"><span class="tpli"'+(u?' style="background-image:url('+u+')"':'')+'></span><b>'+esc(e.m.name)+'</b><small>'+tplSize(e.m)+'</small></button>'}).join("")||'<p class="lead">ありません。</p>';
  [].forEach.call(document.querySelectorAll("#tplc [data-g]"),function(b){b.className=b.getAttribute("data-g")===TPLS.g?"on":""});
  if(typeof THREE==="undefined"){g.classList.add("noimg");return}
- TPLS.q=L.filter(function(e){return!TPLS.c[e.id+"|"+e.m.name]});tplRun()}
+ TPLS.q=L.filter(function(e){return!e.m.glb&&!TPLS.c[e.id+"|"+e.m.name]});
+ L.filter(function(e){return e.m.glb}).forEach(function(e){var im=new Image();im.onerror=function(){TPLS.q.push(e);tplRun()};im.src="models/"+e.m.glb+"/thumb.png"});tplRun()}
 function tplRun(){if(TPLS.busy)return;TPLS.busy=true;(function step(){var e=TPLS.q.shift();if(!e||document.getElementById("tpl").hidden){TPLS.busy=false;return}
  var k=e.id+"|"+e.m.name,u=null;try{u=objThumb(tplItem(e.m),240,180)}catch(x){}if(u){TPLS.c[k]=u;var b=document.querySelector('#tplg [data-id="'+e.id+'"] .tpli');if(b)b.style.backgroundImage="url("+u+")"}setTimeout(step,0)})()}
 function tplShow(id){var e=tplGet(id);if(!e)return;TPLS.cur=e;var q=function(i){return document.getElementById(i)},o=tplItem(e.m);
