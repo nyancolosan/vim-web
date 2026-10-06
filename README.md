@@ -1,52 +1,56 @@
-# BIMini Web版（Netlify）サブスク設定手順
+# BIMini Web版 3.0（Netlify）
 
-このフォルダは、アプリ本体と課金サーバー（`netlify/functions/api.mjs`）を1つにまとめたものです。
-Claudeに「Netlify」を接続すると、公開（デプロイ）はClaudeが行えます。キーの入力だけはご自身でお願いします。
+置ける？ 通れる？ いくら？ が、その場でわかる。実寸で確かめるインテリア・売場プランナーです。
+アプリ本体とサーバー（`netlify/functions/api.mjs`）を1つにまとめています。
 
 | 場所 | 中身 |
 |---|---|
-| `index.html` ほか | アプリ本体 |
-| `netlify/functions/api.mjs` | 課金サーバー（申し込み・通知・契約確認・解約ページ） |
-| `netlify.toml` / `package.json` | Netlifyの設定 |
+| `index.html` ほか | アプリ本体（`_dev/furniture-catalog.html` から組み立てたもの） |
+| `netlify/functions/api.mjs` | サーバー（申し込み・通知・契約確認・解約ページ・クラウド同期・利用状況） |
+| `config.js` | サーバーの場所と、申し込み画面に出す価格（表示用） |
+| `_dev/` | 開発用の元ファイル（公開されません） |
 
-## 1. 公開
-- Claudeが、このフォルダの中身でNetlifyのサイトを作って公開します。
-- 公開URL（例：`https://bimini.netlify.app/`）を控えます。
-- この時点では課金は止まっていて、「PRO」ボタンで自由に切り替えられます。
+## 3.0 で変わったこと
+- はじめの画面で「room（部屋）／vmd（売場）」と広さ（畳・坪）を選び、そのまま「家具を置く」へ進む流れに
+- 下のタブは「部屋・家具・保存・渡す」。平面図と3Dは「部屋」の中で切り替え
+- 旧 Standard／Advisor は廃止。room／vmd はプロジェクトごとの種類（旧データの売場仕様は vmd として読み込み）
+- プランは Free／Plus／Pro。基本の色・床材は無料、見積・お客さま表示・vmd は Pro
+- Plus・Pro は復元コードでクラウド同期、Web版は匿名の利用状況を記録
+- テーマカラー・フォント・画面レイアウト・β表示の設定は廃止（黒・白基調で固定）
 
-## 2. Stripe（テスト環境）
-- 商品「BIMini PRO」（毎月 1,000円）と価格は、接続済みのStripeでClaudeが作れます。
-- 制限付きキー（rk_test_…）はご自身で作ります。開発者 → APIキー →「制限付きのキーを作成」で、次の権限を付けます。ほかはすべて「なし」にします。
-  - Checkout Sessions：書き込み
-  - Customer portal：書き込み
-  - Subscriptions：読み取り
-- 設定 → Billing → カスタマーポータルで、「キャンセル」と「支払い方法の更新」をオンにします。
+## アプリを直すとき
+1. `_dev/furniture-catalog.html` を直す（`_dev/patches/` に 3.0 の変更内容があります）
+2. `python3 _dev/build.py 3.0.1` で `index.html` と `sw.js` を更新（番号は毎回上げる）
+3. push すると Netlify が公開します
 
-## 3. キーの入力（ご自身で・チャットには貼らない）
-Netlify → サイト →「Site configuration」→「Environment variables」→「Add a variable」
+## プランと Stripe の設定
+Stripe に次の価格を作り、価格IDを Netlify の Environment variables に入れます（値はチャットに貼らないこと）。
 
-| 名前 | 値 | 備考 |
-|---|---|---|
-| `STRIPE_KEY` | rk_test_… | 「Contains secret values」にチェック |
-| `STRIPE_WEBHOOK_SECRET` | whsec_… | 4で作ったもの。「Contains secret values」にチェック |
-| `PRICE_PRO` | price_… | Claudeが作った価格ID |
+| 名前 | 中身 |
+|---|---|
+| `PRICE_PLUS_M` | Plus 月額 480円（継続・毎月） |
+| `PRICE_PLUS_Y` | Plus 年額 3,800円（継続・毎年） |
+| `PRICE_PLUS_PASS` | Plus 30日パス 600円（1回払い） |
+| `PRICE_PRO` | Pro 月額 2,980円（継続・毎月） |
+| `PRICE_PRO_LEGACY` | これまでの PRO 月額1,000円の価格ID（今の契約者を Pro のまま守る） |
+| `STRIPE_KEY` | 制限付きキー（Checkout Sessions：書き込み／Customer portal：書き込み／Subscriptions：読み取り） |
+| `STRIPE_WEBHOOK_SECRET` | Webhook の署名シークレット |
+| `OWNER_LIDS` | （任意）支払いなしで Pro にする復元コード |
+| `STATS_KEY` | （任意）利用状況を見るための合言葉（16文字以上） |
 
-入力したら、Claudeに「もう一度公開して」と伝えてください。値は次の公開から効きます。
+- Plus の価格に当てはまらない契約は Pro として扱います。`PRICE_PRO_LEGACY` を入れなくても今の契約者は Pro のままです。
+- カスタマーポータルで「キャンセル」「支払い方法の更新」に加えて「プランの変更」をオンにし、Plus 月額・年額と Pro を切り替え先に入れます（Plus → Pro の変更はここで行います）。
+- Webhook のイベント：`checkout.session.completed` `checkout.session.async_payment_succeeded` `customer.subscription.created` `customer.subscription.updated` `customer.subscription.deleted` `customer.subscription.paused` `customer.subscription.resumed` `invoice.paid` `invoice.payment_failed`
+- `config.js` の `prices` は表示用です。Stripe の価格と合わせてください。
 
-## 4. Webhook
-Stripe → 開発者 → Webhook → 送信先を追加
-- URL：`https://（公開URL）/api/webhook`
-- イベント：`checkout.session.completed` `checkout.session.async_payment_succeeded` `customer.subscription.created` `customer.subscription.updated` `customer.subscription.deleted` `customer.subscription.paused` `customer.subscription.resumed` `invoice.paid` `invoice.payment_failed`
-- 署名シークレット（whsec_…）を、3の `STRIPE_WEBHOOK_SECRET` に入れます。
+## 利用状況を見る
+`https://（公開URL）/api/stats?key=（STATS_KEY）&days=7`
+はじめの流れ（開いた → 広さを選んだ → 家具を置いた → 3Dを見た → 保存 → 渡す → 申し込み画面 → 申し込み）の端末数と、操作ごとの回数が出ます。
 
-## 5. テスト
-- 「PRO」→「申し込む」で、テストカード `4242 4242 4242 4242` を使って申し込みます。
-- PROが有効になること、解約、別のブラウザで「復元コード」が使えることを確かめます。
-
-## 6. 本番へ
-- `tokushoho.html` の【　】を書き換えてから、もう一度公開します。
-- Stripeを本番に切り替えて、2と4を作り直し、Netlifyの値を本番のものに差し替えて、もう一度公開します。
+## 本番の前に
+- `tokushoho.html` の事業者名・所在地・電話番号を記入してください（いまは「請求があった場合は開示」）。
+- `privacy.html` の内容（クラウド同期・利用状況の記録）を確認してください。
 
 ## 注意
-- NetlifyのDrop（ドラッグ＆ドロップでの公開）では、課金サーバーが動きません。公開はClaude（Netlify接続）か、GitHub連携で行ってください。
-- キーが漏れたかもしれないときは、Stripeですぐにキーをロール（作り直し）してください。
+- Netlify の Drop（ドラッグ＆ドロップでの公開）ではサーバーが動きません。GitHub 連携で公開してください。
+- キーが漏れたかもしれないときは、Stripe ですぐにキーをロール（作り直し）してください。
