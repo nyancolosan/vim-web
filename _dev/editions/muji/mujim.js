@@ -51,16 +51,28 @@ F4.mjch=function(K,it,W,H,D){var o=O(it),w=K.wood("oak"),pl=.05,n=o.r||Math.max(
 F4.mjwall=function(K,it,W,H,D){var o=O(it),w=K.wood("oak"),t=.015,y0=o.y0==null?(H<.25?1.1:.9):o.y0;K.box(W,t,D,0,y0+t/2,0,w,.003);K.box(W,t,D,0,y0+H-t/2,0,w,.003);[-1,1].forEach(function(a){K.box(t,H,D,a*(W/2-t/2),y0+H/2,0,w,.003)});K.box(W-2*t,H-2*t,.006,0,y0+H/2,-D/2+.003,w,.002)};
 
 /* ---------- ベッド ---------- */
-/* 脚付マットレス：マットレスに細い木の脚 */
-F4.mjlm=function(K,it,W,H,D){var mt=Math.min(.2,H*.56),lh=H-mt,w=K.wood("beech"),cv=K.fab("plain",it.col||"#e3e1dc");
- var xs=W>1.1?[-1,0,1]:[-1,1];xs.forEach(function(a){[-1,1].forEach(function(b){K.leg([a*(W/2-.12),0,b*(D/2-.14)],[a*(W/2-.12),lh,b*(D/2-.14)],.018,.022,w)})});if(W>1.1)[-1,1].forEach(function(b){K.leg([0,0,b*.0],[0,lh,b*.0],.018,.022,w)});
- K.cush(W,mt,D,0,lh+mt/2,0,cv,.03,.006);K.box(W+.002,.012,D+.002,0,lh+mt*.5,0,K.col("#cfccc6",.9),.006)};
-/* 木製ベッド：低いフレームとマットレス、ヘッドボード。hb: p=板 r=もたれかかれる（厚く傾いた板） */
-F4.mjbed=function(K,it,W,H,D){var o=O(it),w=K.wood("oak"),fh=.3,mt=.2,hb=o.hb||"p",hd=hb==="r"?.1:.035;
- sqLegs(K,W,D-hd,fh-.12,.03,.05,w);K.box(W,.12,D-hd,0,fh-.06,hd/2,w,.005);
- K.cush(W-.06,mt,D-hd-.05,0,fh+mt/2-.02,hd/2,K.col("#f4f2ee",.9),.04,.008);K.cush(W-.05,.03,(D-hd)*.62,0,fh+mt-.005,hd/2+(D-hd)*.17,K.fab("plain",it.ccol||"#d9d4ca"),.015,.01);
- var np=W>1.3?2:1,pw=np===2?W*.4:W*.62;for(var i=0;i<np;i++)K.cush(pw,.11,.34,np===2?(i?1:-1)*W*.23:0,fh+mt+.03,-D/2+hd+.24,K.fab("plain","#efede8"),.05,.03);
- if(H>fh+mt+.05){if(hb==="r"){var g=K.box(W,H-.02,hd,0,(H-.02)/2+.02,-D/2+hd/2,w,.01);g.rotation.x=-.12;g.position.z+=.02}else K.box(W,H,hd,0,H/2,-D/2+hd/2,w,.006)}};
+/* 別売りの脚（脚付マットレス・ベッド共通）：lgm o=オーク w=ウォールナット s=スチール / lgh 12・20・26cm。商品の高さは本体のみ、脚の分だけ持ち上げる */
+function bedLegH(it){var v=+it.lgh;return(v===12||v===26?v:20)/100}
+function bedLeg(K,it,x,z,h){var m=it.lgm||"o";if(m==="s")K.cyl(.014,.014,h,x,h/2,z,K.col("#2a2a2b",.4,.35),16);else K.leg([x,0,z],[x,h,z],.017,.022,K.tx(m==="w"?"walnut":"oak"),20)}
+/* 脚付マットレス：マットレス本体の下に脚（長さ方向に3列、幅が広いものは中央にも） */
+F4.mjlm=function(K,it,W,H,D){var L=bedLegH(it),cv=K.fab("plain",it.col||"#e3e1dc"),xs=W>1.1?[-1,0,1]:[-1,1];
+ xs.forEach(function(a){[-1,0,1].forEach(function(b){bedLeg(K,it,a*(W/2-.12),b*(D/2-.18),L)})});
+ K.box(W-.04,.03,D-.04,0,L+.015,0,K.col("#3a3a3a",.7),.004);K.cush(W,H-.02,D,0,L+.02+(H-.02)/2,0,cv,.035,.008);K.box(W+.002,.01,D+.002,0,L+H*.55,0,K.col("#cfccc6",.9),.005)};
+/* 木製ベッドフレーム：脚の上にフレーム、ヘッドボード。高さは本体（ヘッドボード上端まで）のみ。マットレスは別売り（参考に表示） hb: p=板 r=もたれかかれる */
+F4.mjbed=function(K,it,W,H,D){var o=O(it),w=K.wood("oak"),L=bedLegH(it),hb=o.hb||"p",hd=hb==="r"?.1:.035,fd=D-hd,fz=hd/2,rh=.14,t=.03;
+ [-1,1].forEach(function(a){[-1,1].forEach(function(b){bedLeg(K,it,a*(W/2-.06),fz+b*(fd/2-.08),L)})});bedLeg(K,it,0,fz,L);
+ [-1,1].forEach(function(a){K.box(t,rh,fd,a*(W/2-t/2),L+rh/2,fz,w,.004)});K.box(W,rh,t,0,L+rh/2,D/2-t/2,w,.004);
+ for(var i=0;i<9;i++)K.box(W-2*t,.015,.07,0,L+.05,fz-fd/2+.1+i*(fd-.2)/8,w,.002);
+ var mt=.2,my=L+.06;K.cush(W-2*t-.01,mt,fd-t-.02,0,my+mt/2,fz-t/2,K.col("#f4f2ee",.9),.04,.008);K.cush(W-2*t,.03,fd*.62,0,my+mt+.01,fz+fd*.17,K.fab("plain",it.ccol||"#d9d4ca"),.015,.01);
+ var np=W>1.3?2:1,pw=np===2?W*.4:W*.62;for(var j=0;j<np;j++)K.cush(pw,.11,.34,np===2?(j?1:-1)*W*.23:0,my+mt+.05,-D/2+hd+.24,K.fab("plain","#efede8"),.05,.03);
+ if(hb==="r"){var g=K.box(W,H,hd,0,L+H/2,-D/2+hd/2+.02,w,.01);g.rotation.x=-.1}else K.box(W,H,hd,0,L+H/2,-D/2+hd/2,w,.006)};
+F4OPT.mjlm=F4OPT.mjbed=[["lgm","脚（別売り）",[["o","オーク"],["w","ウォールナット"],["s","スチール"]]],["lgh","脚の高さ",[["20","20cm"],["12","12cm"],["26","26cm"]]]];
+/* スタッキングシェルフは横置きにもできる（置き方を変えると幅と高さが入れ替わる） */
+F4.mjssh=function(K,it,W,H,D){F4.mjss(K,it,W,H,D)};
+F4OPT.mjssh=[["lay","置き方",[["v","縦置き"],["h","横置き"]]]];
+window.mjLay=function(it){if(!it||it.f4!=="mjssh")return false;var want=it.lay==="h",cur=!!it.layH;if(want===cur)return false;var w=it.w;it.w=it.h;it.h=w;it.layH=want;return true};
+window.mjTotalH=function(it){if(!it||(it.f4!=="mjlm"&&it.f4!=="mjbed"))return null;return(+it.h||0)+bedLegH(it)*1000};
+if(typeof TPLF!=="undefined")["lgm","lgh","lay","layH","mjv"].forEach(function(k){if(TPLF.indexOf(k)<0)TPLF.push(k)});
 
 /* ---------- ソファ ---------- */
 /* arm: w=幅広アーム n=なし t=木のフレーム / leg: s=短い木脚 h=高い木脚（リビングでもダイニングでも） f=床置き */
@@ -147,7 +159,7 @@ window.mjShape=function(p){var n=p.name+" "+(p.sub||""),c=p.cat,o={},f="",fs="";
   else if(/手軽に組み立てられる木製シェルフ/.test(n)){f="mjus";o.mt="p";o.x=0;o.n=p.tiers||0}
   else if(/スタッキングチェスト/.test(n)){f="mjsc";o.c=/ハーフ/.test(n)?2:1}
   else if(/スタッキングキャビネット/.test(n)){f="mjss";o.cells=[];var cc=Math.max(1,Math.round(p.w/420));for(var i=0;i<cc;i++)o.cells.push([i,0,i%2?"r":"d"])}
-  else if(/スタッキングシェルフ/.test(n)){f="mjss";o.bk=/背板/.test(n)?1:0}
+  else if(/スタッキングシェルフ/.test(n)){f="mjssh";o.bk=/背板/.test(n)?1:0}
   else if(/家具/.test(n)&&/壁/.test(n)){f="mjwall"}
   else if(/チェスト|引出/.test(n)){f="mjch"}
   else if(/キャビネット|扉/.test(n)){f="mjcab";o.g=/ガラス/.test(n)?1:0}

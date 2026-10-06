@@ -29,11 +29,11 @@ MC.forEach(function(p,i){p._i=i;p._k=norm(p.name+" "+(p.sub||"")+" "+(p.note||""
 function wood(n){return/ウォールナット/.test(n)?"walnut":/オーク/.test(n)?"oak":/タモ|アッシュ/.test(n)?"ash":/パイン/.test(n)?"pine":/ラバーウッド/.test(n)?"rubber":/チーク/.test(n)?"teak":/メープル/.test(n)?"maple":/ブナ/.test(n)?"beech":/チェリー/.test(n)?"cherry":/スチール|ステンレス/.test(n)?"":"oak"}
 /* 商品 → VIM の家具（形は近いものを選び、寸法は商品のまま） */
 function toItem(p){var n=p.name,w=wood(n),o={name:n,w:p.w,d:p.d,h:p.h,price:p.price||"",jan:p.jan,url:p.url};if(w)o.wtex=w;
- var m=window.mjShape?mjShape(p):null;if(m&&m.f4){o.f4=m.f4;o.fs=m.fs;o.mj=m.mj;if(m.col)o.col=m.col;if(m.wtex)o.wtex=m.wtex;if(m.f4==="round"||m.f4==="bent")o.wtex=w||"oak";if(/スチール|ステンレス/.test(n)&&!/材棚|天板|材デスク/.test(n))delete o.wtex}
+ var m=window.mjShape?mjShape(p):null;if(m&&m.f4){o.f4=m.f4;o.fs=m.fs;o.mj=m.mj;if(m.col)o.col=m.col;if(m.wtex)o.wtex=m.wtex;o.mjv=2;if(m.f4==="round"||m.f4==="bent")o.wtex=w||"oak";if(/スチール|ステンレス/.test(n)&&!/材棚|天板|材デスク/.test(n))delete o.wtex}
  else o.fs={sofa:"sofa",table:"table",lt:"lt",desk:"desk",chair:"chair",bench:"bench",bed:"bed",shelf:"shelf",rug:"g"}[p.cat]||"shelf";
  return o}
 /* 以前に置いた無印良品の商品も、新しい3Dモデルに */
-(function(){try{var ch=0,J={};MC.forEach(function(p){J[p.jan]=p});items.forEach(function(it){var p=it&&it.jan&&J[it.jan];if(!p||it.mj)return;var o=toItem(p);["f4","fs","mj","col","wtex"].forEach(function(k){if(o[k]!==undefined)it[k]=o[k];else delete it[k]});ch++});if(ch){save();try{render();rplan();after3d()}catch(x){}}}catch(e){}})();
+(function(){try{var ch=0,J={};MC.forEach(function(p){J[p.jan]=p});items.forEach(function(it){var p=it&&it.jan&&J[it.jan];if(!p||(it.mj&&it.mjv===2))return;var o=toItem(p);["f4","fs","mj","col","wtex","w","h"].forEach(function(k){if(o[k]!==undefined)it[k]=o[k];else delete it[k]});delete it.lay;delete it.layH;it.mjv=2;ch++});if(ch){save();try{render();rplan();after3d()}catch(x){}}}catch(e){}})();
 function find(){var t=norm(S.q).split(/\s+/).filter(Boolean),mw=+S.w||0,md=+S.d||0;
  var r=MC.filter(function(p){return(S.cat==="all"||p.cat===S.cat)&&t.every(function(x){return p._k.indexOf(x)>=0})&&(!mw||p.w<=mw)&&(!md||p.d<=md)});
  if(S.sort==="pa")r.sort(function(a,b){return(a.price||9e9)-(b.price||9e9)});else if(S.sort==="pd")r.sort(function(a,b){return(b.price||0)-(a.price||0)});else if(S.sort==="w")r.sort(function(a,b){return a.w-b.w});
@@ -79,6 +79,12 @@ var tb=q("tplb");if(tb){tb.onclick=function(){open(true)};var l1=tb.querySelecto
 ["plb","plb3"].forEach(function(id){var b=q(id),l=b&&b.querySelector(".lb");if(l)l.textContent="無印良品の商品を置く";else if(b&&!b.children.length)b.textContent="無印良品の商品を置く"});
 /* ロゴの下に「for MUJI staff」 */[].forEach.call(document.querySelectorAll(".stmbrand,.verlogo"),function(el){if(el.querySelector(".mjsub"))return;var t=document.createElement("small");t.className="mjsub";t.textContent="for MUJI staff — VIM";el.appendChild(t)});
 /* 6) 見積書に JAN コード */
-if(typeof dimText==="function"){var oDT=dimText;dimText=function(it){var r=oDT(it);if(it&&it.jan)r=r.concat(["JAN "+it.jan]);return r}}
+if(typeof dimText==="function"){var oDT=dimText;dimText=function(it){var r=oDT(it),th=window.mjTotalH&&mjTotalH(it);if(th)r=r.concat(["脚"+Math.round(th-(+it.h||0))/10+"cm込みの総高さ H"+Math.round(th)+" mm"]);if(it&&it.f4==="mjssh"&&it.lay==="h")r=r.concat(["横置き"]);if(it&&it.jan)r=r.concat(["JAN "+it.jan]);return r}}
+/* 棚の詳細に「置き方（縦置き・横置き）」を出す（スタッキングシェルフ） */
+function layUI(){try{items.forEach(function(it,i){if(!it||it.f4!=="mjssh")return;var g=document.getElementById("grid");if(!g||g.querySelector('select[data-f="lay"][data-i="'+i+'"]'))return;var a=g.querySelector('select[data-f="st"][data-i="'+i+'"]');var host=a&&a.closest("label");if(!host)return;
+ var l=document.createElement("label");l.innerHTML='置き方<select data-f="lay" data-i="'+i+'"><option value="v"'+(it.lay==="h"?"":" selected")+'>縦置き</option><option value="h"'+(it.lay==="h"?" selected":"")+'>横置き</option></select>';host.parentNode.insertBefore(l,host)})}catch(e){}}
+if(typeof render==="function"){var oRender=render;render=function(){var r=oRender.apply(this,arguments);layUI();return r}}
+/* 置き方（縦・横）を変えたら幅と高さを入れ替える */
+(function(){var g=document.getElementById("grid");if(!g)return;g.addEventListener("change",function(e){var t=e.target,i=t.getAttribute&&t.getAttribute("data-i"),f=t.getAttribute&&t.getAttribute("data-f");if(i===null||f!=="lay")return;var it=items[+i];if(!it)return;it.lay=t.value;if(window.mjLay&&mjLay(it)){save();try{render();rplan();after3d()}catch(x){}}else save()})})();
 window.mujiOpen=open;window.__toItem=toItem;
 })();
