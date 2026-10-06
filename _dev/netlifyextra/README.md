@@ -18,6 +18,12 @@
 - Plus・Pro は復元コードでクラウド同期、Web版は匿名の利用状況を記録
 - テーマカラー・フォント・画面レイアウト・β表示の設定は廃止（黒・白基調で固定）
 
+## 3.1 で変わったこと
+- 3Dの家具をなめらかな角丸に作り直し（パーツごとの色・素材はそのまま）。色の扱いを正しく（sRGB）し、光と影をやわらかく
+- 選んだ家具の上に回転ハンドル（平面図はつかんで回す、3Dは「回転」を左右にドラッグ）。30°の近くで吸い付く
+- 戻す・やり直しをヘッダーへ、3Dの視点ボタンを「全体・真上・歩く・その他」に整理
+- Pro を月額1,480円に
+
 ## アプリを直すとき
 1. `_dev/furniture-catalog.html` を直す（`_dev/patches/` に 3.0 の変更内容があります）
 2. `python3 _dev/build.py 3.0.1` で `index.html` と `sw.js` を更新（番号は毎回上げる）
@@ -31,7 +37,7 @@ Stripe に次の価格を作り、価格IDを Netlify の Environment variables 
 | `PRICE_PLUS_M` | Plus 月額 480円（継続・毎月） |
 | `PRICE_PLUS_Y` | Plus 年額 3,800円（継続・毎年） |
 | `PRICE_PLUS_PASS` | Plus 30日パス 600円（1回払い） |
-| `PRICE_PRO` | Pro 月額 2,980円（継続・毎月） |
+| `PRICE_PRO` | Pro 月額 1,480円（継続・毎月） |
 | `PRICE_PRO_LEGACY` | これまでの PRO 月額1,000円の価格ID（今の契約者を Pro のまま守る） |
 | `STRIPE_KEY` | 制限付きキー（Checkout Sessions：書き込み／Customer portal：書き込み／Subscriptions：読み取り） |
 | `STRIPE_WEBHOOK_SECRET` | Webhook の署名シークレット |
