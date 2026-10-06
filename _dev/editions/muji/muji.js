@@ -71,7 +71,7 @@ function act(b){say("押しました。配置しています…");var p=MC[+b.ge
   var o=toItem(p);k=placeTpl(o);
   if(items[k]){items[k].jan=p.jan;items[k].url=p.url;if(p.price)items[k].price=p.price;try{save()}catch(x){}}
  }catch(err){say("置けませんでした（配置）："+(err&&err.message||err),1);return}
- box.hidden=true;
+ box.hidden=true;try{["stm","tpl","dlg"].forEach(function(i){var e=document.getElementById(i);if(e&&e.classList.contains("mdl"))e.hidden=true})}catch(x){}
  try{if(document.getElementById("v2").hidden)tab(2)}catch(x){}try{render()}catch(x){}try{rplan()}catch(x){}try{after3d()}catch(x){}
  try{toast(p.name+" を置きました。ドラッグで動かせます。")}catch(x){}}
 /* ボタンごとに直接つける（親での振り分けをやめる）。touchend と click の二重実行は防ぐ */
