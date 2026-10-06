@@ -6,6 +6,13 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# 開発用の元ファイル（_dev）は公開しない
+[[redirects]]
+  from = "/_dev/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
 [[headers]]
   for = "/sw.js"
   [headers.values]

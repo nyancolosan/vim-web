@@ -1,0 +1,39 @@
+# Macがなくても、Codemagic（クラウドのMac）でビルドしてApp Store Connectに送るための設定です。
+# bundle_identifier を、capacitor.config.json の appId と同じ値に書き換えてください。
+workflows:
+  bimini-ios:
+    name: BIMini iOS
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      app_store_connect: BIMini ASC   # Codemagicに登録したApp Store Connect APIキーの名前
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.example.bimini
+      node: 20
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: 依存パッケージを入れる
+        script: npm install
+      - name: iOSプロジェクトを作る
+        script: |
+          if [ ! -d ios ]; then npx cap add ios; fi
+          npx @capacitor/assets generate --ios
+          bash scripts/ios-setup.sh
+          npx cap sync ios
+      - name: 署名の設定
+        script: xcode-project use-profiles
+      - name: ビルド番号を上げる
+        script: |
+          cd ios/App
+          agvtool new-version -all $((BUILD_NUMBER + 1))
+      - name: ビルド
+        script: xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

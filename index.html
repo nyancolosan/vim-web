@@ -3262,7 +3262,7 @@ function billCheck(quiet){var l=billLid(false);if(!l){billApply(null,true);retur
 function billUI(){var q=function(i){return document.getElementById(i)},L=BILL.lic,on=!!(L&&L.active);q("billbuy").hidden=on;q("billme").hidden=!on;q("billm").textContent="";
  q("bpp").textContent=BILL.price;q("billtk").href=BILL.tk;
  if(on){var dt=L.end?new Date(L.end*1000):null,ds=dt?dt.getFullYear()+"年"+(dt.getMonth()+1)+"月"+dt.getDate()+"日":"";
-  q("billst").innerHTML="<b>ご契約中：BIMini PRO</b><br>"+(L.status==="past_due"?"お支払いが確認できていません。カード情報をご確認ください。":L.cancelAt?ds+"で終了します（解約済み）。":ds?"次回の更新日："+ds:"");q("billcode").value=billCode(billLid(false))}}
+  q("billst").innerHTML="<b>ご契約中：BIMini PRO</b><br>"+(L.status==="owner"?"管理者ライセンス（お支払いは不要です）":L.status==="past_due"?"お支払いが確認できていません。カード情報をご確認ください。":L.cancelAt?ds+"で終了します（解約済み）。":ds?"次回の更新日："+ds:"");q("billcode").value=billCode(billLid(false))}}
 function billOpen(){billUI();document.getElementById("bill").hidden=false}
 (function(){if(!billOn())return;var q=function(i){return document.getElementById(i)};if(!q("bill"))return;document.body.classList.add("billing");
  try{BILL.lic=JSON.parse(localStorage.getItem("bimini-lic"))}catch(e){}billApply(BILL.lic,true);

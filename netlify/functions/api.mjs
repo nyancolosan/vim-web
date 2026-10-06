@@ -9,6 +9,7 @@
  *   STRIPE_KEY            制限付きAPIキー（rk_…）  … 「Secret」にチェック
  *   STRIPE_WEBHOOK_SECRET Webhookの署名シークレット（whsec_…） … 「Secret」にチェック
  *   PRICE_PRO             PROプラン（月額）の価格ID（price_…）
+ *   OWNER_LIDS            （任意）支払いなしでPROにする復元コード。カンマ区切りで複数可
  * 契約状態は Netlify Blobs（ストア名 bimini-lic）に保存します。追加の設定は不要です。
  * STRIPE_KEY が未設定のあいだは課金は止まり、アプリは「PRO」ボタンで自由に切り替えられます。
  */
@@ -30,7 +31,7 @@ export default async (req, context) => {
   const url = new URL(req.url);
   url.pathname = url.pathname.replace(/^\/api/, "");
   const E = (k) => (globalThis.Netlify && Netlify.env.get(k)) || (typeof process !== "undefined" && process.env[k]) || "";
-  const env = { STRIPE_KEY: E("STRIPE_KEY"), STRIPE_WEBHOOK_SECRET: E("STRIPE_WEBHOOK_SECRET"), PRICE_PRO: E("PRICE_PRO"), APP_URL: E("APP_URL") || new URL(req.url).origin + "/" };
+  const env = { STRIPE_KEY: E("STRIPE_KEY"), STRIPE_WEBHOOK_SECRET: E("STRIPE_WEBHOOK_SECRET"), PRICE_PRO: E("PRICE_PRO"), OWNER_LIDS: E("OWNER_LIDS"), APP_URL: E("APP_URL") || new URL(req.url).origin + "/" };
   const cors = corsHeaders(req, env);
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
   if (!env.STRIPE_KEY) return json({ disabled: true }, 200, cors);
@@ -80,6 +81,8 @@ async function checkout(body, env) {
 
 async function license(lid, env) {
   if (!LID_RE.test(String(lid || ""))) throw fail("bad_request");
+  // 管理者（運営者）用：環境変数 OWNER_LIDS に入れた復元コードは、支払いなしでPRO扱い
+  if (String(env.OWNER_LIDS || "").toLowerCase().replace(/[^0-9a-f,]/g, "").split(",").includes(lid)) return { active: true, plan: "pro", status: "owner", end: null, cancelAt: null };
   const r = await env.LIC.get("lic:" + lid, "json");
   if (!r) return { active: false, plan: null, status: "none" };
   return { active: ACTIVE.includes(r.status), plan: r.plan, status: r.status, end: r.end || null, cancelAt: r.cancelAt || null };
