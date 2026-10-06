@@ -12,7 +12,7 @@ for a,b in [("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
             ("https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js","lib/qrcode.js")]:
     assert a in s,a;s=s.replace(a,b)
 assert "cdnjs.cloudflare.com" not in s
-s=s.replace("<title>BIMini</title>",'<title>BIMini</title>\n<script src="ios-config.js"></script>',1)
+s=s.replace("<title>VIM</title>",'<title>VIM</title>\n<script src="ios-config.js"></script>',1)
 open(W+"/index.html","w",encoding="utf-8").write(s)
 shutil.copy(SD+"/th128/build/three.min.js",W+"/lib/three.min.js")
 shutil.copy("/opt/npm-tools/node_modules/pdf-lib/dist/pdf-lib.min.js",W+"/lib/pdf-lib.min.js")

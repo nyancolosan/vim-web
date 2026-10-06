@@ -12,7 +12,7 @@ function iosCI(r){var ci=r&&(r.customerInfo||r);var e=ci&&ci.entitlements&&ci.en
 function iosApply(st,quiet){IOS.active=st.active;IOS.end=st.end;IOS.will=st.will;setPro(st.active,true);if(!st.active&&roleGet()==="biz")roleSet("gen",true);if(!quiet)toast(st.active?"PROが有効です":"PROは無効になっています")}
 function iosUI(){var q=function(i){return document.getElementById(i)},on=IOS.active;q("billbuy").hidden=on;q("billme").hidden=!on;q("billm").textContent="";
  var p=IOS.pkg&&IOS.pkg.product;q("bpp").textContent=p?(p.priceString+"／月"):"価格を読み込んでいます…";
- if(on){var d=IOS.end?new Date(IOS.end):null;q("billst").innerHTML="<b>ご契約中：BIMini PRO</b><br>"+(d?(IOS.will?"次回の更新日：":"終了日：")+d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日":"")}}
+ if(on){var d=IOS.end?new Date(IOS.end):null;q("billst").innerHTML="<b>ご契約中：VIM PRO</b><br>"+(d?(IOS.will?"次回の更新日：":"終了日：")+d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日":"")}}
 (function(){if(!isNative())return;var q=function(i){return document.getElementById(i)};document.body.classList.add("native");
  try{if(IOS.web&&!localStorage.getItem("bimini-weburl"))localStorage.setItem("bimini-weburl",IOS.web)}catch(e){}
  /* 外部リンクは、アプリ内ブラウザ（Safari）で開く */

@@ -315,9 +315,9 @@
 "A  3D sketch (numbers = catalog numbers)",
 "A  3D 밑그림 (번호 = 카탈로그 번호)"
 ],
-"BIMini　プレゼンボード": [
-"BIMini  Presentation board",
-"BIMini  프레젠테이션 보드"
+"VIM　プレゼンボード": [
+"VIM  Presentation board",
+"VIM  프레젠테이션 보드"
 ],
 "BIZ UDPゴシック": [
 "BIZ UDPGothic",
@@ -1151,13 +1151,13 @@
 "Couldn't save to this device. There may be too many photos.",
 "이 기기에 저장할 수 없었습니다. 사진이 너무 많을 수 있습니다."
 ],
-"ご契約中：BIMini": [
-"Current plan: BIMini",
-"이용 중: BIMini"
+"ご契約中：VIM": [
+"Current plan: VIM",
+"이용 중: VIM"
 ],
-"ご契約中：BIMini Pro": [
-"Current plan: BIMini Pro",
-"이용 중: BIMini Pro"
+"ご契約中：VIM Pro": [
+"Current plan: VIM Pro",
+"이용 중: VIM Pro"
 ],
 "さらに計算しています…": [
 "Still calculating…",
@@ -6423,9 +6423,9 @@
 "B Right wall",
 "B 오른쪽 벽"
 ],
-"BIMini のプラン": [
-"BIMini plans",
-"BIMini 플랜"
+"VIM のプラン": [
+"VIM plans",
+"VIM 플랜"
 ],
 "C 手前の壁": [
 "C Front wall",

@@ -1,4 +1,4 @@
-/*! bimini-pt.js — BIMini 高品位レンダー用バンドル
+/*! bimini-pt.js — VIM 高品位レンダー用バンドル
  * three.js r185 — Copyright © 2010-2026 three.js authors (MIT License)
  * three-gpu-pathtracer 0.0.26 — Copyright (c) 2021 Garrett Johnson (MIT License)
  * three-mesh-bvh 0.9.15 — Copyright (c) 2018 Garrett Johnson (MIT License)

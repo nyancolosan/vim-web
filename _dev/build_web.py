@@ -10,16 +10,16 @@ head='''<meta name="description" content="家具の配置を平面図と3Dで検
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0058a3"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 '''
-assert s.count("<title>BIMini</title>")==1
-s=s.replace("<title>BIMini</title>","<title>BIMini</title>\n"+head)
+assert s.count("<title>VIM</title>")==1
+s=s.replace("<title>VIM</title>","<title>VIM</title>\n"+head)
 reg='''<script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"||location.hostname==="127.0.0.1")){navigator.serviceWorker.register("sw.js").then(function(r){r.addEventListener("updatefound",function(){var w=r.installing;if(w)w.addEventListener("statechange",function(){if(w.state==="activated"&&navigator.serviceWorker.controller){try{toast("アプリが最新版になりました")}catch(e){}}})})}).catch(function(){})}</script>
 </body></html>'''
 assert s.rstrip().endswith("</body></html>")
 s=s.rstrip()[:-len("</body></html>")]+reg
 open(OUT+"/index.html","w",encoding="utf-8").write(s)
-json.dump({"name":"BIMini インテリア・売場プランナー","short_name":"BIMini","start_url":"./","scope":"./","display":"standalone","orientation":"any","background_color":"#f7f5f0","theme_color":"#0058a3","lang":"ja",
+json.dump({"name":"VIM インテリア・売場プランナー","short_name":"VIM","start_url":"./","scope":"./","display":"standalone","orientation":"any","background_color":"#f7f5f0","theme_color":"#0058a3","lang":"ja",
  "icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png"},{"src":"icon-512.png","sizes":"512x512","type":"image/png"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}]},open(OUT+"/manifest.webmanifest","w",encoding="utf-8"),ensure_ascii=False,indent=1)
-open(OUT+"/sw.js","w").write('''// BIMini service worker: 更新時は V の番号を上げてください
+open(OUT+"/sw.js","w").write('''// VIM service worker: 更新時は V の番号を上げてください
 const V="bimini-web-2.2.0";
 const SHELL=["./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png","./icon-180.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)));self.skipWaiting()});

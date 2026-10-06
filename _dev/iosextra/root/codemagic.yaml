@@ -2,11 +2,11 @@
 # bundle_identifier を、capacitor.config.json の appId と同じ値に書き換えてください。
 workflows:
   bimini-ios:
-    name: BIMini iOS
+    name: VIM iOS
     instance_type: mac_mini_m2
     max_build_duration: 60
     integrations:
-      app_store_connect: BIMini ASC   # Codemagicに登録したApp Store Connect APIキーの名前
+      app_store_connect: VIM ASC   # Codemagicに登録したApp Store Connect APIキーの名前
     environment:
       ios_signing:
         distribution_type: app_store

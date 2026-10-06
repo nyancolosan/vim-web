@@ -1,5 +1,5 @@
 /**
- * BIMini 課金サーバー（Cloudflare Pages の _worker.js として、アプリと一緒にアップロード）
+ * VIM 課金サーバー（Cloudflare Pages の _worker.js として、アプリと一緒にアップロード）
  * - POST /api/checkout  … 申し込みページ（Stripe Checkout）を作る
  * - POST /api/webhook   … Stripeからの通知を受けて、契約状態をKVに保存（署名を必ず検証）
  * - GET  /api/license   … アプリが契約状態を確認する

@@ -2,7 +2,7 @@
   "name": "bimini-ios",
   "version": "1.0.0",
   "private": true,
-  "description": "BIMini インテリアプランナー（iOSアプリ）",
+  "description": "VIM インテリアプランナー（iOSアプリ）",
   "scripts": {
     "setup": "npx cap add ios && npx @capacitor/assets generate --ios && bash scripts/ios-setup.sh && npx cap sync ios",
     "sync": "npx cap sync ios",

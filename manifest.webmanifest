@@ -1,12 +1,12 @@
 {
- "name": "BIMini インテリア・売場プランナー",
- "short_name": "BIMini",
+ "name": "VIM — Visual × Interior × Modeling",
+ "short_name": "VIM",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
  "orientation": "any",
- "background_color": "#ffffff",
- "theme_color": "#2b2b2b",
+ "background_color": "#0a0a0a",
+ "theme_color": "#141414",
  "lang": "ja",
  "icons": [
   {

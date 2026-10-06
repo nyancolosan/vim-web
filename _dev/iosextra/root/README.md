@@ -1,6 +1,6 @@
-# BIMini iOSアプリ リリース手順
+# VIM iOSアプリ リリース手順
 
-このフォルダは、BIMiniをiPhone・iPadアプリにするための一式です。
+このフォルダは、VIMをiPhone・iPadアプリにするための一式です。
 3D・PDF・QRの部品はすべてアプリの中に入っているので、圏外でも動きます。
 PRO（月額1,000円）は、Appleのアプリ内課金（RevenueCat経由）で販売します。
 
@@ -24,10 +24,10 @@ PRO（月額1,000円）は、Appleのアプリ内課金（RevenueCat経由）で
 
 ## 2. App Store Connect でアプリを作る
 1. https://appstoreconnect.apple.com →「アプリ」→「＋」→「新規App」を開きます。
-   - プラットフォームはiOS、名前は「BIMini」、言語は日本語、バンドルIDは0で決めたものを選びます。
+   - プラットフォームはiOS、名前は「VIM」、言語は日本語、バンドルIDは0で決めたものを選びます。
    - バンドルIDが一覧にない場合は、先にDeveloperサイトの「Identifiers」で登録します。
 2. **サブスクリプション**を作ります（アプリ →「サブスクリプション」）。
-   - サブスクリプショングループ：`BIMini PRO`
+   - サブスクリプショングループ：`VIM PRO`
    - 製品ID：`bimini_pro_monthly`、期間：1か月
    - 価格：1,000円（その価格がない場合は、いちばん近い価格を選びます）
    - 表示名・説明・審査用のスクリーンショットも入れます。
@@ -67,12 +67,12 @@ PRO（月額1,000円）は、Appleのアプリ内課金（RevenueCat経由）で
    - 権限は「App Manager」にします。
    - Issuer ID・キーID・.p8ファイルを控えます。
 3. https://codemagic.io にGitHubで登録し、リポジトリを追加します。
-   - 「Teams → Integrations → Developer Portal」に、2のキーを `BIMini ASC` という名前で登録します。
-4. 「Start new build」→ ワークフロー「BIMini iOS」を選ぶと、ビルドしてTestFlightまで自動で送ります。
+   - 「Teams → Integrations → Developer Portal」に、2のキーを `VIM ASC` という名前で登録します。
+4. 「Start new build」→ ワークフロー「VIM iOS」を選ぶと、ビルドしてTestFlightまで自動で送ります。
 
 ## 6. TestFlightで確認する
 1. iPhoneに「TestFlight」アプリを入れます。
-2. App Store Connectの「TestFlight」で自分をテスターに追加して、配信されたBIMiniを入れます。
+2. App Store Connectの「TestFlight」で自分をテスターに追加して、配信されたVIMを入れます。
 3. 次の点を確かめます。
    - 3D・保存（共有シート）・PDF・QRが動く
    - PROを購入するとPROが有効になる

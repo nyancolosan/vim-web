@@ -1,5 +1,5 @@
 /**
- * BIMini サーバー（Netlify Functions 版）
+ * VIM サーバー（Netlify Functions 版）
  * - POST /api/checkout  … 申し込みページ（Stripe Checkout）を作る（plan: plus_m / plus_y / plus_pass / pro）
  * - POST /api/webhook   … Stripeからの通知を受けて、契約状態を保存（署名を必ず検証）
  * - GET  /api/license   … アプリが契約状態（free / plus / pro）を確認する
