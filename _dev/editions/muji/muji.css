@@ -16,3 +16,4 @@
 .mjb{display:flex;flex-direction:column;gap:6px;align-items:stretch;flex:0 0 auto}.mjb .pri{min-height:36px;padding:4px 14px;font-size:.8rem}.mjb a{font-size:.72rem;color:var(--acc);text-align:center}
 .mje{color:var(--sub);font-size:.82rem;text-align:center;padding:20px 0}.mjnote{font-size:.66rem;color:var(--sub);margin:0;line-height:1.5}
 .mjsub{display:block;font-size:.64rem;letter-spacing:.14em;color:var(--acc);font-weight:700;margin-top:2px}
+@media (max-width:700px){#mjs .mjbox{max-height:none;height:calc(100% - 16px);height:calc(100dvh - 16px)}}

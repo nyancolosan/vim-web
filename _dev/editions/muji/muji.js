@@ -48,7 +48,7 @@ function yen2(v){return v?"¥"+Math.round(v).toLocaleString("ja-JP"):"価格は�
 function draw(){var R=find(),L=q("mjl");q("mjn").textContent=R.length+"件";
  L.innerHTML=R.slice(0,120).map(function(p){return'<div class="mjc"><div class="mjm"><b>'+esc2(p.name)+'</b><span>W'+p.w+' × D'+p.d+' × H'+p.h+' mm'+(p.sub?'　'+esc2(p.sub):'')+'</span><span class="mjp">'+yen2(p.price)+'</span></div>'+
   '<div class="mjb"><button type="button" class="pri" data-mp="'+p._i+'">'+(S.place?"置く":"一覧に追加")+'</button><a href="'+esc2(p.url)+'" target="_blank" rel="noopener">商品ページ</a></div></div>'}).join("")||'<p class="mje">見つかりませんでした。言葉を短くするか、幅・奥行の上限を外してください。</p>'}
-function open(place){S.place=place!==false;q("mjs").hidden=false;q("mjt").textContent=S.place?"無印良品の商品を置く":"無印良品の商品を一覧に追加";draw();setTimeout(function(){try{q("mjq").focus({preventScroll:true})}catch(e){}},60)}
+function open(place){S.place=place!==false;q("mjs").hidden=false;q("mjt").textContent=S.place?"無印良品の商品を置く":"無印良品の商品を一覧に追加";draw();if(!("ontouchstart" in window))setTimeout(function(){try{q("mjq").focus({preventScroll:true})}catch(e){}},60)}
 var box=document.createElement("div");box.id="mjs";box.className="mdl";box.hidden=true;box.setAttribute("role","dialog");box.setAttribute("aria-modal","true");box.setAttribute("aria-labelledby","mjt");
 box.innerHTML='<div class="dbox mjbox"><div class="m3h"><b id="mjt">無印良品の商品を置く</b><button id="mjx" class="ib" type="button">閉じる</button></div>'+
  '<input id="mjq" type="search" placeholder="商品名・素材・JANで探す（例：オーク 2シーター）" autocomplete="off">'+
@@ -63,12 +63,18 @@ q("mjw").addEventListener("input",function(e){S.w=e.target.value;draw()});q("mjd
 q("mjo").addEventListener("change",function(e){S.sort=e.target.value;draw()});
 q("mjcats").onclick=function(e){var b=e.target.closest("[data-c]");if(!b)return;S.cat=b.getAttribute("data-c");[].forEach.call(q("mjcats").children,function(x){x.className=x===b?"on":""});draw()};
 q("mjg").onclick=function(){box.hidden=true;TPLPLACE=S.place;var lb=q("tpla")&&q("tpla").querySelector(".lb");if(lb)lb.textContent=S.place?"部屋に置く":"一覧に追加";tplOpen()};
-q("mjl").onclick=function(e){var b=e.target.closest("[data-mp]");if(!b)return;var p=MC[+b.getAttribute("data-mp")];if(!p)return;var o=toItem(p),k;
- if(S.place){k=placeTpl(o);box.hidden=true;toast(p.name+" を置きました。ドラッグで動かせます。")}else{k=addPreset(o);toast(p.name+" を一覧に追加しました。")}
- if(items[k]){items[k].jan=p.jan;items[k].url=p.url;if(p.price)items[k].price=p.price;save();try{render()}catch(x){}}};
+/* 置く：スマホではキーボードが閉じて並びがずれ、タップが外れやすいので、押した時点で決める */
+function act(b){var p=MC[+b.getAttribute("data-mp")];if(!p)return;try{try{document.activeElement&&document.activeElement.blur()}catch(x){}
+ var o=toItem(p),k=placeTpl(o);box.hidden=true;if(items[k]){items[k].jan=p.jan;items[k].url=p.url;if(p.price)items[k].price=p.price;try{save()}catch(x){}}
+ try{if(document.getElementById("v2").hidden)tab(2)}catch(x){}try{render()}catch(x){}try{rplan()}catch(x){}try{after3d()}catch(x){}
+ toast(p.name+" を置きました。ドラッグで動かせます。")}catch(err){toast("置けませんでした："+(err&&err.message||err))}}
+var down=null;
+q("mjl").addEventListener("pointerdown",function(e){var b=e.target.closest("[data-mp]");down=b?{b:b,x:e.clientX,y:e.clientY}:null});
+q("mjl").addEventListener("pointerup",function(e){var b=e.target.closest("[data-mp]");if(down&&b&&down.b===b&&Math.abs(e.clientX-down.x)<12&&Math.abs(e.clientY-down.y)<12){e.preventDefault();b._done=Date.now();act(b)}down=null});
+q("mjl").addEventListener("click",function(e){var b=e.target.closest("[data-mp]");if(!b)return;if(b._done&&Date.now()-b._done<800)return;act(b)});
 /* 「家具を置く」「家具を追加」は無印良品の商品から */
 ["plb","plb3"].forEach(function(id){var b=q(id);if(b)b.onclick=function(){open(true)}});
-var tb=q("tplb");if(tb){tb.onclick=function(){open(false)};var l1=tb.querySelector(".lb"),s1=tb.querySelector("small");if(l1)l1.textContent="無印良品の商品を追加";if(s1)s1.textContent="ネットストアの家具を、名前やサイズで探せます"}
+var tb=q("tplb");if(tb){tb.onclick=function(){open(true)};var l1=tb.querySelector(".lb"),s1=tb.querySelector("small");if(l1)l1.textContent="無印良品の商品を置く";if(s1)s1.textContent="ネットストアの家具を、名前やサイズで探せます"}
 ["plb","plb3"].forEach(function(id){var b=q(id),l=b&&b.querySelector(".lb");if(l)l.textContent="無印良品の商品を置く";else if(b&&!b.children.length)b.textContent="無印良品の商品を置く"});
 /* ロゴの下に「for MUJI staff」 */[].forEach.call(document.querySelectorAll(".stmbrand,.verlogo"),function(el){if(el.querySelector(".mjsub"))return;var t=document.createElement("small");t.className="mjsub";t.textContent="for MUJI staff — VIM";el.appendChild(t)});
 /* 6) 見積書に JAN コード */
