@@ -7,6 +7,7 @@
  * - POST /api/db        … クラウド同期（Plus・Pro）。復元コードごとに保存
  * - POST /api/ev        … 匿名の利用状況（どの画面で止まったか、など）
  * - GET  /api/stats     … 利用状況の集計（STATS_KEY が必要）
+ * - /api/admin/…        … 管理画面（/admin）。OWNER_LIDS の復元コードで入る。売上・利用者・利用状況・要望・公開の状態
  *
  * 必要な設定（Netlify → サイト設定 → Environment variables）※値はチャットに貼らないこと
  *   STRIPE_KEY            制限付きAPIキー（rk_…）  … 「Secret」にチェック
@@ -53,6 +54,7 @@ export default async (req, context) => {
     // 利用状況は課金の設定と関係なく受け付ける
     if (url.pathname === "/ev" && req.method === "POST") return json(await evPut(await req.text()), 200, cors);
     if (url.pathname === "/stats" && req.method === "GET") return json(await stats(url, env), 200, cors);
+    if (url.pathname.startsWith("/admin/")) return await admin(req, url, env, cors);
     if (!env.STRIPE_KEY) return json({ disabled: true }, 200, cors);
     env.LIC = globalThis.__BIMINI_LIC || licStore();
     if (url.pathname === "/webhook" && req.method === "POST") return await webhook(req, env);
@@ -320,3 +322,124 @@ function corsHeaders(req, env) {
 }
 function json(d, status, headers) { return new Response(JSON.stringify(d), { status, headers: Object.assign({ "Content-Type": "application/json" }, headers || {}) }); }
 
+/* ===== 管理画面（/admin）用 =====
+ * 入れるのは運営者だけ：OWNER_LIDS に入っている復元コードを x-admin ヘッダーで送る。
+ * 売上（Stripe）・利用者（契約の記録）・利用状況・要望ボード・公開の状態（NETLIFY_TOKEN があるとき）。 */
+const SITE_ID_FALLBACK = "84bfb53b-8306-4e8e-9b92-7708083a554b";
+async function admin(req, url, env, cors) {
+  const key = String(req.headers.get("x-admin") || "").toLowerCase();
+  const owners = ids(String(env.OWNER_LIDS || "").toLowerCase());
+  if (!LID_RE.test(key) || !owners.some((o) => timingSafeEqual(o, key))) return json({ error: "forbidden" }, 403, cors);
+  const p = url.pathname.replace(/^\/admin\/?/, "");
+  const h = Object.assign({ "Cache-Control": "no-store" }, cors);
+  if (p === "sales") return json(await adminSales(env), 200, h);
+  if (p === "users") return json(await adminUsers(env), 200, h);
+  if (p === "usage") return json(await adminUsage(Math.max(1, Math.min(31, +url.searchParams.get("days") || 14))), 200, h);
+  if (p === "req") return json(await adminReq(req), 200, h);
+  if (p === "deploys") return json(await adminDeploys(env), 200, h);
+  return json({ error: "not_found" }, 404, h);
+}
+async function stripeList(env, path, max) {
+  const out = []; let after = "";
+  while (out.length < max) {
+    const d = await stripe(env, "GET", path + (path.includes("?") ? "&" : "?") + "limit=100" + (after ? "&starting_after=" + after : ""));
+    out.push(...d.data);
+    if (!d.has_more || !d.data.length) break;
+    after = d.data[d.data.length - 1].id;
+  }
+  return out;
+}
+async function adminSales(env) {
+  if (!env.STRIPE_KEY) return { disabled: true };
+  const errs = [], now = Date.now() / 1000;
+  let subs = [];
+  try { subs = await stripeList(env, "subscriptions?status=all", 1000); } catch (e) { errs.push("subscriptions:" + (e.detail || e.code)); }
+  const S = subs.map((s) => {
+    const it = s.items && s.items.data && s.items.data[0], pr = it && it.price || {};
+    const amt = pr.unit_amount || 0, iv = pr.recurring && pr.recurring.interval;
+    return { id: s.id, status: s.status, plan: tierOfPrice(env, pr.id), price: pr.id, amount: amt, interval: iv, monthly: iv === "year" ? Math.round(amt / 12) : amt,
+      created: s.created, canceledAt: s.canceled_at || null, cancelAtEnd: !!s.cancel_at_period_end, end: (it && it.current_period_end) || s.current_period_end || null, customer: typeof s.customer === "string" ? s.customer : s.customer && s.customer.id };
+  });
+  const live = S.filter((s) => ACTIVE.includes(s.status));
+  let pays = [], src = "charges";
+  try {
+    const ch = await stripeList(env, "charges?created[gte]=" + Math.floor(now - 400 * 86400), 1000);
+    pays = ch.filter((c) => c.paid && c.status === "succeeded").map((c) => ({ at: c.created, amount: c.amount - (c.amount_refunded || 0), refunded: c.amount_refunded || 0, email: c.billing_details && c.billing_details.email || "", desc: c.description || "", customer: c.customer || "" }));
+  } catch (e) {
+    errs.push("charges:" + (e.detail || e.code)); src = "invoices";
+    try {
+      const inv = await stripeList(env, "invoices?status=paid&created[gte]=" + Math.floor(now - 400 * 86400), 1000);
+      pays = inv.map((v) => ({ at: v.status_transitions && v.status_transitions.paid_at || v.created, amount: v.amount_paid, refunded: 0, email: v.customer_email || "", desc: (v.lines && v.lines.data && v.lines.data[0] && v.lines.data[0].description) || "", customer: v.customer || "" }));
+    } catch (e2) { errs.push("invoices:" + (e2.detail || e2.code)); src = "none"; }
+  }
+  return {
+    src, errors: errs, now,
+    mrr: live.reduce((a, s) => a + s.monthly, 0),
+    active: { total: live.length, plus: live.filter((s) => s.plan === "plus").length, pro: live.filter((s) => s.plan === "pro").length, canceling: live.filter((s) => s.cancelAtEnd).length },
+    subs: S.slice(0, 300), payments: pays.sort((a, b) => b.at - a.at),
+  };
+}
+async function adminUsers(env) {
+  const L = env.LIC || licStore(), st = getStore({ name: "bimini-lic", consistency: "strong" });
+  const keys = (await st.list({ prefix: "lic:" })).blobs.map((b) => b.key);
+  const users = [];
+  for (const k of keys.slice(0, 2000)) {
+    const r = await L.get(k, "json"); if (!r) continue;
+    const v = licView(r); users.push({ lid: k.slice(4), tier: v.tier, active: v.active, status: v.status, plan: r.plan || null, end: v.end || null, cancelAt: r.cancelAt || null, passEnd: r.passEnd || null, customer: r.customer || "", at: r.at || null });
+  }
+  let emails = {};
+  if (env.STRIPE_KEY) { try { (await stripeList(env, "customers", 1000)).forEach((c) => { emails[c.id] = { email: c.email || "", name: c.name || "" }; }); } catch (e) { emails = null; } }
+  users.forEach((u) => { const c = emails && emails[u.customer]; if (c) { u.email = c.email; u.name = c.name; } });
+  const sync = getStore({ name: "bimini-sync", consistency: "strong" }), cnt = {};
+  (await sync.list()).blobs.forEach((b) => { const id = b.key.split("/")[0]; cnt[id] = (cnt[id] || 0) + 1; });
+  users.forEach((u) => { u.docs = cnt[u.lid] || 0; });
+  const owners = ids(String(env.OWNER_LIDS || "").toLowerCase());
+  return { users: users.sort((a, b) => (b.at || 0) - (a.at || 0)), owners: owners.length, cloudUsers: Object.keys(cnt).length, emails: emails !== null };
+}
+async function adminUsage(days) {
+  const S = getStore({ name: "bimini-ev" });
+  const daily = [], ev = {}, devAll = new Set(), devs = {}, tiers = {}, wide = {};
+  let read = 0;
+  for (let i = days - 1; i >= 0; i--) {
+    const day = new Date(Date.now() + 9 * 3600e3 - i * 864e5).toISOString().slice(0, 10);
+    const L = (await S.list({ prefix: "ev/" + day + "/" })).blobs, dd = new Set(); let opens = 0;
+    for (const x of L) {
+      if (read >= 8000) break;
+      const r = await S.get(x.key, { type: "json" }); read++; if (!r) continue;
+      ev[r.e] = (ev[r.e] || 0) + 1; (devs[r.e] = devs[r.e] || new Set()).add(r.d); dd.add(r.d); devAll.add(r.d);
+      if (r.e === "open") { opens++; tiers[r.t || "?"] = (tiers[r.t || "?"] || 0) + 1; wide[r.w || "sp"] = (wide[r.w || "sp"] || 0) + 1; }
+    }
+    daily.push({ day, opens, devices: dd.size });
+  }
+  const f = (e) => (devs[e] ? devs[e].size : 0);
+  return { days, read, truncated: read >= 8000, devices: devAll.size, daily,
+    funnel: [["open", f("open")], ["start_size", f("start_size")], ["place", f("place")], ["view_3d", f("view_3d")], ["save", f("save")], ["share_open", f("share_open")], ["paywall", f("paywall")], ["checkout", f("checkout")]],
+    events: Object.keys(ev).sort((a, b) => ev[b] - ev[a]).slice(0, 40).map((e) => ({ e, count: ev[e], devices: devs[e].size })), opensByTier: tiers, opensByDevice: wide };
+}
+async function adminReq(req) {
+  const st = getStore({ name: "vim-admin", consistency: "strong" });
+  let list = (await st.get("req", { type: "json" })) || [];
+  if (req.method === "POST") {
+    let b; try { b = await req.json(); } catch (e) { throw fail("bad_request"); }
+    if (b.op === "save" && b.item) {
+      const it = b.item, now = Date.now();
+      const clean = { id: /^[a-z0-9]{6,20}$/.test(String(it.id || "")) ? it.id : now.toString(36) + randLetters(4).toLowerCase(),
+        t: String(it.t || "").slice(0, 120), b: String(it.b || "").slice(0, 4000), k: ["feat", "bug", "idea"].includes(it.k) ? it.k : "feat",
+        s: ["todo", "doing", "preview", "done", "hold"].includes(it.s) ? it.s : "todo", p: [1, 2, 3].includes(+it.p) ? +it.p : 2, at: +it.at || now, up: now };
+      if (!clean.t) throw fail("bad_request");
+      const i = list.findIndex((x) => x.id === clean.id); if (i >= 0) { clean.at = list[i].at; list[i] = clean; } else list.unshift(clean);
+    } else if (b.op === "del") list = list.filter((x) => x.id !== b.id);
+    else throw fail("bad_request");
+    list = list.slice(0, 1000); await st.set("req", JSON.stringify(list));
+  }
+  return { items: list };
+}
+async function adminDeploys(env) {
+  const tok = (globalThis.Netlify && Netlify.env.get("NETLIFY_TOKEN")) || (typeof process !== "undefined" && process.env.NETLIFY_TOKEN) || "";
+  if (!tok) return { disabled: true };
+  const site = (typeof process !== "undefined" && process.env.SITE_ID) || SITE_ID_FALLBACK;
+  const r = await fetch("https://api.netlify.com/api/v1/sites/" + site + "/deploys?per_page=25", { headers: { Authorization: "Bearer " + tok } });
+  if (!r.ok) return { error: "netlify_" + r.status };
+  const d = await r.json();
+  return { deploys: d.map((x) => ({ id: x.id, state: x.state, context: x.context, branch: x.branch, title: (x.title || "").split("\n")[0], at: x.created_at, published: x.published_at, url: x.deploy_ssl_url, review: x.review_url, commit: (x.commit_ref || "").slice(0, 7), error: x.error_message || null })) };
+}

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VIM 管理</title><meta name="robots" content="noindex">
+<meta name="theme-color" content="#141414"><link rel="manifest" href="admin.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="VIM 管理"><meta name="apple-mobile-web-app-status-bar-style" content="black">
+<style>
+:root{--bg:#f4f3f0;--card:#fff;--ink:#141414;--sub:#6a6a6a;--mute:#9a9a9a;--line:#e6e4df;--acc:#141414;--bar:#3f6f9f;--bar2:#9fb8cf;--good:#2f7d4f;--warn:#b7791f;--bad:#b3403a;--r:14px;color-scheme:light}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:10;background:#141414;color:#fff;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;display:flex;align-items:center;gap:10px}
+header svg{height:28px;width:auto;display:block}header b{font-size:1rem;letter-spacing:.06em}header small{color:#9a9a9a;font-size:.72rem;margin-left:2px}
+header .sp{flex:1}header button{background:none;border:1px solid #444;color:#fff;border-radius:999px;font:inherit;font-size:.78rem;padding:6px 12px}
+main{max-width:980px;margin:0 auto;padding:14px 14px calc(90px + env(safe-area-inset-bottom))}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;padding:4px 4px calc(4px + env(safe-area-inset-bottom))}
+nav button{flex:1;border:0;background:none;font:inherit;font-size:.68rem;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;min-height:52px}
+nav button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}nav button.on{color:var(--ink);font-weight:700}
+h2{font-size:1.05rem;margin:18px 2px 10px}h2:first-child{margin-top:4px}h3{font-size:.9rem;margin:0 0 8px;color:var(--sub);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}@media(min-width:720px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}.kpi small{display:block;color:var(--sub);font-size:.74rem}.kpi b{display:block;font-size:1.45rem;letter-spacing:.01em;margin-top:2px;font-variant-numeric:tabular-nums}.kpi i{font-style:normal;color:var(--mute);font-size:.72rem}
+.grid2{display:grid;gap:12px}@media(min-width:820px){.grid2{grid-template-columns:1fr 1fr}}
+.chart{position:relative}.chart svg{display:block;width:100%;height:auto;overflow:visible}.chart .tip{position:absolute;pointer-events:none;background:#141414;color:#fff;font-size:.74rem;padding:5px 8px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-110%);display:none;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:.82rem;font-variant-numeric:tabular-nums}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--sub);font-weight:600;font-size:.74rem}td.r,th.r{text-align:right}
+.scroll{overflow-x:auto;margin:0 -14px;padding:0 14px}
+.chip{display:inline-block;font-size:.68rem;font-weight:700;border-radius:999px;padding:2px 8px;border:1px solid var(--line);color:var(--sub);white-space:nowrap}
+.chip.pro{background:#141414;color:#fff;border-color:#141414}.chip.plus{background:#eef3f8;color:#2d567f;border-color:#cfdceb}.chip.free{background:#f3f3f3}
+.chip.good{color:var(--good);border-color:#cfe6d7;background:#f0f8f3}.chip.warn{color:var(--warn);border-color:#f0dfbf;background:#fdf7ec}.chip.bad{color:var(--bad);border-color:#efcfcc;background:#fcf2f1}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.muted{color:var(--sub);font-size:.8rem}.small{font-size:.74rem;color:var(--mute)}
+input,select,textarea{font:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;color:var(--ink);width:100%}textarea{min-height:90px;resize:vertical}
+button.b{font:inherit;font-size:.85rem;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:10px;padding:9px 14px;min-height:40px}button.g{background:#fff;color:var(--ink);border-color:var(--line)}button.sm{min-height:32px;padding:4px 10px;font-size:.76rem}
+.seg{display:flex;background:#e9e7e2;border-radius:10px;padding:3px;gap:3px;margin-bottom:12px}.seg button{flex:1;border:0;background:none;font:inherit;font-size:.82rem;padding:7px 0;border-radius:8px;color:var(--sub)}.seg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.filters{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filters button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;font:inherit;font-size:.76rem;padding:5px 12px;color:var(--sub)}.filters button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.req{border-left:3px solid var(--line)}.req.p1{border-left-color:var(--bad)}.req.p2{border-left-color:var(--warn)}.req.p3{border-left-color:var(--line)}
+.req .t{font-weight:700}.req .bd{white-space:pre-wrap;font-size:.86rem;color:#333;margin:6px 0}
+.fun{display:grid;grid-template-columns:7.5em 1fr 6.2em;gap:6px 8px;align-items:center;font-size:.8rem}.fun .bar{height:14px;background:var(--bar);border-radius:0 4px 4px 0;min-width:2px}.fun .n{text-align:right;font-variant-numeric:tabular-nums}
+.log li{list-style:none;padding:8px 0;border-bottom:1px solid var(--line);font-size:.86rem}.log{padding:0;margin:0}.log time{display:block;color:var(--mute);font-size:.72rem}
+.empty{color:var(--mute);text-align:center;padding:24px 0;font-size:.85rem}.err{background:#fcf2f1;border:1px solid #efcfcc;color:#7a2b26;border-radius:10px;padding:10px 12px;font-size:.8rem;margin-bottom:12px}
+.note{background:#f7f6f2;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;font-size:.8rem;color:var(--sub);margin-bottom:12px}.note a{color:var(--ink)}
+#login{max-width:420px;margin:40px auto}#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#141414;color:#fff;padding:9px 14px;border-radius:10px;font-size:.82rem;display:none;z-index:20}
+.list .u{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.84rem}.list .u .m{color:var(--sub);font-size:.74rem}
+</style></head>
+<body>
+<header><svg viewBox="360 235 520 515" aria-hidden="true"><path d="M380 372 L630 243 L630 258 L488 334 L488 690 L380 612 Z" fill="#fff"/><path d="M488 690 L640 560 L838 640 L622 742 Z" fill="#c4c0bb"/><path d="M722 325 L868 390 L868 634 L722 580 Z" fill="#8b8580"/><rect x="621" y="246" width="8" height="142" fill="#fff"/><path d="M569 442 A55 55 0 0 1 679 442 Z" fill="#fff"/></svg><b>VIM</b><small>管理</small><span class="sp"></span><button id="rf" type="button">更新</button></header>
+<main id="app"><div class="empty">読み込み中…</div></main>
+<nav id="nav" hidden>
+ <button data-t="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>ホーム</button>
+ <button data-t="sales"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>売上</button>
+ <button data-t="users"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.8c1.7.8 2.7 2.5 3 5.2"/></svg>利用者</button>
+ <button data-t="usage"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 3 6-8 3 3"/><path d="M3 21h18"/></svg>利用状況</button>
+ <button data-t="dev"><svg viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>開発</button>
+</nav>
+<div id="toast"></div>
+<script>
+/* VIM 管理画面：売上（Stripe）・利用者・利用状況・要望・変更履歴・公開の状態。データは /api/admin/… から（運営者の復元コードで入る） */
+var A={key:"",tab:"home",cache:{},devTab:"req",reqF:"open",userQ:"",days:14};
+var $=function(s,r){return(r||document).querySelector(s)},esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var yen=function(n){return"¥"+Math.round(+n||0).toLocaleString("ja-JP")},num=function(n){return(+n||0).toLocaleString("ja-JP")};
+function jd(t){if(!t)return"―";var d=new Date(typeof t==="number"&&t<1e12?t*1000:t);return d.toLocaleDateString("ja-JP",{timeZone:"Asia/Tokyo",year:"numeric",month:"numeric",day:"numeric"})}
+function jdt(t){if(!t)return"―";var d=new Date(typeof t==="number"&&t<1e12?t*1000:t);return d.toLocaleString("ja-JP",{timeZone:"Asia/Tokyo",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})}
+function toast(m){var t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){t.style.display="none"},2200)}
+function api(p,opt){opt=opt||{};var h={"x-admin":A.key};if(opt.body)h["Content-Type"]="application/json";
+ return fetch("/api/admin/"+p,{method:opt.body?"POST":"GET",headers:h,body:opt.body?JSON.stringify(opt.body):undefined,cache:"no-store"}).then(function(r){if(r.status===403)throw new Error("forbidden");return r.json()})}
+function get(k,p,force){if(!force&&A.cache[k])return Promise.resolve(A.cache[k]);return api(p).then(function(d){A.cache[k]=d;return d})}
+function getLog(){if(A.cache.log)return Promise.resolve(A.cache.log);return fetch("/changelog.json?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():{log:[]}}).catch(function(){return{log:[]}}).then(function(d){A.cache.log=d;return d})}
+
+/* ---------- 入る ---------- */
+function boot(){var k="";try{k=localStorage.getItem("vim-admin-key")||localStorage.getItem("bimini-lid")||""}catch(e){}
+ if(!/^[a-f0-9]{32}$/.test(k)){login();return}A.key=k;api("req").then(function(){$("#nav").hidden=false;show(A.tab)}).catch(function(e){login(e.message==="forbidden"?"この端末の復元コードは管理者として登録されていません。":"")})}
+function login(msg){$("#nav").hidden=true;$("#app").innerHTML='<div id="login" class="card"><h2>管理画面に入る</h2><p class="muted">運営者の復元コード（32文字）を入れてください。VIM の「保存」画面に表示されている番号です。</p>'+(msg?'<div class="err">'+esc(msg)+'</div>':'')+'<input id="lk" inputmode="latin" autocomplete="off" autocapitalize="off" placeholder="例：0123abcd…"><div style="height:10px"></div><button class="b" id="lb" style="width:100%">入る</button></div>';
+ $("#lb").onclick=function(){var v=$("#lk").value.trim().toLowerCase().replace(/[^a-f0-9]/g,"");if(v.length!==32){toast("32文字の英数字です");return}try{localStorage.setItem("vim-admin-key",v)}catch(e){}A.key=v;A.cache={};boot()}}
+
+/* ---------- 画面の切り替え ---------- */
+$("#nav").onclick=function(e){var b=e.target.closest("[data-t]");if(!b)return;show(b.getAttribute("data-t"))};
+$("#rf").onclick=function(){A.cache={};show(A.tab);toast("最新にしました")};
+function show(t){A.tab=t;[].forEach.call(document.querySelectorAll("#nav [data-t]"),function(b){b.classList.toggle("on",b.getAttribute("data-t")===t)});
+ $("#app").innerHTML='<div class="empty">読み込み中…</div>';window.scrollTo(0,0);
+ ({home:vHome,sales:vSales,users:vUsers,usage:vUsage,dev:vDev})[t]().catch(function(e){$("#app").innerHTML='<div class="err">読み込めませんでした（'+esc(e.message)+'）。通信を確認して「更新」を押してください。</div>'})}
+
+/* ---------- グラフ（1系列の棒）：棒にさわると値が出る ---------- */
+function bars(data,o){o=o||{};var W=640,H=o.h||230,P={l:62,r:6,t:14,b:34},iw=W-P.l-P.r,ih=H-P.t-P.b,mx=Math.max.apply(null,data.map(function(d){return d.v}).concat([o.min||1]));
+ var nice=function(v){var p=Math.pow(10,Math.floor(Math.log10(v))),m=v/p;return(m<=1?1:m<=2?2:m<=5?5:10)*p},top=nice(mx),bw=iw/data.length,g=Math.max(2,Math.min(8,bw*.25)),fmt=o.fmt||num;
+ var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(o.label||"")+'">';
+ for(var i=0;i<=4;i++){var y=P.t+ih-ih*i/4;s+='<line x1="'+P.l+'" x2="'+(W-P.r)+'" y1="'+y+'" y2="'+y+'" stroke="#ecebe7"/><text x="'+(P.l-6)+'" y="'+(y+6)+'" font-size="19" fill="#8a8a8a" text-anchor="end">'+esc(o.short?o.short(top*i/4):fmt(top*i/4))+'</text>'}
+ data.forEach(function(d,i){var h=Math.max(d.v>0?2:0,ih*d.v/top),x=P.l+i*bw+g/2,w=bw-g,y=P.t+ih-h,r=Math.min(4,w/2,h);
+  s+='<g class="bh" data-i="'+i+'"><rect x="'+(P.l+i*bw)+'" y="'+P.t+'" width="'+bw+'" height="'+ih+'" fill="transparent"/>'+(h>0?'<path d="M'+x+' '+(P.t+ih)+'V'+(y+r)+'q0 -'+r+' '+r+' -'+r+'H'+(x+w-r)+'q'+r+' 0 '+r+' '+r+'V'+(P.t+ih)+'Z" fill="'+(o.color||"var(--bar)")+'"/>':'')+'</g>';
+  if(o.every&&i%o.every===0||!o.every&&(i===0||i===data.length-1||data.length<=12))s+='<text x="'+(P.l+i*bw+bw/2)+'" y="'+(H-6)+'" font-size="19" fill="#9a9a9a" text-anchor="middle">'+esc(d.k)+'</text>'});
+ s+='</svg>';var id="c"+Math.random().toString(36).slice(2,8);
+ setTimeout(function(){var el=document.getElementById(id);if(!el)return;var tip=el.querySelector(".tip");
+  function on(e){var g2=e.target.closest(".bh");if(!g2){tip.style.display="none";return}var d=data[+g2.getAttribute("data-i")],r=el.getBoundingClientRect(),rr=g2.getBoundingClientRect();tip.innerHTML=esc(d.full||d.k)+"　<b>"+esc(fmt(d.v))+"</b>";tip.style.display="block";tip.style.left=(rr.left-r.left+rr.width/2)+"px";tip.style.top=(rr.top-r.top+rr.height*(1-d.v/top))+"px"}
+  el.addEventListener("pointermove",on);el.addEventListener("pointerdown",on);el.addEventListener("pointerleave",function(){tip.style.display="none"})},0);
+ return'<div class="chart" id="'+id+'">'+s+'<div class="tip"></div></div>'}
+var shortYen=function(v){return v>=10000?(v/10000).toLocaleString("ja-JP",{maximumFractionDigits:1})+"万":Math.round(v).toLocaleString("ja-JP")};
+
+/* ---------- 売上の集計 ---------- */
+function monthKey(t){var d=new Date(t*1000+9*3600e3);return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")}
+function salesAgg(S){var now=Date.now()/1000,mk=monthKey(now),pm=monthKey(now-(new Date(now*1000+9*3600e3).getUTCDate()+1)*86400),by={},daily={};
+ (S.payments||[]).forEach(function(p){var k=monthKey(p.at);by[k]=(by[k]||0)+p.amount;if(now-p.at<30*86400){var d=new Date(p.at*1000+9*3600e3).toISOString().slice(0,10);daily[d]=(daily[d]||0)+p.amount}});
+ var months=[];for(var i=11;i>=0;i--){var d=new Date(Date.now()+9*3600e3);d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()-i);var k=d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0");months.push({k:(d.getUTCMonth()+1)+"月",full:d.getUTCFullYear()+"年"+(d.getUTCMonth()+1)+"月",v:by[k]||0})}
+ var days=[];for(var j=29;j>=0;j--){var dd=new Date(Date.now()+9*3600e3-j*864e5).toISOString().slice(0,10);days.push({k:+dd.slice(8),full:dd.slice(5).replace("-","/"),v:daily[dd]||0})}
+ return{thisM:by[mk]||0,lastM:by[pm]||0,y12:months.reduce(function(a,m){return a+m.v},0),months:months,days:days}}
+
+/* ---------- ホーム ---------- */
+function vHome(){return Promise.all([get("sales","sales").catch(function(){return{}}),get("users","users").catch(function(){return{users:[]}}),get("usage","usage?days=14").catch(function(){return{daily:[]}}),get("req","req"),getLog()]).then(function(r){
+ var S=r[0],U=r[1],G=r[2],Q=r[3].items||[],L=r[4],a=S.disabled?null:salesAgg(S),paid=(U.users||[]).filter(function(u){return u.active});
+ var d7=(G.daily||[]).slice(-7),dev7=Math.max.apply(null,[0].concat(d7.map(function(x){return x.devices}))),today=(G.daily||[]).slice(-1)[0]||{devices:0,opens:0};
+ var open=Q.filter(function(x){return x.s!=="done"});
+ var h='<h2>ホーム</h2><div class="kpis">'+
+  kpi("月の売上見込み（MRR）",S.disabled?"―":yen(S.mrr),S.disabled?"課金が止まっています":"有料の定期契約の合計")+
+  kpi("今月の売上",a?yen(a.thisM):"―",a?"先月 "+yen(a.lastM):"")+
+  kpi("有料会員",num(paid.length)+"人","Plus "+paid.filter(function(u){return u.tier==="plus"}).length+"・Pro "+paid.filter(function(u){return u.tier==="pro"}).length)+
+  kpi("今日の利用端末",num(today.devices)+"台","開いた回数 "+num(today.opens))+'</div>';
+ h+='<div class="grid2"><div class="card"><h3>利用端末（1日ごと・直近14日）</h3>'+bars((G.daily||[]).map(function(d){return{k:+d.day.slice(8),full:d.day.slice(5).replace("-","/"),v:d.devices}}),{label:"利用端末",fmt:function(v){return num(v)+"台"},short:num})+'</div>'+
+  '<div class="card"><h3>売上（1日ごと・直近30日）</h3>'+(a?bars(a.days,{label:"売上",fmt:yen,short:shortYen,every:5}):'<div class="empty">売上の読み込みができません</div>')+'</div></div>';
+ h+='<div class="grid2"><div class="card"><h3>対応待ちの要望（'+open.length+'件）</h3>'+(open.slice(0,4).map(function(x){return'<div class="row" style="padding:6px 0;border-bottom:1px solid var(--line)">'+kindChip(x.k)+'<span style="flex:1">'+esc(x.t)+'</span>'+statChip(x.s)+'</div>'}).join("")||'<div class="empty">ありません</div>')+'<div style="height:8px"></div><button class="b g sm" data-go="dev">要望を見る</button></div>'+
+  '<div class="card"><h3>最近の変更（公開中 '+esc(L.version||"")+'）</h3><ul class="log">'+((L.log||[]).slice(0,4).map(function(x){return'<li><time>'+jd(x.at)+'</time>'+esc(x.t)+'</li>'}).join("")||'<li class="empty">記録がありません</li>')+'</ul></div></div>';
+ $("#app").innerHTML=h;[].forEach.call(document.querySelectorAll("[data-go]"),function(b){b.onclick=function(){show(b.getAttribute("data-go"))}})})}
+function kpi(l,v,s){return'<div class="kpi"><small>'+esc(l)+'</small><b>'+esc(v)+'</b><i>'+esc(s||"")+'</i></div>'}
+
+/* ---------- 売上 ---------- */
+var PLN={plus:"Plus",pro:"Pro"},STS={active:["契約中","good"],trialing:["お試し中","good"],past_due:["支払い遅れ","warn"],canceled:["解約済み",""],unpaid:["未払い","bad"],incomplete:["未完了","warn"],incomplete_expired:["期限切れ",""],paused:["一時停止","warn"]};
+function vSales(){return get("sales","sales").then(function(S){if(S.disabled){$("#app").innerHTML='<h2>売上</h2><div class="note">課金サーバーに Stripe のキーが入っていないため、売上は表示できません。</div>';return}
+ var a=salesAgg(S),h='<h2>売上</h2>';
+ if(S.errors&&S.errors.length)h+='<div class="err">一部を読み込めませんでした：'+esc(S.errors.join(" / "))+'<br>Stripe の制限付きキーに「Charges」「Subscriptions」「Customers」の読み取り権限を足すと表示されます。</div>';
+ h+='<div class="kpis">'+kpi("月の売上見込み（MRR）",yen(S.mrr),"年払いは12で割って計算")+kpi("今月の売上",yen(a.thisM),"先月 "+yen(a.lastM))+kpi("直近12か月",yen(a.y12),"返金を差し引いた額")+kpi("有料の定期契約",num(S.active.total)+"件","Plus "+S.active.plus+"・Pro "+S.active.pro+(S.active.canceling?"・解約予定 "+S.active.canceling:""))+'</div>';
+ h+='<div class="grid2"><div class="card"><h3>月ごとの売上（12か月）</h3>'+bars(a.months,{label:"月ごとの売上",fmt:yen,short:shortYen})+'</div><div class="card"><h3>1日ごとの売上（30日）</h3>'+bars(a.days,{label:"1日ごとの売上",fmt:yen,short:shortYen,every:5})+'</div></div>';
+ h+='<div class="card"><h3>最近の入金</h3><div class="scroll"><table><thead><tr><th>日時</th><th>内容</th><th>メール</th><th class="r">金額</th></tr></thead><tbody>'+((S.payments||[]).slice(0,40).map(function(p){return'<tr><td>'+jdt(p.at)+'</td><td>'+esc(p.desc||"―")+'</td><td>'+esc(p.email||"―")+'</td><td class="r">'+yen(p.amount)+(p.refunded?'<br><span class="small">返金 '+yen(p.refunded)+'</span>':'')+'</td></tr>'}).join("")||'<tr><td colspan="4" class="empty">まだ入金はありません</td></tr>')+'</tbody></table></div></div>';
+ h+='<div class="card"><h3>定期契約の一覧</h3><div class="scroll"><table><thead><tr><th>開始</th><th>プラン</th><th>状態</th><th>次の更新</th><th class="r">金額</th></tr></thead><tbody>'+((S.subs||[]).map(function(s){var st=STS[s.status]||[s.status,""];return'<tr><td>'+jd(s.created)+'</td><td><span class="chip '+s.plan+'">'+PLN[s.plan]+'</span></td><td><span class="chip '+st[1]+'">'+st[0]+'</span>'+(s.cancelAtEnd?' <span class="chip warn">解約予定</span>':'')+'</td><td>'+(s.status==="canceled"?jd(s.canceledAt):jd(s.end))+'</td><td class="r">'+yen(s.amount)+'<span class="small">/'+(s.interval==="year"?"年":"月")+'</span></td></tr>'}).join("")||'<tr><td colspan="5" class="empty">まだ契約はありません</td></tr>')+'</tbody></table></div></div>';
+ $("#app").innerHTML=h})}
+
+/* ---------- 利用者 ---------- */
+function vUsers(){return get("users","users").then(function(U){var L=U.users||[],paid=L.filter(function(u){return u.active});
+ var h='<h2>利用者</h2><div class="kpis">'+kpi("有料会員",num(paid.length)+"人","いま有効な契約")+kpi("Plus",num(paid.filter(function(u){return u.tier==="plus"&&u.status!=="pass"}).length)+"人","30日パス "+paid.filter(function(u){return u.status==="pass"}).length+"人")+kpi("Pro",num(paid.filter(function(u){return u.tier==="pro"}).length)+"人","")+kpi("クラウド保存",num(U.cloudUsers)+"人","Plus・Proで保存したことがある人")+'</div>';
+ h+='<div class="note">無料の利用者は登録がないため、人数は「利用状況」の端末数で見られます。'+(U.emails?'':'メールアドレスは Stripe キーの「Customers」読み取り権限があると表示されます。')+'</div>';
+ h+='<div class="card"><input id="uq" placeholder="メール・名前・復元コードで探す" value="'+esc(A.userQ)+'"><div class="list" id="ul"></div></div>';
+ $("#app").innerHTML=h;var draw=function(){var q=A.userQ.toLowerCase(),R=L.filter(function(u){return!q||[u.email,u.name,u.lid].join(" ").toLowerCase().indexOf(q)>=0});
+  $("#ul").innerHTML=R.map(function(u){var st=u.status==="pass"?["30日パス","good"]:STS[u.status]||[u.status,""];return'<div class="u"><div><b>'+esc(u.email||u.name||"（メール不明）")+'</b><div class="m">復元コード '+esc(u.lid.slice(0,8))+'…　保存 '+u.docs+'件</div></div><div style="text-align:right"><span class="chip '+(u.active?u.tier:"free")+'">'+(u.active?PLN[u.tier]:"無料")+'</span><div class="m"><span class="chip '+st[1]+'">'+esc(st[0])+'</span></div></div><div class="m" style="grid-column:1/-1">'+(u.cancelAt?"解約日 "+jd(u.cancelAt)+"　":"")+(u.end?"期限・次の更新 "+jd(u.end)+"　":"")+"最終更新 "+jd(u.at)+'</div></div>'}).join("")||'<div class="empty">該当する人はいません</div>'};
+ draw();$("#uq").oninput=function(e){A.userQ=e.target.value;draw()}})}
+
+/* ---------- 利用状況 ---------- */
+var EVN={open:"開いた",start_size:"広さを選んだ",place:"家具を置いた",view_3d:"3Dを見た",save:"保存した",share_open:"渡す画面",paywall:"プラン案内",checkout:"申し込みへ"};
+function vUsage(){return get("usage"+A.days,"usage?days="+A.days).then(function(G){var dev=G.opensByDevice||{},tr=G.opensByTier||{};
+ var h='<h2>利用状況</h2><div class="seg" id="dsg">'+[7,14,30].map(function(d){return'<button data-d="'+d+'"'+(A.days===d?' class="on"':'')+'>'+d+'日</button>'}).join("")+'</div>';
+ h+='<div class="kpis">'+kpi("利用端末",num(G.devices)+"台","直近"+G.days+"日・重複なし")+kpi("開いた回数",num((G.daily||[]).reduce(function(a,d){return a+d.opens},0))+"回","")+kpi("スマホ・PC",num(dev.sp||0)+"・"+num(dev.pc||0),"タブレット "+num(dev.tab||0))+kpi("有料で開いた回数",num((tr.plus||0)+(tr.pro||0))+"回","無料 "+num(tr.free||0))+'</div>';
+ if(G.truncated)h+='<div class="note">記録が多いため、一部だけで集計しています。</div>';
+ h+='<div class="card"><h3>利用端末（1日ごと）</h3>'+bars((G.daily||[]).map(function(d){return{k:+d.day.slice(8),full:d.day.slice(5).replace("-","/"),v:d.devices}}),{label:"利用端末",fmt:function(v){return num(v)+"台"},short:num,every:G.days>14?5:G.days>7?2:1})+'</div>';
+ var F=G.funnel||[],f0=F[0]?F[0][1]:0;h+='<div class="card"><h3>はじめの流れ（端末数）</h3><div class="fun">'+F.map(function(x){var pc=f0?Math.round(x[1]/f0*100):0;return'<span>'+esc(EVN[x[0]]||x[0])+'</span><div><div class="bar" style="width:'+(f0?Math.max(1,x[1]/f0*100):0)+'%"></div></div><span class="n">'+num(x[1])+' <span class="small">'+pc+'%</span></span>'}).join("")+'</div><p class="small" style="margin:8px 0 0">％は「開いた」端末に対する割合。どこで止まっているかの目安です。</p></div>';
+ h+='<div class="card"><h3>よく使われた操作</h3><div class="scroll"><table><thead><tr><th>操作</th><th class="r">回数</th><th class="r">端末</th></tr></thead><tbody>'+(G.events||[]).map(function(e){return'<tr><td>'+esc(EVN[e.e]||e.e)+'</td><td class="r">'+num(e.count)+'</td><td class="r">'+num(e.devices)+'</td></tr>'}).join("")+'</tbody></table></div></div>';
+ $("#app").innerHTML=h;$("#dsg").onclick=function(e){var b=e.target.closest("[data-d]");if(!b)return;A.days=+b.getAttribute("data-d");show("usage")}})}
+
+/* ---------- 開発：要望・変更の履歴・公開の状態 ---------- */
+var KND={feat:["新機能",""],bug:["不具合","bad"],idea:["アイデア",""]},STQ={todo:["未着手",""],doing:["対応中","warn"],preview:["確認待ち","warn"],done:["公開済み","good"],hold:["保留",""]};
+function kindChip(k){var x=KND[k]||KND.feat;return'<span class="chip '+x[1]+'">'+x[0]+'</span>'}
+function statChip(s){var x=STQ[s]||STQ.todo;return'<span class="chip '+x[1]+'">'+x[0]+'</span>'}
+function vDev(){var h='<h2>開発</h2><div class="seg" id="dvs"><button data-v="req"'+(A.devTab==="req"?' class="on"':'')+'>要望</button><button data-v="log"'+(A.devTab==="log"?' class="on"':'')+'>変更の履歴</button><button data-v="dep"'+(A.devTab==="dep"?' class="on"':'')+'>公開の状態</button></div><div id="dvb"><div class="empty">読み込み中…</div></div>';
+ $("#app").innerHTML=h;$("#dvs").onclick=function(e){var b=e.target.closest("[data-v]");if(!b)return;A.devTab=b.getAttribute("data-v");vDev()};
+ return({req:dReq,log:dLog,dep:dDep})[A.devTab]()}
+function dReq(){return get("req","req").then(function(Q){var L=Q.items||[],F=A.reqF;
+ var f=L.filter(function(x){return F==="all"||(F==="open"?x.s!=="done":x.s===F)}).sort(function(a,b){return(a.p-b.p)||(b.up-a.up)});
+ var h='<div class="card" id="rqf"><h3>要望を書く</h3><input id="rt" placeholder="ひとことで（例：見積書に会社ロゴを入れたい）"><div style="height:8px"></div><textarea id="rb" placeholder="くわしく（どの画面で・何をしたいか・困っていること）"></textarea><div style="height:8px"></div><div class="row"><select id="rk" style="flex:1"><option value="feat">新機能</option><option value="bug">不具合</option><option value="idea">アイデア</option></select><select id="rp" style="flex:1"><option value="1">優先：高</option><option value="2" selected>優先：中</option><option value="3">優先：低</option></select><button class="b" id="rs">追加</button></div><input type="hidden" id="ri"></div>';
+ h+='<div class="filters" id="rqF">'+[["open","対応待ち"],["todo","未着手"],["doing","対応中"],["preview","確認待ち"],["done","公開済み"],["hold","保留"],["all","すべて"]].map(function(x){return'<button data-f="'+x[0]+'"'+(F===x[0]?' class="on"':'')+'>'+x[1]+' '+L.filter(function(y){return x[0]==="all"||(x[0]==="open"?y.s!=="done":y.s===x[0])}).length+'</button>'}).join("")+'</div>';
+ h+=f.map(function(x){return'<div class="card req p'+x.p+'" data-id="'+x.id+'"><div class="row">'+kindChip(x.k)+statChip(x.s)+'<span class="small" style="margin-left:auto">'+jd(x.at)+'</span></div><div class="t" style="margin-top:6px">'+esc(x.t)+'</div>'+(x.b?'<div class="bd">'+esc(x.b)+'</div>':'')+
+  '<div class="row" style="margin-top:8px"><select data-st style="flex:1;min-width:120px">'+Object.keys(STQ).map(function(k){return'<option value="'+k+'"'+(x.s===k?' selected':'')+'>'+STQ[k][0]+'</option>'}).join("")+'</select><button class="b sm" data-cp>Claudeに渡す</button><button class="b g sm" data-ed>直す</button><button class="b g sm" data-del>消す</button></div></div>'}).join("")||'<div class="empty">ありません</div>';
+ $("#dvb").innerHTML=h;
+ $("#rs").onclick=function(){var t=$("#rt").value.trim();if(!t){toast("ひとことを書いてください");return}var id=$("#ri").value,old=L.filter(function(y){return y.id===id})[0]||{};
+  api("req",{body:{op:"save",item:{id:id||undefined,t:t,b:$("#rb").value,k:$("#rk").value,p:+$("#rp").value,s:old.s||"todo"}}}).then(function(d){A.cache.req=d;toast(id?"直しました":"追加しました");dReq()})};
+ $("#rqF").onclick=function(e){var b=e.target.closest("[data-f]");if(!b)return;A.reqF=b.getAttribute("data-f");dReq()};
+ $("#dvb").addEventListener("change",function(e){if(!e.target.matches("[data-st]"))return;var id=e.target.closest("[data-id]").getAttribute("data-id"),x=L.filter(function(y){return y.id===id})[0];if(!x)return;
+  api("req",{body:{op:"save",item:Object.assign({},x,{s:e.target.value})}}).then(function(d){A.cache.req=d;toast("状態を変えました");dReq()})});
+ $("#dvb").onclick=function(e){var c=e.target.closest("[data-id]");if(!c)return;var id=c.getAttribute("data-id"),x=L.filter(function(y){return y.id===id})[0];if(!x)return;
+  if(e.target.closest("[data-cp]")){var txt="VIM の要望（"+(KND[x.k]||KND.feat)[0]+"・優先"+["","高","中","低"][x.p]+"・ID "+x.id+"）\n"+x.t+(x.b?"\n\n"+x.b:"")+"\n\n対応したら、管理画面の状態を「確認待ち」にできるよう教えてください。";
+   (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){toast("コピーしました。Claude との会話に貼ってください")}).catch(function(){prompt("この文をコピーして Claude に貼ってください",txt)})}
+  else if(e.target.closest("[data-ed]")){$("#rt").value=x.t;$("#rb").value=x.b||"";$("#rk").value=x.k;$("#rp").value=String(x.p);$("#ri").value=x.id;$("#rs").textContent="直す";$("#rqf").scrollIntoView({behavior:"smooth"})}
+  else if(e.target.closest("[data-del]")){if(!confirm("「"+x.t+"」を消しますか？"))return;api("req",{body:{op:"del",id:id}}).then(function(d){A.cache.req=d;toast("消しました");dReq()})}}})}
+function dLog(){return getLog().then(function(L){var by={};(L.log||[]).forEach(function(x){var d=jd(x.at);(by[d]=by[d]||[]).push(x)});
+ $("#dvb").innerHTML='<div class="card"><h3>公開中の版：'+esc(L.version||"―")+'</h3><p class="small" style="margin:0">組み立て '+jdt(L.built)+'</p></div>'+Object.keys(by).map(function(d){return'<div class="card"><h3>'+esc(d)+'</h3><ul class="log">'+by[d].map(function(x){return'<li>'+esc(x.t.replace(/（#\d+）$/,""))+' <span class="small">'+esc(x.c)+'</span></li>'}).join("")+'</ul></div>'}).join("")||'<div class="empty">記録がありません</div>'})}
+var DST={ready:["公開済み","good"],building:["組み立て中","warn"],enqueued:["順番待ち","warn"],processing:["処理中","warn"],uploading:["アップロード中","warn"],error:["失敗","bad"],new:["準備中","warn"]};
+function dDep(){return Promise.all([get("dep","deploys"),getLog()]).then(function(r){var D=r[0],L=r[1];
+ var h='<div class="card"><h3>公開中</h3><div class="row"><b style="font-size:1.2rem">'+esc(L.version||"―")+'</b><span class="chip good">公開中</span></div><p class="small" style="margin:6px 0 0"><a href="/" style="color:inherit">https://vim-interior.netlify.app</a></p></div>';
+ if(D.disabled){h+='<div class="note">公開の記録（プレビュー待ち・失敗など）を見るには、Netlify の「個人用アクセストークン」を課金サーバーに入れてください。<br>1. <a href="https://app.netlify.com/user/applications#personal-access-tokens" target="_blank" rel="noopener">トークンを作る</a>（New access token）<br>2. <a href="https://app.netlify.com/projects/vim-interior/configuration/env" target="_blank" rel="noopener">環境変数</a>に <b>NETLIFY_TOKEN</b> として入れ、「Secret」にチェック<br>3. 次の公開から表示されます</div>'}
+ else if(D.error)h+='<div class="err">公開の記録を読めませんでした（'+esc(D.error)+'）</div>';
+ else{var pv=D.deploys.filter(function(x){return x.context==="deploy-preview"}),pr=D.deploys.filter(function(x){return x.context==="production"});
+  h+='<div class="card"><h3>確認待ちのプレビュー</h3>'+(pv.slice(0,8).map(function(x){var s=DST[x.state]||[x.state,""];return'<div class="row" style="padding:8px 0;border-bottom:1px solid var(--line)"><span class="chip '+s[1]+'">'+s[0]+'</span><span style="flex:1;min-width:0">'+esc(x.title||x.branch)+'<br><span class="small">'+jdt(x.at)+'</span></span>'+(x.state==="ready"?'<a class="chip" href="'+esc(x.url)+'" target="_blank" rel="noopener">開く</a>':'')+'</div>'}).join("")||'<div class="empty">ありません</div>')+'</div>';
+  h+='<div class="card"><h3>本番の公開</h3>'+(pr.slice(0,10).map(function(x){var s=DST[x.state]||[x.state,""];return'<div class="row" style="padding:8px 0;border-bottom:1px solid var(--line)"><span class="chip '+s[1]+'">'+s[0]+'</span><span style="flex:1;min-width:0">'+esc(x.title||x.commit)+'<br><span class="small">'+jdt(x.published||x.at)+(x.error?"　"+esc(x.error):"")+'</span></span></div>'}).join("")||'<div class="empty">ありません</div>')+'</div>'}
+ $("#dvb").innerHTML=h})}
+boot();
+</script></body></html>
