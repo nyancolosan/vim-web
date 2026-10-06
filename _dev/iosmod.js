@@ -5,7 +5,7 @@ function blob64(b){return new Promise(function(res,rej){var f=new FileReader();f
 /* 保存＝共有シート（「画像を保存」「ファイルに保存」などを選べる） */
 function iosDL(){return{save:function(o){var FS=nP("Filesystem"),SH=nP("Share");if(!FS||!SH)return Promise.reject({code:"unavailable"});
  var bl=o.data instanceof Blob?o.data:new Blob([o.data],{type:"application/octet-stream"});
- return blob64(bl).then(function(b64){return FS.writeFile({path:o.filename||"bimini-file",data:b64,directory:"CACHE"})}).then(function(r){return SH.share({title:o.filename,url:r.uri,dialogTitle:"保存・共有"})})
+ return blob64(bl).then(function(b64){return FS.writeFile({path:o.filename||"vim-file",data:b64,directory:"CACHE"})}).then(function(r){return SH.share({title:o.filename,url:r.uri,dialogTitle:"保存・共有"})})
   .catch(function(e){var m=String(e&&(e.message||e.errorMessage)||"");if(/cancel/i.test(m))throw{code:"declined"};throw e})}}}
 var IOS=(function(){var c=window.BIMINI_IOS||{};return{rc:c.revenuecatKey||"",ent:c.entitlement||"pro",web:c.webUrl||"",terms:c.terms||"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",privacy:c.privacy||"privacy.html",pkg:null,active:false,end:null}})();
 function iosCI(r){var ci=r&&(r.customerInfo||r);var e=ci&&ci.entitlements&&ci.entitlements.active&&ci.entitlements.active[IOS.ent];return{active:!!e,end:e&&(e.expirationDate||null),will:e?e.willRenew!==false:false}}
