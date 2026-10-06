@@ -5505,7 +5505,7 @@
 ],
 "石": [
 "Stone",
-"돌"
+"석재"
 ],
 "石目の丸鉢": [
 "Stone-texture round pot",
@@ -5785,7 +5785,7 @@
 ],
 "色": [
 "Color",
-"색상"
+"색"
 ],
 "色は": [
 "Color is ",
@@ -7010,5 +7010,61 @@
 "Web版": [
 "Web",
 "웹"
+],
+"同じ素材をまとめて": [
+"Same material together",
+"같은 소재 한꺼번에"
+],
+"木目": [
+"Grain",
+"나뭇결"
+],
+"ここを戻す": [
+"Reset this",
+"이 부분 되돌리기"
+],
+"元の素材": [
+"Original",
+"원래 소재"
+],
+"か所を選択中": [
+" parts selected",
+" 곳 선택됨"
+],
+"1か所を選択中": [
+"1 part selected",
+"1곳 선택됨"
+],
+"（ほかのところ・ほかの家具もタップで選べます）": [
+" (tap other parts or furniture to switch)",
+" (다른 부분·다른 가구도 탭해서 선택)"
+],
+"：いまは「": [
+": now “",
+": 현재 “"
+],
+"の素材": [
+" — materials",
+" 소재"
+],
+"変えたいところをタップしてください（同じ番号の家具すべてに反映されます）。": [
+"Tap the part you want to change (applies to all furniture with the same number).",
+"바꾸고 싶은 부분을 탭하세요 (같은 번호의 가구 모두에 반영됩니다)."
+],
+"素材を変える": [
+"Change materials",
+"소재 바꾸기"
+],
+"部品ごとに素材を変えるのは Plus から使えます。": [
+"Changing materials per part is available from Plus.",
+"부분별 소재 변경은 Plus부터 이용할 수 있습니다."
+],
+"木": [
+"Wood",
+"목재"
+],
+"布": [
+"Fabric",
+"패브릭"
 ]
 }

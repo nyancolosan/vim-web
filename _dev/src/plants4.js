@@ -141,4 +141,10 @@ function plant4(it,seed){var sp=PL4.sp[it.sp]||PL4.sp.ficus,H=(+it.h||sp.h)/1000
    var st=new THREE.Mesh(pl4Tube([new THREE.Vector3(bx4,y0-.02,bz4),mid,end],.008,.005,6,8).g,SM);st.castShadow=true;g.add(st);
    var Lm=(.28+R()*.14)*Math.sqrt(H/.95);pl4Card(LB,end.x,end.y,end.z,yw4+(R()-.5)*.3,.35+R()*.45,(R()-.5)*.35,Lm,Lm*.96,.28+R()*.12,.14,7)}
   g.add(pl4Mesh(LB,LM4))}
- g.userData.plant4=1;return g}
+ g.userData.plant4=1;pl4PP(g,it);return g}
+/* 部品ごとの素材・色（鉢・土・幹・葉…）。葉は形を残すため色だけ */
+function pl4PP(g,it){var n=0,ov0=isPro()&&it.pp?it.pp:null;g.traverse(function(o){if(!o.isMesh)return;var pk=n++;o.userData.pk=pk;o.userData.om=o.material.uuid;var ov=ov0&&ov0[pk];if(!ov)return;
+ var leaf=o.material.alphaTest>0||!!o.material.alphaMap,m;
+ if(ov.tx&&TEX[ov.tx]&&!leaf){m=texMat(ov.tx,ov.c||null);var gg=o.geometry.clone(),uv=gg.attributes.uv;if(uv){gg.computeBoundingBox();var b=gg.boundingBox,z=b.getSize(new THREE.Vector3()),ts=TEX[ov.tx].s||.5,cu=Math.PI*Math.max(z.x,z.z)/ts,cv=Math.max(z.y,.05)/ts*(gg.type==="LatheGeometry"?2.2:1);for(var i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*(ov.r?cv:cu),uv.getY(i)*(ov.r?cu:cv));uv.needsUpdate=true}o.geometry=gg}
+ else if(ov.c){m=o.material.clone();m._lin=0;m.color=new THREE.Color(ov.c);if(leaf){m.color.multiplyScalar(1.6)}}
+ if(m)o.material=m})}
