@@ -361,19 +361,18 @@ async function adminSales(env) {
       created: s.created, canceledAt: s.canceled_at || null, cancelAtEnd: !!s.cancel_at_period_end, end: (it && it.current_period_end) || s.current_period_end || null, customer: typeof s.customer === "string" ? s.customer : s.customer && s.customer.id };
   });
   const live = S.filter((s) => ACTIVE.includes(s.status));
-  let pays = [], src = "charges";
-  try {
-    const ch = await stripeList(env, "charges?created[gte]=" + Math.floor(now - 400 * 86400), 1000);
-    pays = ch.filter((c) => c.paid && c.status === "succeeded").map((c) => ({ at: c.created, amount: c.amount - (c.amount_refunded || 0), refunded: c.amount_refunded || 0, email: c.billing_details && c.billing_details.email || "", desc: c.description || "", customer: c.customer || "" }));
-  } catch (e) {
-    errs.push("charges:" + (e.detail || e.code)); src = "invoices";
-    try {
-      const inv = await stripeList(env, "invoices?status=paid&created[gte]=" + Math.floor(now - 400 * 86400), 1000);
-      pays = inv.map((v) => ({ at: v.status_transitions && v.status_transitions.paid_at || v.created, amount: v.amount_paid, refunded: 0, email: v.customer_email || "", desc: (v.lines && v.lines.data && v.lines.data[0] && v.lines.data[0].description) || "", customer: v.customer || "" }));
-    } catch (e2) { errs.push("invoices:" + (e2.detail || e2.code)); src = "none"; }
-  }
+  /* 入金：読める記録から順に試す（制限付きキーの権限に合わせる）。どれも読めなければ、申し込み（Checkout）の記録で数える */
+  let pays = [], src = "none";
+  const since = Math.floor(now - 400 * 86400), tries = [
+    ["charges", async () => (await stripeList(env, "charges?created[gte]=" + since, 1000)).filter((c) => c.paid && c.status === "succeeded").map((c) => ({ at: c.created, amount: c.amount - (c.amount_refunded || 0), refunded: c.amount_refunded || 0, email: c.billing_details && c.billing_details.email || "", desc: c.description || "", customer: c.customer || "" }))],
+    ["invoices", async () => (await stripeList(env, "invoices?status=paid&created[gte]=" + since, 1000)).map((v) => ({ at: v.status_transitions && v.status_transitions.paid_at || v.created, amount: v.amount_paid, refunded: 0, email: v.customer_email || "", desc: (v.lines && v.lines.data && v.lines.data[0] && v.lines.data[0].description) || "", customer: v.customer || "" }))],
+    ["payment_intents", async () => (await stripeList(env, "payment_intents?created[gte]=" + since, 1000)).filter((x) => x.status === "succeeded").map((x) => ({ at: x.created, amount: x.amount_received || x.amount, refunded: 0, email: x.receipt_email || "", desc: x.description || "", customer: x.customer || "" }))],
+    ["checkout", async () => (await stripeList(env, "checkout/sessions?created[gte]=" + since, 1000)).filter((x) => x.payment_status === "paid").map((x) => ({ at: x.created, amount: x.amount_total || 0, refunded: 0, email: x.customer_details && x.customer_details.email || "", desc: x.metadata && x.metadata.plan ? "申し込み（" + x.metadata.plan + "）" : "申し込み", customer: x.customer || "" }))],
+  ];
+  for (const [name, fn] of tries) { try { pays = await fn(); src = name; break; } catch (e) { errs.push(name + ":" + (e.detail || e.code)); } }
+  const partial = src === "checkout"; // 申し込みの記録だけ：2回目以降の自動更新の入金は含まれない
   return {
-    src, errors: errs, now,
+    src, partial, errors: src === "none" ? errs : [], now,
     mrr: live.reduce((a, s) => a + s.monthly, 0),
     active: { total: live.length, plus: live.filter((s) => s.plan === "plus").length, pro: live.filter((s) => s.plan === "pro").length, canceling: live.filter((s) => s.cancelAtEnd).length },
     subs: S.slice(0, 300), payments: pays.sort((a, b) => b.at - a.at),
