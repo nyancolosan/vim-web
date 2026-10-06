@@ -28,7 +28,7 @@ PRO（月額1,000円）は、Appleのアプリ内課金（RevenueCat経由）で
    - バンドルIDが一覧にない場合は、先にDeveloperサイトの「Identifiers」で登録します。
 2. **サブスクリプション**を作ります（アプリ →「サブスクリプション」）。
    - サブスクリプショングループ：`VIM PRO`
-   - 製品ID：`bimini_pro_monthly`、期間：1か月
+   - 製品ID：`vim_pro_monthly`、期間：1か月
    - 価格：1,000円（その価格がない場合は、いちばん近い価格を選びます）
    - 表示名・説明・審査用のスクリーンショットも入れます。
 3. **有料Appの契約**（ビジネス → 契約）に同意し、口座と税金の情報を登録します。これをしないと課金が動きません。
@@ -37,8 +37,8 @@ PRO（月額1,000円）は、Appleのアプリ内課金（RevenueCat経由）で
 ## 3. RevenueCat を準備する（購入の確認を任せるサービス）
 1. https://www.revenuecat.com で無料登録し、プロジェクトを作って「App Store」のアプリを追加します（バンドルIDを入力）。
 2. App Store Connectの「アプリ内課金キー」を作り、RevenueCatに登録します。登録方法はRevenueCatの画面の案内に従ってください。
-3. **Entitlement（権利）**を `pro` という名前で作り、`bimini_pro_monthly` を紐づけます。
-4. **Offering**（default）に、Monthlyのパッケージとして `bimini_pro_monthly` を入れます。
+3. **Entitlement（権利）**を `pro` という名前で作り、`vim_pro_monthly` を紐づけます。
+4. **Offering**（default）に、Monthlyのパッケージとして `vim_pro_monthly` を入れます。
 5. 「APIキー」画面の**公開SDKキー（appl_…）**をコピーします。
 
 ## 4. 設定ファイルを書き換える（`www/ios-config.js`）

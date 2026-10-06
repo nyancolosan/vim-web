@@ -2373,8 +2373,6 @@ function vimLockImg(c){if(VIMG[c])return VIMG[c];var m=vimMark(c,"k"+c.slice(1))
  w='<g transform="translate(940 432) scale(1.55) translate(-330 -688)" fill="'+c+'"><path d=\"M330 688 H368 L438 842 L508 688 H546 L458 866 H418 Z\"/><rect x=\"589\" y=\"688\" width=\"35\" height=\"178\"/><path d=\"M690 866 V688 H727 L800 808 L873 688 H910 V866 H876 V744 L813 846 H787 L724 744 V866 Z\"/></g>',s='<svg xmlns="http://www.w3.org/2000/svg" width="1860" height="530" viewBox="360 230 1860 530">'+m+w+'</svg>',im=new Image();im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s);VIMG[c]=im;return im}
 function vimDraw(x,c,X,Y,H,align){var im=vimLockImg(c);if(!(im.complete&&im.naturalWidth))return false;var W=H*1860/530;x.drawImage(im,align==="right"?X-W:X,Y-H/2,W,H);return W}
 (function(){[].forEach.call(document.querySelectorAll("[data-vim]"),function(el){el.innerHTML=vimMark(null,"v"+Math.random().toString(36).slice(2,6))+vimWord()});vimLockImg("#ffffff");vimLockImg("#111111")})();
-/* 旧URLから引っ越してきたとき、ひと言お知らせ */
-(function(){var c=null;try{c=sessionStorage.getItem("vim-migrated");sessionStorage.removeItem("vim-migrated")}catch(e){}if(c!==null)setTimeout(function(){toast(+c>0?"VIM は新しいURLに引っ越しました。これまでのデータを引き継いでいます。":"VIM は新しいURLに引っ越しました。")},1200)})();
 /*@@END vim@@*/
 function fixUV(geo,TS){var uv=geo.attributes&&geo.attributes.uv,P=geo.parameters,i;if(!uv||!P||!TS)return;
  if(geo.type==="BoxGeometry"){var w=P.width,h=P.height,d=P.depth,F=[[d,h],[d,h],[w,d],[w,d],[w,h],[w,h]],PF=Math.floor(uv.count/6)||4;
@@ -3379,7 +3377,7 @@ document.getElementById("pjl").addEventListener("click",function(e){var b=e.targ
   busy(b,function(){return pjWrite(r,r.name)}).then(function(){toast("「"+r.name+"」を上書きしました。");rproj()},pjFail)});
  else if(a==="dl")ask("「"+r.name+"」を削除します。元に戻せません。","削除").then(function(ok){if(!ok)return;
   pjDelete(r).then(function(){toast("削除しました。");rproj()},function(){toast("削除できませんでした。")})})});
-document.getElementById("pjx").onclick=function(){if(!DL)return;var n=document.getElementById("pjn").value.trim()||"bimini-backup";
+document.getElementById("pjx").onclick=function(){if(!DL)return;var n=document.getElementById("pjn").value.trim()||"vim-backup";
  DL.save({filename:n+".json",data:JSON.stringify(snap())}).catch(function(e){if(e&&e.code!=="declined")toast("書き出せませんでした。")})};
 document.getElementById("pji").onclick=function(){document.getElementById("pjf").click()};
 document.getElementById("pjf").addEventListener("change",function(e){var f=e.target.files[0];e.target.value="";if(!f)return;var r=new FileReader();
@@ -3709,7 +3707,7 @@ document.getElementById("prob").onclick=function(){var t=tierGet();setTier(t==="
 (function(){setTier(tierLocal(),true)})();
 document.getElementById("ain").onclick=function(){document.getElementById("aip").hidden=true};
 document.getElementById("aiy").onclick=aiRun;
-document.getElementById("shpdf").onclick=function(){save1(this,"bimini-proposal.pdf",pdfBoard)};
+document.getElementById("shpdf").onclick=function(){save1(this,"vim-proposal.pdf",pdfBoard)};
 var DL=null;
 function dimText(it){if(it.kind==="p")return["葉張り Ø"+(it.w||"-")+" / 鉢径 Ø"+(it.d||"-"),"樹高 "+(it.h||"-")+" mm"];
  return["W"+(it.w||"-")+" × D"+(it.d||"-")+" × H"+(it.h||"-")+" mm"]}
@@ -4149,7 +4147,7 @@ function blob64(b){return new Promise(function(res,rej){var f=new FileReader();f
 /* 保存＝共有シート（「画像を保存」「ファイルに保存」などを選べる） */
 function iosDL(){return{save:function(o){var FS=nP("Filesystem"),SH=nP("Share");if(!FS||!SH)return Promise.reject({code:"unavailable"});
  var bl=o.data instanceof Blob?o.data:new Blob([o.data],{type:"application/octet-stream"});
- return blob64(bl).then(function(b64){return FS.writeFile({path:o.filename||"bimini-file",data:b64,directory:"CACHE"})}).then(function(r){return SH.share({title:o.filename,url:r.uri,dialogTitle:"保存・共有"})})
+ return blob64(bl).then(function(b64){return FS.writeFile({path:o.filename||"vim-file",data:b64,directory:"CACHE"})}).then(function(r){return SH.share({title:o.filename,url:r.uri,dialogTitle:"保存・共有"})})
   .catch(function(e){var m=String(e&&(e.message||e.errorMessage)||"");if(/cancel/i.test(m))throw{code:"declined"};throw e})}}}
 var IOS=(function(){var c=window.BIMINI_IOS||{};return{rc:c.revenuecatKey||"",ent:c.entitlement||"pro",web:c.webUrl||"",terms:c.terms||"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",privacy:c.privacy||"privacy.html",pkg:null,active:false,end:null}})();
 function iosCI(r){var ci=r&&(r.customerInfo||r);var e=ci&&ci.entitlements&&ci.entitlements.active&&ci.entitlements.active[IOS.ent];return{active:!!e,end:e&&(e.expirationDate||null),will:e?e.willRenew!==false:false}}

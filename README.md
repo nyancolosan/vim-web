@@ -1,6 +1,6 @@
 # VIM Web版（Netlify）
 
-公開URL：https://vim-interior.netlify.app/ （旧URL bimini-ihae.netlify.app は `_dev/bridge` の引っ越しページを別サイトで公開し、データを引き継いで転送）
+公開URL：https://vim-interior.netlify.app/
 
 置ける？ 通れる？ いくら？ が、その場でわかる。実寸で確かめるインテリア・売場プランナーです。
 アプリ本体とサーバー（`netlify/functions/api.mjs`）を1つにまとめています。
