@@ -31,7 +31,7 @@ s = s.replace('<meta name="theme-color" content="#141414">', '<meta name="theme-
 s = s.replace('try{seen=sessionStorage.getItem("vim-op")==="1";sessionStorage.setItem("vim-op","1")}', 'try{seen=sessionStorage.getItem("vim-mj-op")==="1";sessionStorage.setItem("vim-mj-op","1")}', 1)
 # 5) 追加分
 cat = json.load(open(os.path.join(E, "catalog.json"), encoding="utf-8"))
-add = '<style>' + open(os.path.join(E, "muji.css"), encoding="utf-8").read() + '</style><script>window.MUJI_CATALOG=' + json.dumps(cat, ensure_ascii=False, separators=(",", ":")) + ';window.MUJI_CATALOG_AT="2026年10月7日";</script><script>' + open(os.path.join(E, "muji.js"), encoding="utf-8").read() + '</script>'
+add = '<style>' + open(os.path.join(E, "muji.css"), encoding="utf-8").read() + '</style><script>window.MUJI_CATALOG=' + json.dumps(cat, ensure_ascii=False, separators=(",", ":")) + ';window.MUJI_CATALOG_AT="2026年10月7日";</script><script>' + open(os.path.join(E, "mujim.js"), encoding="utf-8").read() + '</script><script>' + open(os.path.join(E, "muji.js"), encoding="utf-8").read() + '</script>'
 s = s.rstrip() + "\n" + add + "\n"
 sys.path.insert(0, E)
 from guard import guard

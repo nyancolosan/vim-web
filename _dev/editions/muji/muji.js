@@ -29,17 +29,11 @@ MC.forEach(function(p,i){p._i=i;p._k=norm(p.name+" "+(p.sub||"")+" "+(p.note||""
 function wood(n){return/ウォールナット/.test(n)?"walnut":/オーク/.test(n)?"oak":/タモ|アッシュ/.test(n)?"ash":/パイン/.test(n)?"pine":/ラバーウッド/.test(n)?"rubber":/チーク/.test(n)?"teak":/メープル/.test(n)?"maple":/ブナ/.test(n)?"beech":/チェリー/.test(n)?"cherry":/スチール|ステンレス/.test(n)?"":"oak"}
 /* 商品 → VIM の家具（形は近いものを選び、寸法は商品のまま） */
 function toItem(p){var n=p.name,w=wood(n),o={name:n,w:p.w,d:p.d,h:p.h,price:p.price||"",jan:p.jan,url:p.url};if(w)o.wtex=w;
- if(p.cat==="sofa"){if(/オットマン|スツール/.test(n+(p.sub||""))){o.fs="bench"}else if(/ソファベッド/.test(n)){o.fs="sofa";o.f4="sofa";o.arm="n";o.leg="w";o.bk="l"}
-  else{o.fs="sofa";o.f4="sofa";o.arm=/アームレス|カウチ/.test(n)?"n":/木製フレーム|木製アーム/.test(n)?"t":"k";o.leg=/フロア|体にフィット|空気/.test(n)?"p":"w";o.bk=/ハイバック/.test(n)?"h":"l";o.cu=/カウチ|1シーター|１シーター/.test(n)?"b":"s"}}
- else if(p.cat==="table"||p.cat==="lt"){o.fs=p.cat==="lt"?"lt":"table";o.f4="table";o.top=p.top==="round"||/丸|ラウンド/.test(n)?"c":p.top==="oval"||/楕円/.test(n)?"o":"r";o.lg="4"}
- else if(p.cat==="desk"){o.fs="desk";o.f4="desk";o.dr=/引出/.test(n)?"y":"n"}
- else if(p.cat==="chair"){o.fs="chair"}
- else if(p.cat==="bench"){o.fs="bench"}
- else if(p.cat==="bed"){o.fs="bed";o.f4="bed";o.hb=/脚付マットレス/.test(n)?"n":"p"}
- else if(p.cat==="shelf"){o.fs="shelf";if(/チェスト|引出/.test(n+(p.sub||""))){o.f4="chest";o.tiers=String(Math.max(2,Math.min(8,p.tiers||4)))}else if(/キャビネット|扉/.test(n+(p.sub||""))){o.f4="board"}else{o.f4="shelf";o.tiers=String(Math.max(1,Math.min(8,p.tiers||Math.max(2,Math.round(p.h/360)))));o.back="n"}}
- else if(p.cat==="rug"){o.fs="g";o.col="#cbb9a0"}
- else if(p.cat==="l"){o.fs="l"}
+ var m=window.mjShape?mjShape(p):null;if(m&&m.f4){o.f4=m.f4;o.fs=m.fs;o.mj=m.mj;if(m.col)o.col=m.col;if(m.wtex)o.wtex=m.wtex;if(m.f4==="round"||m.f4==="bent")o.wtex=w||"oak";if(/スチール|ステンレス/.test(n)&&!/材棚|天板|材デスク/.test(n))delete o.wtex}
+ else o.fs={sofa:"sofa",table:"table",lt:"lt",desk:"desk",chair:"chair",bench:"bench",bed:"bed",shelf:"shelf",rug:"g"}[p.cat]||"shelf";
  return o}
+/* 以前に置いた無印良品の商品も、新しい3Dモデルに */
+(function(){try{var ch=0,J={};MC.forEach(function(p){J[p.jan]=p});items.forEach(function(it){var p=it&&it.jan&&J[it.jan];if(!p||it.mj)return;var o=toItem(p);["f4","fs","mj","col","wtex"].forEach(function(k){if(o[k]!==undefined)it[k]=o[k];else delete it[k]});ch++});if(ch){save();try{render();rplan();after3d()}catch(x){}}}catch(e){}})();
 function find(){var t=norm(S.q).split(/\s+/).filter(Boolean),mw=+S.w||0,md=+S.d||0;
  var r=MC.filter(function(p){return(S.cat==="all"||p.cat===S.cat)&&t.every(function(x){return p._k.indexOf(x)>=0})&&(!mw||p.w<=mw)&&(!md||p.d<=md)});
  if(S.sort==="pa")r.sort(function(a,b){return(a.price||9e9)-(b.price||9e9)});else if(S.sort==="pd")r.sort(function(a,b){return(b.price||0)-(a.price||0)});else if(S.sort==="w")r.sort(function(a,b){return a.w-b.w});
@@ -86,5 +80,5 @@ var tb=q("tplb");if(tb){tb.onclick=function(){open(true)};var l1=tb.querySelecto
 /* ロゴの下に「for MUJI staff」 */[].forEach.call(document.querySelectorAll(".stmbrand,.verlogo"),function(el){if(el.querySelector(".mjsub"))return;var t=document.createElement("small");t.className="mjsub";t.textContent="for MUJI staff — VIM";el.appendChild(t)});
 /* 6) 見積書に JAN コード */
 if(typeof dimText==="function"){var oDT=dimText;dimText=function(it){var r=oDT(it);if(it&&it.jan)r=r.concat(["JAN "+it.jan]);return r}}
-window.mujiOpen=open;
+window.mujiOpen=open;window.__toItem=toItem;
 })();
