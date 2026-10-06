@@ -1,0 +1,8 @@
+# 旧URL（bimini-ihae.netlify.app）専用：VIM の新URLへ引っ越すためのページだけを出す
+[build]
+  publish = "."
+  command = ""
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "no-cache"
