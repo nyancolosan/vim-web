@@ -64,3 +64,8 @@ Stripe に次の価格を作り、価格IDを Netlify の Environment variables 
 ## 注意
 - Netlify の Drop（ドラッグ＆ドロップでの公開）ではサーバーが動きません。GitHub 連携で公開してください。
 - キーが漏れたかもしれないときは、Stripe ですぐにキーをロール（作り直し）してください。
+
+## 言語（v4〜）
+- 画面は日本語で作り、表示時に `_dev/src/i18n.js` が英語・韓国語に置きかえます（設定 →「言語」、初回は端末の言語）。
+- 訳の辞書は `_dev/i18n-dict.json`（日本語 → [英語, 韓国語]）。直したら `python3 _dev/i18n_build.py && python3 _dev/sync_src.py && python3 _dev/build.py 版`。
+- 新しい日本語の文言を足したら、辞書にも追加してください（無い文言は部分ごとに訳されます）。
