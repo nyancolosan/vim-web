@@ -7,5 +7,5 @@ with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page(viewport={"width":1024,"height":1024})
     pg.set_content('<body style="margin:0;background:#0a0a0a">'+open(os.path.join(B,'icon.svg')).read()+'</body>');pg.screenshot(path=os.path.join(B,'icon-1024.png'));b.close()
 im=Image.open(os.path.join(B,'icon-1024.png')).convert('RGB')
-for s in (180,192,512):im.resize((s,s),Image.LANCZOS).save(os.path.join(ROOT,'icon-%d.png'%s))
+for s in (180,192,512):im.resize((s,s),Image.LANCZOS).save(os.path.join(ROOT,"vim-icon-%d.png"%s))
 print("ok")

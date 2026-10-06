@@ -28,7 +28,7 @@ head = (
     '<meta name="description" content="置ける？ 通れる？ いくら？ が、その場でわかる。実寸で確かめるインテリア・売場プランナー">\n'
     '<script src="config.js"></script>\n'
     '<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="' + THEME + '">'
-    '<link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">\n'
+    '<link rel="apple-touch-icon" href="vim-icon-180.png"><link rel="icon" href="vim-icon-192.png">\n'
     '<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">'
     '<meta name="apple-mobile-web-app-status-bar-style" content="default">\n'
 )
