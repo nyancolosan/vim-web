@@ -26,6 +26,9 @@ assert n == 1, "版表示が見つかりません"
 
 head = (
     '<meta name="description" content="置ける？ 通れる？ いくら？ が、その場でわかる。実寸で確かめるインテリア・売場プランナー">\n'
+    r'<script>/* 旧URLからの引っ越し：?mig= で預けたデータを一度だけ受け取る（すでにある項目は上書きしない） */(function(){try{var q=new URLSearchParams(location.search),t=q.get("mig"),n=+q.get("mign")||1;if(!/^[0-9a-f]{32}$/.test(t||""))return;var s="";for(var i=0;i<n;i++){var x=new XMLHttpRequest();x.open("GET","/api/mig?t="+t+"&i="+i+"&n="+n,false);x.send();if(x.status!==200){s=null;break}s+=x.responseText}'
+    r'if(s){var d=JSON.parse(s),c=0;Object.keys(d).forEach(function(k){if(localStorage.getItem(k)===null){var v=d[k];if(k==="bimini-weburl")v=String(v).replace(/https?:\/\/bimini-ihae\.netlify\.app/g,location.origin);try{localStorage.setItem(k,v);c++}catch(e){}}});try{sessionStorage.setItem("vim-migrated",String(c))}catch(e){}}'
+    r'q.delete("mig");q.delete("mign");history.replaceState(null,"",location.pathname+(q.toString()?"?"+q:"")+location.hash)}catch(e){}})();</script>' '\n'
     '<script src="config.js"></script>\n'
     '<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="' + THEME + '">'
     '<link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">\n'

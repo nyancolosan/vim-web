@@ -7,6 +7,7 @@
  * - POST /api/db        … クラウド同期（Plus・Pro）。復元コードごとに保存
  * - POST /api/ev        … 匿名の利用状況（どの画面で止まったか、など）
  * - GET  /api/stats     … 利用状況の集計（STATS_KEY が必要）
+ * - POST/GET /api/mig   … 旧URLからの引っ越し（端末の保存データを一時的に預かり、新URLで受け取る。24時間で無効）
  *
  * 必要な設定（Netlify → サイト設定 → Environment variables）※値はチャットに貼らないこと
  *   STRIPE_KEY            制限付きAPIキー（rk_…）  … 「Secret」にチェック
@@ -53,6 +54,8 @@ export default async (req, context) => {
     // 利用状況は課金の設定と関係なく受け付ける
     if (url.pathname === "/ev" && req.method === "POST") return json(await evPut(await req.text()), 200, cors);
     if (url.pathname === "/stats" && req.method === "GET") return json(await stats(url, env), 200, cors);
+    // 旧URL（bimini-ihae.netlify.app）からの引っ越し：保存データを一時的に預かる
+    if (url.pathname === "/mig") return await mig(req, url);
     if (!env.STRIPE_KEY) return json({ disabled: true }, 200, cors);
     env.LIC = globalThis.__BIMINI_LIC || licStore();
     if (url.pathname === "/webhook" && req.method === "POST") return await webhook(req, env);
@@ -319,3 +322,29 @@ function corsHeaders(req, env) {
   return { "Access-Control-Allow-Origin": origin === allow ? origin : allow, "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type", Vary: "Origin" };
 }
 function json(d, status, headers) { return new Response(JSON.stringify(d), { status, headers: Object.assign({ "Content-Type": "application/json" }, headers || {}) }); }
+
+/* ===== 旧URLからの引っ越し =====
+ * 旧URLのページが端末の保存データ（localStorage）を分けて送り、新URLのアプリが一度だけ受け取る。 */
+const OLD_ORIGINS = ["https://bimini-ihae.netlify.app"];
+async function mig(req, url) {
+  const origin = req.headers.get("origin") || "";
+  const h = { "Access-Control-Allow-Origin": OLD_ORIGINS.includes(origin) ? origin : "*", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type", Vary: "Origin", "Cache-Control": "no-store" };
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: h });
+  const t = url.searchParams.get("t") || "", i = +url.searchParams.get("i") || 0, n = +url.searchParams.get("n") || 1;
+  if (!/^[0-9a-f]{32}$/.test(t) || i < 0 || i > 63 || n < 1 || n > 64) return json({ error: "bad" }, 400, h);
+  const st = getStore({ name: "bimini-mig", consistency: "strong" }), k = t + "/" + i;
+  if (req.method === "POST") {
+    if (!OLD_ORIGINS.includes(origin)) return json({ error: "origin" }, 403, h);
+    const body = await req.text();
+    if (body.length > 4500000) return json({ error: "too_large" }, 413, h);
+    await st.set(k, JSON.stringify({ at: Date.now(), n, d: body }));
+    return json({ ok: true }, 200, h);
+  }
+  if (req.method === "GET") {
+    const v = await st.get(k, { type: "json" });
+    if (!v || Date.now() - v.at > 864e5) return json({ error: "not_found" }, 404, h);
+    await st.delete(k);
+    return new Response(v.d, { status: 200, headers: Object.assign({ "Content-Type": "text/plain; charset=utf-8" }, h) });
+  }
+  return json({ error: "method" }, 405, h);
+}

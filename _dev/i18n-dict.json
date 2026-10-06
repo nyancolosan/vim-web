@@ -7066,5 +7066,13 @@
 "布": [
 "Fabric",
 "패브릭"
+],
+"VIM は新しいURLに引っ越しました。これまでのデータを引き継いでいます。": [
+"VIM has moved to a new URL. Your data has been carried over.",
+"VIM이 새 URL로 이전했습니다. 기존 데이터를 그대로 가져왔습니다."
+],
+"VIM は新しいURLに引っ越しました。": [
+"VIM has moved to a new URL.",
+"VIM이 새 URL로 이전했습니다."
 ]
 }
