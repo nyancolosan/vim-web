@@ -33,6 +33,9 @@ s = s.replace('try{seen=sessionStorage.getItem("vim-op")==="1";sessionStorage.se
 cat = json.load(open(os.path.join(E, "catalog.json"), encoding="utf-8"))
 add = '<style>' + open(os.path.join(E, "muji.css"), encoding="utf-8").read() + '</style><script>window.MUJI_CATALOG=' + json.dumps(cat, ensure_ascii=False, separators=(",", ":")) + ';window.MUJI_CATALOG_AT="2026年10月7日";</script><script>' + open(os.path.join(E, "muji.js"), encoding="utf-8").read() + '</script>'
 s = s.rstrip() + "\n" + add + "\n"
+sys.path.insert(0, E)
+from guard import guard
+s, _ng = guard(s); print("guarded", _ng)
 open(sys.argv[1], "w", encoding="utf-8").write(s)
 # 6) アイコン（赤の角丸に VIM と英字）
 P = json.load(open(os.path.join(D, "brand", "vim-parts.json")))
