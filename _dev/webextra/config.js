@@ -1,4 +1,4 @@
-/* BIMini Web版の設定ファイル
+/* VIM Web版の設定ファイル
  * サーバーは netlify/functions/api.mjs です。
  * Netlify側でStripeの設定（STRIPE_KEYなど）を入れるまでは、課金は止まっていて、
  * 画面上部の「プラン」ボタンで Free → Plus → Pro を自由に切り替えられます。

@@ -1,4 +1,4 @@
-/* BIMini iOSアプリの設定（手順書の「4. RevenueCat」のあとに書き換えます） */
+/* VIM iOSアプリの設定（手順書の「4. RevenueCat」のあとに書き換えます） */
 window.BIMINI_IOS = {
   revenuecatKey: "",            // RevenueCatの「公開SDKキー」（appl_… で始まる。アプリに入れて大丈夫な種類のキーです）
   entitlement: "pro",           // RevenueCatで作る「権利（Entitlement）」の名前

@@ -1,4 +1,4 @@
-# BIMini Web版 3.0（Netlify）
+# VIM Web版 3.0（Netlify）
 
 置ける？ 通れる？ いくら？ が、その場でわかる。実寸で確かめるインテリア・売場プランナーです。
 アプリ本体とサーバー（`netlify/functions/api.mjs`）を1つにまとめています。

@@ -1,4 +1,4 @@
-"""BIMini Web版を、このリポジトリの中だけで組み立てるスクリプト。
+"""VIM Web版を、このリポジトリの中だけで組み立てるスクリプト。
 
 使い方（リポジトリ直下で）:
     python3 _dev/build.py 3.0.0
@@ -18,7 +18,7 @@ VER = sys.argv[1] if len(sys.argv) > 1 else None
 if not VER or not re.fullmatch(r"\d+\.\d+\.\d+", VER):
     sys.exit("バージョンを 3.0.0 の形で指定してください。")
 SHORT = ".".join(VER.split(".")[:2])
-THEME = "#2b2b2b"
+THEME = "#141414"
 
 s = open(SRC, encoding="utf-8").read()
 s, n = re.subn(r"インテリア・売場プランナー　(v\d+|Web版 [\d.]+)", "インテリア・売場プランナー　Web版 " + SHORT, s, count=1)
@@ -32,8 +32,8 @@ head = (
     '<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">'
     '<meta name="apple-mobile-web-app-status-bar-style" content="default">\n'
 )
-assert s.count("<title>BIMini</title>") == 1
-s = s.replace("<title>BIMini</title>", "<title>BIMini</title>\n" + head)
+assert s.count("<title>VIM</title>") == 1
+s = s.replace("<title>VIM</title>", "<title>VIM</title>\n" + head)
 
 reg = (
     '<script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"||location.hostname==="127.0.0.1"))'
@@ -54,7 +54,7 @@ open(sw_path, "w", encoding="utf-8").write(sw)
 mf_path = os.path.join(ROOT, "manifest.webmanifest")
 mf = json.load(open(mf_path, encoding="utf-8"))
 mf["theme_color"] = THEME
-mf["background_color"] = "#ffffff"
+mf["background_color"] = "#0a0a0a"
 json.dump(mf, open(mf_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 print("index.html / sw.js / manifest.webmanifest を更新しました（" + VER + "）")
