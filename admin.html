@@ -8,7 +8,7 @@
 :root{--bg:#f4f3f0;--card:#fff;--ink:#141414;--sub:#6a6a6a;--mute:#9a9a9a;--line:#e6e4df;--acc:#141414;--bar:#3f6f9f;--bar2:#9fb8cf;--good:#2f7d4f;--warn:#b7791f;--bad:#b3403a;--r:14px;color-scheme:light}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;-webkit-text-size-adjust:100%}
 header{position:sticky;top:0;z-index:10;background:#141414;color:#fff;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;display:flex;align-items:center;gap:10px}
-header svg{height:28px;width:auto;display:block}header b{font-size:1rem;letter-spacing:.06em}header small{color:#9a9a9a;font-size:.72rem;margin-left:2px}
+header svg{height:22px;width:auto;display:block}header small{color:#9a9a9a;font-size:.72rem;margin-left:2px}
 header .sp{flex:1}header button{background:none;border:1px solid #444;color:#fff;border-radius:999px;font:inherit;font-size:.78rem;padding:6px 12px}
 main{max-width:980px;margin:0 auto;padding:14px 14px calc(90px + env(safe-area-inset-bottom))}
 nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;padding:4px 4px calc(4px + env(safe-area-inset-bottom))}
@@ -40,7 +40,7 @@ button.b{font:inherit;font-size:.85rem;border:1px solid var(--ink);background:va
 .list .u{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.84rem}.list .u .m{color:var(--sub);font-size:.74rem}
 </style></head>
 <body>
-<header><svg viewBox="360 235 520 515" aria-hidden="true"><path d="M380 372 L630 243 L630 258 L488 334 L488 690 L380 612 Z" fill="#fff"/><path d="M488 690 L640 560 L838 640 L622 742 Z" fill="#c4c0bb"/><path d="M722 325 L868 390 L868 634 L722 580 Z" fill="#8b8580"/><rect x="621" y="246" width="8" height="142" fill="#fff"/><path d="M569 442 A55 55 0 0 1 679 442 Z" fill="#fff"/></svg><b>VIM</b><small>管理</small><span class="sp"></span><button id="rf" type="button">更新</button></header>
+<header><svg viewBox="230 455 790 275" aria-hidden="true" style="height:22px"><g fill="#fff"><path d="M241 487Q238 478 248 478H344Q352 478 355 486L381 572L407 486Q410 478 418 478H514Q524 478 521 487L421 712Q418 720 409 720H353Q344 720 341 712Z"/><path d="M579 465H592V596H598V612L668 700Q674 712 662 712H508Q496 712 502 700L572 612V596H579Z"/><path d="M710 486Q710 478 718 478H792Q800 478 805 485L860 563L915 485Q920 478 928 478H1002Q1010 478 1010 486V712Q1010 720 1002 720H940Q932 720 932 712V612L873 687Q867 694 860 694Q853 694 847 687L788 612V712Q788 720 780 720H718Q710 720 710 712Z"/></g></svg><small>管理</small><span class="sp"></span><button id="rf" type="button">更新</button></header>
 <main id="app"><div class="empty">読み込み中…</div></main>
 <nav id="nav" hidden>
  <button data-t="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>ホーム</button>
