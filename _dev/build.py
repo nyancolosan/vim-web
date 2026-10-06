@@ -21,7 +21,7 @@ SHORT = ".".join(VER.split(".")[:2])
 THEME = "#2b2b2b"
 
 s = open(SRC, encoding="utf-8").read()
-s, n = re.subn(r"インテリア・売場プランナー　(v\d+|Web版 [\d.]+)", "インテリア・売場プランナー　Web版 " + SHORT, s)
+s, n = re.subn(r"インテリア・売場プランナー　(v\d+|Web版 [\d.]+)", "インテリア・売場プランナー　Web版 " + SHORT, s, count=1)
 assert n == 1, "版表示が見つかりません"
 
 head = (
