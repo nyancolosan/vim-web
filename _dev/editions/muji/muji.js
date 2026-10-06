@@ -79,7 +79,7 @@ var tb=q("tplb");if(tb){tb.onclick=function(){open(true)};var l1=tb.querySelecto
 ["plb","plb3"].forEach(function(id){var b=q(id),l=b&&b.querySelector(".lb");if(l)l.textContent="無印良品の商品を置く";else if(b&&!b.children.length)b.textContent="無印良品の商品を置く"});
 /* ロゴの下に「for MUJI staff」 */[].forEach.call(document.querySelectorAll(".stmbrand,.verlogo"),function(el){if(el.querySelector(".mjsub"))return;var t=document.createElement("small");t.className="mjsub";t.textContent="for MUJI staff — VIM";el.appendChild(t)});
 /* 6) 見積書に JAN コード */
-if(typeof dimText==="function"){var oDT=dimText;dimText=function(it){var r=oDT(it),th=window.mjTotalH&&mjTotalH(it);if(th)r=r.concat(["脚"+Math.round(th-(+it.h||0))/10+"cm込みの総高さ H"+Math.round(th)+" mm"]);if(it&&it.f4==="mjssh"&&it.lay==="h")r=r.concat(["横置き"]);if(it&&it.jan)r=r.concat(["JAN "+it.jan]);return r}}
+if(typeof dimText==="function"){var oDT=dimText;dimText=function(it){var r=oDT(it),th=window.mjTotalH&&mjTotalH(it);if(th)r=r.concat([(window.mjLegName?mjLegName(it):"脚")+"込みの総高さ H"+Math.round(th)+" mm"]);if(it&&it.f4==="mjssh"&&it.lay==="h")r=r.concat(["横置き"]);if(it&&it.jan)r=r.concat(["JAN "+it.jan]);return r}}
 /* 棚の詳細に「置き方（縦置き・横置き）」を出す（スタッキングシェルフ） */
 function layUI(){try{items.forEach(function(it,i){if(!it||it.f4!=="mjssh")return;var g=document.getElementById("grid");if(!g||g.querySelector('select[data-f="lay"][data-i="'+i+'"]'))return;var a=g.querySelector('select[data-f="st"][data-i="'+i+'"]');var host=a&&a.closest("label");if(!host)return;
  var l=document.createElement("label");l.innerHTML='置き方<select data-f="lay" data-i="'+i+'"><option value="v"'+(it.lay==="h"?"":" selected")+'>縦置き</option><option value="h"'+(it.lay==="h"?" selected":"")+'>横置き</option></select>';host.parentNode.insertBefore(l,host)})}catch(e){}}

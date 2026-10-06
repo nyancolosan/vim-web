@@ -51,7 +51,7 @@ F4.mjch=function(K,it,W,H,D){var o=O(it),w=K.wood("oak"),pl=.05,n=o.r||Math.max(
 F4.mjwall=function(K,it,W,H,D){var o=O(it),w=K.wood("oak"),t=.015,y0=o.y0==null?(H<.25?1.1:.9):o.y0;K.box(W,t,D,0,y0+t/2,0,w,.003);K.box(W,t,D,0,y0+H-t/2,0,w,.003);[-1,1].forEach(function(a){K.box(t,H,D,a*(W/2-t/2),y0+H/2,0,w,.003)});K.box(W-2*t,H-2*t,.006,0,y0+H/2,-D/2+.003,w,.002)};
 
 /* ---------- ベッド ---------- */
-/* 別売りの脚（脚付マットレス・ベッド共通）：lgm o=オーク w=ウォールナット s=スチール / lgh 12・20・26cm。商品の高さは本体のみ、脚の分だけ持ち上げる */
+/* 別売りの脚（脚付マットレス・ベッド共通）：lgm o=木製脚 ナチュラル w=木製脚 ブラウン s=スチール脚 / lgh 12・20・26cm。商品の高さは本体のみ、脚の分だけ持ち上げる */
 function bedLegH(it){var v=+it.lgh;return(v===12||v===26?v:20)/100}
 function bedLeg(K,it,x,z,h){var m=it.lgm||"o";if(m==="s")K.cyl(.014,.014,h,x,h/2,z,K.col("#2a2a2b",.4,.35),16);else K.leg([x,0,z],[x,h,z],.017,.022,K.tx(m==="w"?"walnut":"oak"),20)}
 /* 脚付マットレス：マットレス本体の下に脚（長さ方向に3列、幅が広いものは中央にも） */
@@ -66,11 +66,12 @@ F4.mjbed=function(K,it,W,H,D){var o=O(it),w=K.wood("oak"),L=bedLegH(it),hb=o.hb|
  var mt=.2,my=L+.06;K.cush(W-2*t-.01,mt,fd-t-.02,0,my+mt/2,fz-t/2,K.col("#f4f2ee",.9),.04,.008);K.cush(W-2*t,.03,fd*.62,0,my+mt+.01,fz+fd*.17,K.fab("plain",it.ccol||"#d9d4ca"),.015,.01);
  var np=W>1.3?2:1,pw=np===2?W*.4:W*.62;for(var j=0;j<np;j++)K.cush(pw,.11,.34,np===2?(j?1:-1)*W*.23:0,my+mt+.05,-D/2+hd+.24,K.fab("plain","#efede8"),.05,.03);
  if(hb==="r"){var g=K.box(W,H,hd,0,L+H/2,-D/2+hd/2+.02,w,.01);g.rotation.x=-.1}else K.box(W,H,hd,0,L+H/2,-D/2+hd/2,w,.006)};
-F4OPT.mjlm=F4OPT.mjbed=[["lgm","脚（別売り）",[["o","オーク"],["w","ウォールナット"],["s","スチール"]]],["lgh","脚の高さ",[["20","20cm"],["12","12cm"],["26","26cm"]]]];
+F4OPT.mjlm=F4OPT.mjbed=[["lgm","脚（別売り）",[["o","木製脚 ナチュラル"],["w","木製脚 ブラウン"],["s","スチール脚"]]],["lgh","脚の高さ",[["20","20cm"],["12","12cm"],["26","26cm"]]]];
 /* スタッキングシェルフは横置きにもできる（置き方を変えると幅と高さが入れ替わる） */
 F4.mjssh=function(K,it,W,H,D){F4.mjss(K,it,W,H,D)};
 F4OPT.mjssh=[["lay","置き方",[["v","縦置き"],["h","横置き"]]]];
 window.mjLay=function(it){if(!it||it.f4!=="mjssh")return false;var want=it.lay==="h",cur=!!it.layH;if(want===cur)return false;var w=it.w;it.w=it.h;it.h=w;it.layH=want;return true};
+window.mjLegName=function(it){return{o:"木製脚 ナチュラル",w:"木製脚 ブラウン",s:"スチール脚"}[it.lgm||"o"]+" "+Math.round(bedLegH(it)*100)+"cm"};
 window.mjTotalH=function(it){if(!it||(it.f4!=="mjlm"&&it.f4!=="mjbed"))return null;return(+it.h||0)+bedLegH(it)*1000};
 if(typeof TPLF!=="undefined")["lgm","lgh","lay","layH","mjv"].forEach(function(k){if(TPLF.indexOf(k)<0)TPLF.push(k)});
 
