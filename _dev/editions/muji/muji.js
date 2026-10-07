@@ -1,4 +1,4 @@
-/* ===== POAD（pocket advisor。旧 VIM for MUJI staff / MUJI Store Assistant。店舗スタッフ向け・部屋づくり・カーテン見積・素材知識） =====
+/* ===== idea（旧 POAD / MUJI Store Assistant / VIM for MUJI staff。店舗スタッフ向け・部屋づくり・カーテン見積・素材知識） =====
  * VIM 本体の上に重ねて動く追加分。VIM 本体には入らない（_dev/editions/muji/build_muji.py で別ファイルに組み立てる）。
  * ・プランの切り替えなし（全機能）・白地にエンジのテーマ
  * ・はじめの画面を「接客」「売場（vmd）」に
@@ -15,7 +15,7 @@ var RED="#9f2a37",WHITE={"--bg":"#ffffff","--card":"#ffffff","--fill":"#ffffff",
 function red(){try{var V=themeVars(RED),r=document.documentElement;Object.keys(WHITE).forEach(function(k){V[k]=WHITE[k]});Object.keys(V).forEach(function(k){r.style.setProperty(k,V[k])});var mt=document.querySelector('meta[name="theme-color"]');if(mt)mt.setAttribute("content",RED)}catch(e){}}
 if(typeof setTheme==="function"){var oST=setTheme;setTheme=function(){var r=oST.apply(this,arguments);red();return r}}red();
 /* 3) 見出し */
-/* （ロゴが POAD になったので、文字のラベルは付けない） */
+/* （ロゴが idea になったので、文字のラベルは付けない） */
 /* 4) はじめの画面：接客／売場 */
 var rb=document.querySelector('#stmk [data-k="room"]'),vb=document.querySelector('#stmk [data-k="vmd"]');
 if(rb)rb.innerHTML='接客<small>お客さまのお部屋</small>';if(vb)vb.innerHTML='売場づくり<small>vmd・什器</small>';
@@ -99,7 +99,7 @@ mjPrune();
 /* 置き方（縦・横）を変えたら幅と高さを入れ替える */
 (function(){var g=document.getElementById("grid");if(!g)return;g.addEventListener("change",function(e){var t=e.target,i=t.getAttribute&&t.getAttribute("data-i"),f=t.getAttribute&&t.getAttribute("data-f");if(i===null||f!=="lay")return;var it=items[+i];if(!it)return;it.lay=t.value;if(window.mjLay&&mjLay(it)){save();try{render();rplan();after3d()}catch(x){}}else save()})})();
 
-/* ===== POAD：はじめの選択画面と、オーダーカーテン見積・素材知識（同じフォルダのページを全画面で重ねる） ===== */
+/* ===== idea：はじめの選択画面と、オーダーカーテン見積・素材知識（同じフォルダのページを全画面で重ねる） ===== */
 (function(){
 var IC={
  room:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20 24 7l18 13"/><path d="M10 17v24h28V17"/><path d="M15 34v-6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v6"/><path d="M13 34h22v4H13z"/><path d="M15 38v3M33 38v3"/></svg>',
@@ -120,23 +120,23 @@ window.addEventListener("message",function(e){var d=e.data||{},k=null;Object.key
  if(d.mj==="sub-ready"&&k){subs[k].ready=true;subs[k].el.querySelector(".mjsubf").hidden=true}
  if(d.mj==="sub-close")closeSub()});
 /* --- はじめの選択画面 --- */
-var home=document.createElement("div");home.id="poadhome";home.setAttribute("role","dialog");home.setAttribute("aria-label","POAD メニュー");
-home.innerHTML='<div class="phin"><div class="phlogo" data-vim="lock" role="img" aria-label="POAD pocket advisor"></div>'+
+var home=document.createElement("div");home.id="ideahome";home.setAttribute("role","dialog");home.setAttribute("aria-label","idea メニュー");
+home.innerHTML='<div class="phin"><div class="phlogo" role="img" aria-label="idea"></div>'+
  '<p class="phq">今日は何をしますか？</p><div class="phgrid">'+
  '<button type="button" class="phc" data-go="room"><span class="phi">'+IC.room+'</span><span><b>部屋に家具を置く</b><small>間取りに無印良品の家具を実寸で置いて、3Dで確かめる</small></span></button>'+
  '<button type="button" class="phc" data-go="curtain"><span class="phi">'+IC.curtain+'</span><span><b>オーダーカーテンの見積り</b><small>生地・スタイル・サイズ・吊り方から金額と見積書をつくる</small></span></button>'+
  '<button type="button" class="phc" data-go="know"><span class="phi">'+IC.know+'</span><span><b>素材知識</b><small>木材・繊維・カーテン生地の特長と、接客のひとこと</small></span></button>'+
  '</div><p class="phsup">supported by VIM</p></div>';
 document.body.appendChild(home);
-try{home.querySelector("[data-vim]").innerHTML=vimLock()}catch(e){}
+try{home.querySelector(".phlogo").innerHTML=vimWord()}catch(e){}
 function showHome(){home.hidden=false;document.documentElement.style.overflow="hidden"}
 function hideHome(){home.hidden=true;document.documentElement.style.overflow=""}
 home.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(!b)return;var g=b.getAttribute("data-go");if(g==="room")hideHome();else openSub(g)});
 /* ヘッダーに「メニュー」、ロゴを押してもメニューへ */
 var hb=document.querySelector("h1 .hbt"),th=q("thb");
-if(hb&&!q("poadmenu")){var b=document.createElement("button");b.id="poadmenu";b.className="hb";b.type="button";b.setAttribute("aria-label","メニュー");b.innerHTML=IC.menu+"メニュー";b.onclick=showHome;hb.insertBefore(b,th&&th.parentNode===hb?th:null)}
+if(hb&&!q("ideamenu")){var b=document.createElement("button");b.id="ideamenu";b.className="hb";b.type="button";b.setAttribute("aria-label","メニュー");b.innerHTML=IC.menu+"メニュー";b.onclick=showHome;hb.insertBefore(b,th&&th.parentNode===hb?th:null)}
 var lg=document.querySelector("h1 .vlogo");if(lg){lg.style.cursor="pointer";lg.addEventListener("click",showHome)}
-window.poadMenu=showHome;window.mjCurtainOpen=function(){openSub("curtain")};
+window.ideaMenu=showHome;window.mjCurtainOpen=function(){openSub("curtain")};
 var h=(location.hash||"").slice(1);if(h==="curtain"||h==="know")openSub(h);else if(h==="room")hideHome();else showHome();
 })();
 window.mujiOpen=open;window.__toItem=toItem;
