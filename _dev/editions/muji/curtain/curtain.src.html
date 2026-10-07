@@ -1,0 +1,700 @@
+<title>MUJI Store Assistant for curtain</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap">
+<style>
+/* Layout: VIM for MUJI と同じ骨格。白いヘッダー＋1カラム（最大720px）＋下部固定タブ。見積額は常にタブの上に出す */
+:root{
+  --bg:#ffffff;--card:#ffffff;--ink:#333333;--sub:#7d7778;--line:#e3dfdf;--fill:#ffffff;
+  --acc:#9f2a37;--accink:#ffffff;--accbg:#f9eef0;--ok:#4f6b45;--warn:#a5520f;
+  --head:#ffffff;--headink:#333333;--logo:#ffffff;--logobg:#9f2a37;--shadow:rgba(60,30,35,.05);
+  --rc:6px;--rb:4px;color-scheme:light;
+  --f-body:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --f-num:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+main{max-width:720px;margin:0 auto;padding:0 14px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.num,.yen{font-variant-numeric:tabular-nums}
+/* header */
+header.hd{background:var(--head);color:var(--headink);margin:0 -14px 14px;padding:10px 12px 10px 16px;border-bottom:1px solid var(--line);border-radius:0 0 var(--rc) var(--rc);display:flex;align-items:center;gap:8px;min-height:58px}
+.vlogo{display:inline-flex;align-items:center;background:var(--logobg);color:var(--logo);padding:5px 9px;border-radius:6px;line-height:0}
+.vlogo svg{height:22px;width:auto;display:block}
+.mjhd{font-size:.62rem;font-weight:700;letter-spacing:.08em;border:1px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap;opacity:.85}
+.hdt{margin-left:auto;text-align:right;line-height:1.25;min-width:0}
+.hdt b{display:block;font-size:.95rem;font-family:"Poppins","Hiragino Sans",system-ui,sans-serif;letter-spacing:.01em}
+.hdt small{color:var(--sub);font-size:.7rem}
+/* sections */
+h2{font-size:.95rem;margin:22px 0 8px;border-left:3px solid var(--acc);padding-left:8px;display:flex;align-items:baseline;gap:8px;text-wrap:balance}
+h2 small{font-weight:400;color:var(--sub);font-size:.74rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--rc);padding:12px;box-shadow:0 1px 3px var(--shadow)}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg button{flex:1;border:0;background:none;color:var(--sub);min-height:42px;font-size:.88rem;padding:0 4px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--acc);color:var(--accink);font-weight:700}
+.seg button:disabled{opacity:.35;cursor:default}
+input[type=text],input[type=number],input[type=search],select{width:100%;font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--fill);color:var(--ink)}
+label.lb{display:block;font-size:.72rem;color:var(--sub);margin-bottom:4px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.row>*{flex:1 1 140px;min-width:0}
+.hint{font-size:.74rem;color:var(--sub);margin-top:4px}
+.err{font-size:.78rem;color:var(--warn);margin-top:4px;font-weight:700}
+/* fabric list */
+.flist{display:flex;flex-direction:column;max-height:330px;overflow:auto;margin-top:10px;border:1px solid var(--line);border-radius:var(--rc);background:var(--card)}
+.fab{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:10px 12px;min-height:56px}
+.fab:last-child{border-bottom:0}
+.fab .n{font-weight:700;font-size:.9rem;overflow-wrap:anywhere}
+.fab .p{grid-row:span 2;align-self:center;font-size:.8rem;color:var(--sub);white-space:nowrap}
+.fab .p b{color:var(--ink);font-size:.92rem}
+.fab .tg{display:flex;gap:4px;flex-wrap:wrap}
+.fab.on{background:var(--accbg);box-shadow:inset 3px 0 0 var(--acc)}
+.tag{font-size:.66rem;padding:1px 7px;border-radius:999px;background:var(--fill);border:1px solid var(--line);color:var(--sub);white-space:nowrap}
+.tag.s1{border-color:var(--acc);color:var(--acc)}
+.dots{display:flex;gap:3px;align-items:center}
+.dots i{width:10px;height:10px;border-radius:50%;border:1px solid var(--line);display:block}
+.empty{padding:18px;color:var(--sub);font-size:.85rem;text-align:center}
+/* colors */
+.sws{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sw{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px 4px 4px;min-height:40px;font-size:.84rem}
+.sw i{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.12);flex:none}
+.sw.on{border-color:var(--acc);color:var(--acc);font-weight:700}
+.sw small{font-size:.66rem;color:var(--sub);font-weight:400}
+/* style buttons */
+.styles{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px}
+.st{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px 8px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-size:.76rem;font-weight:700;line-height:1.2;text-align:center}
+.st svg{width:56px;height:40px;color:var(--sub)}
+.st small{font-weight:400;color:var(--sub);font-size:.66rem}
+.st.on{border-color:var(--acc);background:var(--accbg);color:var(--acc)}
+.st.on svg,.st.on small{color:var(--acc)}
+.st:disabled{opacity:.3;cursor:default}
+.ck{display:flex;gap:10px;align-items:center;margin-top:12px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--rc);background:var(--fill);font-size:.86rem}
+.ck input{width:20px;height:20px;accent-color:var(--acc);flex:none}
+.ck b{color:var(--acc)}
+.mood{display:flex;flex-wrap:wrap;gap:6px;padding:10px 0 2px}
+.mood::-webkit-scrollbar{display:none}
+.mood button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;min-height:34px;padding:0 12px;font-size:.8rem;white-space:nowrap}
+.mood button.on{background:var(--accbg);border-color:var(--acc);color:var(--acc);font-weight:700}
+.mood .lab{flex:none;align-self:center;font-size:.72rem;color:var(--sub);padding-right:2px}
+.sw.dim{opacity:.45}
+.about{margin-top:12px;border:1px solid var(--line);border-radius:var(--rc);padding:12px 14px;background:var(--fill)}
+.about h3{margin:0 0 6px;font-size:.88rem;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.about h3 small{font-weight:400;font-size:.7rem;color:var(--sub)}
+.about p{margin:0 0 10px;font-size:.85rem;line-height:1.7;max-width:62ch}
+.about dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0 0 10px;font-size:.8rem}
+.about dt{color:var(--sub)}
+.about dd{margin:0}
+.about .tg{display:flex;gap:4px;flex-wrap:wrap}
+.tag.m{background:var(--card);color:var(--ink)}
+.tag.fx{border-color:var(--ok);color:var(--ok)}
+/* opening */
+#op{position:fixed;inset:0;z-index:100;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;cursor:pointer;transition:opacity .45s ease}
+#op.out{opacity:0;pointer-events:none}
+#op svg{width:min(84vw,540px);height:auto;overflow:visible}
+#op .skip{position:absolute;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));color:var(--accink);opacity:.7;font-size:.75rem;letter-spacing:.08em;background:none;border:1px solid currentColor;border-radius:999px;padding:4px 12px;min-height:30px}
+#op .lt{transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+#op .lv{opacity:0;transform:translateX(-26px)}
+#op .lm{opacity:0;transform:translateX(26px)}
+#op.ltr .lv,#op.ltr .lm{opacity:1;transform:none}
+#op .sub{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease;font-family:"Poppins","Hiragino Sans",system-ui,sans-serif;font-weight:700}
+#op.subon .sub{opacity:1;transform:none}
+#op.subon .sub+.sub{transition-delay:.25s}
+/* stepper */
+.stp{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;background:var(--fill);height:42px}
+.stp button{width:44px;height:100%;border:0;background:none;font-size:1.2rem;color:var(--acc)}
+.stp output{flex:1;text-align:center;font-weight:700}
+/* price table */
+details.pt{margin-top:12px}
+details.pt summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--acc);padding:6px 0;list-style:none}
+details.pt summary::-webkit-details-marker{display:none}
+details.pt summary::before{content:"＋ "}
+details.pt[open] summary::before{content:"－ "}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.78rem;background:var(--card);font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:right;white-space:nowrap}
+th{background:var(--accbg);font-weight:600;text-align:center}
+td.hit{background:var(--acc);color:var(--accink);font-weight:700}
+/* sticky total */
+.sum{position:fixed;left:0;right:0;bottom:calc(57px + env(safe-area-inset-bottom,0px));z-index:19;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -4px 14px var(--shadow)}
+.sum .in{max-width:720px;margin:0 auto;padding:8px 14px;display:flex;align-items:center;gap:10px}
+.sum .t{flex:1;min-width:0;line-height:1.25}
+.sum .t small{display:block;color:var(--sub);font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sum .t b{font-size:1.35rem;letter-spacing:.01em}
+.sum .t b span{font-size:.72rem;font-weight:400;color:var(--sub);margin-left:4px}
+.pri{border:0;background:var(--acc);color:var(--accink);font-weight:700;border-radius:8px;min-height:44px;padding:0 16px;white-space:nowrap}
+.pri:disabled{opacity:.35;cursor:default}
+.sec{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;min-height:40px;padding:0 14px}
+/* tabs */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs button{flex:1;border:0;background:none;color:var(--sub);padding:7px 0 8px;font-size:.72rem;border-top:3px solid transparent;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:56px;position:relative}
+.tabs button svg{width:22px;height:22px}
+.tabs button.on{color:var(--acc);border-top-color:var(--acc);font-weight:700}
+.badge{position:absolute;top:4px;left:calc(50% + 6px);background:var(--acc);color:var(--accink);font-size:.62rem;border-radius:999px;padding:0 6px;min-width:18px;line-height:16px;font-weight:700}
+/* quote */
+.ql{display:flex;flex-direction:column;gap:10px}
+.qi{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:4px 12px;align-items:start}
+.qi .cs{width:44px;height:56px;border-radius:4px;border:1px solid var(--line);grid-row:span 3}
+.qi .nm{font-weight:700;font-size:.88rem;overflow-wrap:anywhere}
+.qi .sp{font-size:.76rem;color:var(--sub);grid-column:2}
+.qi .pr{text-align:right;font-weight:700;white-space:nowrap}
+.qi .pr small{display:block;font-weight:400;color:var(--sub);font-size:.7rem}
+.qi .ac{grid-column:2/4;display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;align-items:center}
+.qi .ac a{font-size:.76rem;color:var(--acc)}
+.qi .ac .rm{margin-left:auto}
+.lnk{background:none;border:0;color:var(--sub);font-size:.76rem;padding:4px 6px;min-height:32px;text-decoration:underline}
+.qtot{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--ink);margin-top:12px;padding-top:10px}
+.qtot b{font-size:1.5rem}
+/* document */
+.doc{background:var(--card);border:1px solid var(--line);border-radius:var(--rc);padding:18px 16px;font-size:.84rem}
+.doc .dh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border-bottom:2px solid var(--acc);padding-bottom:10px;margin-bottom:12px}
+.doc .dh h3{margin:0;font-size:1.15rem;letter-spacing:.2em}
+.doc .dh .vlogo svg{height:16px}
+.doc .to{font-size:1rem;border-bottom:1px solid var(--ink);display:inline-block;padding:0 24px 2px 0;margin-bottom:8px}
+.doc .big{display:flex;justify-content:space-between;align-items:baseline;background:var(--accbg);padding:8px 12px;margin:10px 0 12px;border-radius:4px}
+.doc .big b{font-size:1.3rem}
+.doc table{min-width:540px}.doc td,.doc th{font-size:.74rem;white-space:normal}.doc td:first-child{min-width:84px}.doc td:nth-child(2){min-width:170px}.doc td:nth-child(3){white-space:nowrap}
+.doc td:first-child,.doc td:nth-child(2){text-align:left}
+.doc .nt{color:var(--sub);font-size:.7rem;margin-top:10px;line-height:1.6}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+textarea#qtxt{width:100%;min-height:160px;font:inherit;font-size:13px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--fill);color:var(--ink);margin-top:8px}
+.memo p,.memo li{font-size:.86rem}
+.memo ul{padding-left:1.2em;margin:6px 0}
+.memo code{font-size:.8rem;background:var(--fill);padding:1px 4px;border-radius:3px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(132px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:.85rem;max-width:calc(100% - 32px)}
+.confirm{display:flex;gap:6px;align-items:center;font-size:.78rem;color:var(--warn)}
+@media (prefers-reduced-motion:no-preference){.fab,.sw,.st,.seg button{transition:background .15s,border-color .15s}}
+</style>
+
+<div id="op" role="img" aria-label="MUJI Store Assistant for curtain">
+<svg viewBox="200 430 860 430" aria-hidden="true">
+ <g fill="#ffffff">
+  <g class="lt lv">%%V%%</g>
+  <g class="lt lm">%%M%%</g>
+  <g id="opL"></g><g id="opR"></g>
+  <rect id="opRail" x="540" y="456" width="158" height="10" rx="5" transform="scale(0 1)" style="transform-origin:619px 461px"/>
+  <rect id="opSill" x="544" y="710" width="150" height="8" rx="4" transform="scale(0 1)" style="transform-origin:619px 714px"/>
+  <circle id="opC1" cx="540" cy="461" r="7" opacity="0"/><circle id="opC2" cx="698" cy="461" r="7" opacity="0"/>
+  <text class="sub" x="621" y="792" text-anchor="middle" font-size="58" letter-spacing="1">MUJI Store Assistant</text>
+  <text class="sub" x="621" y="842" text-anchor="middle" font-size="34" letter-spacing="6" opacity=".85">for curtain</text>
+ </g>
+</svg>
+<button class="skip" id="opskip">スキップ</button>
+</div>
+<main>
+<header class="hd">
+  <span class="vlogo" role="img" aria-label="VIM"><svg viewBox="235 455 775 275" aria-hidden="true"><g fill="currentColor">%%VIMW%%</g></svg></span>
+  <span class="hdt"><b>MUJI Store Assistant</b><small>for curtain・オーダーカーテン見積</small></span>
+</header>
+
+<!-- ===== つくる ===== -->
+<section id="pg-make">
+  <h2>1 生地 <small id="fabcount"></small></h2>
+  <div class="seg" id="catseg" role="tablist">
+    <button data-c="shade" class="on">遮光</button><button data-c="thick">厚地</button><button data-c="lace">レース</button>
+  </div>
+  <div class="mood" id="moods" aria-label="雰囲気で選ぶ"></div>
+  <div style="margin-top:8px"><input type="search" id="q" placeholder="生地名で探す（例：麻、防炎、二重織）" aria-label="生地名で探す"></div>
+  <div class="flist" id="flist"></div>
+  <div class="sws" id="sws"></div>
+  <div class="about" id="about"></div>
+
+  <h2>2 スタイル</h2>
+  <div class="styles" id="styles"></div>
+  <label class="ck" id="lnwrap" hidden><input type="checkbox" id="lined"><span>遮光裏地付にする <b>（遮光1級）</b></span></label>
+
+  <h2>3 サイズ <small>1枚あたり・1cm単位</small></h2>
+  <div class="card">
+    <div class="row" id="szrow">
+      <div id="wbox"><label class="lb" for="w">幅（cm）</label><input type="number" id="w" inputmode="numeric" value="100"><div class="hint" id="wh"></div></div>
+      <div><label class="lb" for="h">丈（cm）</label><input type="number" id="h" inputmode="numeric" value="200"><div class="hint" id="hh">20〜300cm</div></div>
+    </div>
+    <div id="eyebox" hidden>
+      <label class="lb">幅（ハトメは4サイズから）</label>
+      <div class="seg" id="eyeseg"></div>
+      <div class="hint" id="eyeh"></div>
+    </div>
+    <div class="err" id="szerr" hidden></div>
+    <div class="row" style="margin-top:12px">
+      <div><label class="lb">開き方</label><div class="seg" id="openseg"><button data-q="1">片開き</button><button data-q="2" class="on">両開き</button></div></div>
+      <div><label class="lb">枚数</label><div class="stp"><button id="qm" aria-label="1枚減らす">−</button><output id="qty" class="num">2</output><button id="qp" aria-label="1枚増やす">＋</button></div></div>
+    </div>
+    <details class="pt" id="ptd"><summary>この生地の価格表</summary><div class="tw" id="ptab"></div></details>
+  </div>
+
+  <h2>4 吊り方</h2>
+  <div class="card">
+    <div class="seg" id="hangseg"><button data-g="front" class="on">正面付け</button><button data-g="ceil">天井付け</button></div>
+    <div class="hint" id="hangh"></div>
+    <div style="margin-top:12px"><label class="lb" for="room">設置場所（見積書に載ります）</label><input type="text" id="room" placeholder="例：リビング 掃き出し窓"></div>
+  </div>
+</section>
+
+<!-- ===== 見積 ===== -->
+<section id="pg-quote" hidden>
+  <h2>見積の明細 <small id="qcount"></small></h2>
+  <div class="card">
+    <div class="ql" id="qlist"></div>
+    <div class="qtot"><span>合計（税込）</span><b class="yen" id="qsum">¥0</b></div>
+  </div>
+
+  <h2>見積書</h2>
+  <div class="card row" style="margin-bottom:10px">
+    <div><label class="lb" for="cust">お客さま名</label><input type="text" id="cust" placeholder="例：山田"></div>
+    <div><label class="lb" for="staff">担当</label><input type="text" id="staff" placeholder="例：佐藤"></div>
+    <div><label class="lb" for="shop">店舗</label><input type="text" id="shop" placeholder="例：無印良品 銀座"></div>
+  </div>
+  <div class="doc" id="doc"></div>
+  <div class="tools">
+    <button class="sec" id="cpy">見積をテキストでコピー</button>
+    <span id="clrwrap"><button class="sec" id="clr">明細をすべて消す</button></span>
+  </div>
+  <textarea id="qtxt" readonly hidden aria-label="見積テキスト"></textarea>
+</section>
+
+<!-- ===== メモ ===== -->
+<section id="pg-memo" class="memo" hidden>
+  <h2>価格データについて</h2>
+  <div class="card">
+    <p>無印良品ネットストアのオーダーカーテン（<span class="num" id="mcount"></span>商品）の価格表を、<b>2026年10月7日</b>時点で取り込んでいます。金額は税込・1枚あたりです。</p>
+    <p>セールや価格改定があると実際の金額と変わります。お会計前に、明細の「商品ページ」で確認してください。</p>
+  </div>
+  <h2>オーダーの決まりごと</h2>
+  <div class="card"><ul>
+    <li>幅・丈は1cm単位。丈は20〜300cm。</li>
+    <li>ノンプリーツ・プリーツの幅は51〜300cm、2倍ヒダとギャザーは30〜300cm。</li>
+    <li>ハトメは幅100・140・180・220cmの4サイズ（丈は1cm単位）。仕上がり丈は注文より約2.5cm長くなります。</li>
+    <li>フック式の仕上がり総丈は、正面付けで＋4cm、天井付けで＋1cm。誤差は±1cm程度。</li>
+    <li>生地幅の都合で、サイズによってはハギ合わせ（縫い合わせ）が入ります。</li>
+    <li>届くまで約10〜14日。受注生産のため、注文後のサイズ変更・キャンセル・返品はできません。</li>
+    <li>タッセル・アジャスターフック付き（レースはタッセルなし。ギャザーはギャザー用フック）。</li>
+  </ul></div>
+  <h2>VIM for MUJI との統合</h2>
+  <div class="card" style="margin-bottom:10px"><p>アプリ名は「MUJI Store Assistant for curtain」です。</p></div>
+  <div class="card">
+    <p>素材の説明はネットストアの商品説明をもとに書き直したものです。雰囲気の分類はスタッフ向けの目安で、ネットストアの分類ではありません。</p><p>見た目と部品（ヘッダー、下のタブ、選択ボタン、色）は VIM for MUJI と同じ作りにしています。計算部分は画面と切り離してあり、<code>window.MUJI_CURTAIN</code> から呼べます。</p>
+    <ul>
+      <li><code>MUJI_CURTAIN.fabrics</code>：生地・色・JAN・価格表</li>
+      <li><code>MUJI_CURTAIN.quote({fab,color,style,lined,w,h})</code>：1枚の金額とJAN</li>
+      <li><code>MUJI_CURTAIN.lines()</code>：いまの見積明細</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<div class="sum" id="sum"><div class="in">
+  <div class="t"><small id="sumsub">生地を選んでください</small><b class="yen" id="sumv">—</b></div>
+  <button class="pri" id="add" disabled>見積に追加</button>
+</div></div>
+
+<nav class="tabs" aria-label="画面の切り替え">
+  <button data-t="make" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 4h18M5 4v15c2 1 3-1 4 0V4M15 4v15c1-1 2 1 4 0V4"/></svg>つくる</button>
+  <button data-t="quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h5"/></svg>見積<span class="badge" id="bdg" hidden></span></button>
+  <button data-t="memo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>メモ</button>
+</nav>
+<div id="toast" hidden></div>
+
+<script>
+/* ===== 価格データ（無印良品ネットストア 2026-10-07 時点・税込・1枚） ===== */
+(function(){
+var CA=[[51,100],[101,150],[151,200],[201,300]],CB=[[30,75],[76,110],[111,145],[146,220],[221,300]],
+R2=[[20,150],[151,300]],R4=[[20,150],[151,200],[201,250],[251,300]];
+function A2(v){return{c:CA,r:R2,v:v}}function A4(v){return{c:CA,r:R4,v:v}}function B4(v){return{c:CB,r:R4,v:v}}
+var T={
+ a6500:A2([[6500,8000,10000,13500],[7500,10000,12500,17000]]),
+ a7000:A2([[7000,9000,11000,15000],[8000,11000,13500,19500]]),
+ a7500:A2([[7500,10000,12500,17000],[9000,12500,15000,21500]]),
+ a9000:A4([[9000,12000,15000,20500],[9500,13000,16000,23000],[10000,14000,17000,25000],[10500,15500,18500,27500]]),
+ a10000:A4([[10000,13500,17000,24000],[10500,15000,18500,26500],[11000,16000,19500,28500],[12000,17000,20500,31000]]),
+ a11500:A4([[11500,16000,19500,28000],[12000,17000,21000,30000],[12500,18000,22000,32000],[13000,19000,23000,35000]]),
+ a12500:A4([[12500,17000,21500,31000],[13000,18500,23000,33500],[13500,19500,24000,35500],[14000,20500,25000,38000]]),
+ a13500:A2([[13500,19500,24000,35500],[15500,22500,27500,41500]]),
+ a13500x:A4([[13500,19500,24000,35500],[14000,20500,25000,38000],[15500,22500,27500,41500],[16500,24000,30000,45000]]),
+ a14500:A4([[14500,21500,26500,39000],[15000,22500,28000,42000],[17000,24000,31000,44000],[18000,25500,33500,47500]]),
+ a16000:A4([[16000,22000,28500,41500],[17000,25000,31500,46000],[18000,27000,33500,50500],[19500,29000,35500,55000]]),
+ a16500:A4([[16500,23000,28500,42500],[17000,24000,31000,45000],[18500,25000,33500,47000],[19500,26500,35500,49500]]),
+ a18500:A4([[18500,25500,33000,48500],[19500,28500,36000,53000],[20500,30500,38000,57500],[21500,32500,40000,62000]]),
+ b10000:B4([[10000,13500,17000,24000,31000],[11000,15000,19500,26500,35500],[12500,16000,21500,28500,40000],[13500,17000,24000,31000,45000]]),
+ b11000:B4([[11000,16000,19500,28500,35500],[12500,17000,21500,31000,40000],[13500,18500,24000,33500,45000],[15000,19500,26500,35500,49500]]),
+ b13000:B4([[13000,18000,23000,33000,42000],[14000,19000,25000,35000,46000],[15000,21000,27000,38000,51000],[17000,22000,30000,40000,56000]]),
+ b14000:B4([[14000,20000,25000,36500,47000],[15500,21000,27500,39000,52000],[16500,22500,30000,41500,56500],[17500,23500,32000,43500,61000]]),
+ b16000:B4([[16000,23000,28500,42500,54000],[17000,24000,31000,45000,58500],[18500,25000,33500,47000,63500],[19500,26500,35500,49500,68000]]),
+ b17500:B4([[17500,26000,32000,47000,63000],[18000,27000,34000,50000,67000],[20500,29000,37000,55000,75000],[22000,31000,40000,60000,77000]]),
+ b18000:B4([[18000,26500,33000,49500,63000],[21000,28500,38000,54000,72500],[22500,31000,42500,59000,81500],[25500,33500,47000,63500,91000]]),
+ b19000:B4([[19000,27500,35000,51000,67000],[21500,29000,38500,55000,74000],[23000,31500,43000,59500,82000],[26000,34000,47500,64000,92000]]),
+ b19500:B4([[19500,28000,35500,53000,72500],[20500,30500,38000,57500,77000],[22500,33500,41500,63500,82000],[24000,36000,45000,69000,91000]]),
+ e10500:{eye:true,c:[100,140,180,220],r:R2,v:[[10500,14000,18500,25000],[12000,16500,21000,30000]]}
+};
+var EYE_POLE=[[65,90],[91,125],[126,160],[161,200]];
+var STYLES=[
+ {k:"np",n:"ノンプリーツ",s:"ヒダなし・すっきり"},
+ {k:"p",n:"プリーツ",s:"1.5倍ヒダ"},
+ {k:"p2",n:"2倍ヒダ",s:"たっぷりのヒダ"},
+ {k:"eye",n:"ハトメ",s:"ポールに通す"},
+ {k:"ga",n:"ギャザー",s:"細かく寄せる"}
+];
+var SW={"白":"#f6f5f1","オフ白":"#f1ece2","生成":"#e6dcc6","アイボリー":"#ece2cb","ベージュ":"#d5c2a2","ライトベージュ":"#e2d5bd","サンドベージュ":"#cfbb9a","グレー":"#8f8e8a","ライトグレー":"#cfcdc8","チャコール":"#4a4846","チャコールグレー":"#55524e","ブラウン":"#7a5a40","ライトブラウン":"#ad8f6b","ペールブラウン":"#c7b19a","ブルーグレー":"#8795a2","フェードブルー":"#8ea2b5","ライトブルー":"#a8c3d7","ブルー":"#4f73a5","ネイビー":"#2f3b55","グリーン":"#6e895e","ライトグリーン":"#a7be8d","ペールグリーン":"#c6d2b5","イエロー":"#e2c55a","マスタード":"#c69934","ピンク":"#e1b3b5"};
+/* 色：[色名, 遮光等級(0=なし), {スタイル:JAN}, {遮光裏地付スタイル:JAN}, {スタイル:価格表の上書き}] */
+var F=[
+ {id:"mokudobby",n:"ポリエステル杢糸ドビー織（防炎・遮光性）",cat:"shade",fr:1,t:{np:"a14500",p:"a14500",p2:"b17500"},col:[
+  ["白",2,{np:"4550723675963",p:"4550723676441",p2:"4550723674775"}],
+  ["グレー",1,{np:"4550723675970",p:"4550723676458",p2:"4550723674782"}],
+  ["ベージュ",2,{np:"4550723675987",p:"4550723676465",p2:"4550723674799"}]]},
+ {id:"nijuori",n:"ポリエステル二重織（防炎・遮光性）",cat:"shade",fr:1,t:{np:"a7500",p:"a7500",eye:"e10500"},col:[
+  ["アイボリー",2,{np:"4550344493076",p:"4550344492994",eye:"4550344493151"}],
+  ["ベージュ",1,{np:"4550344493311",p:"4550344493236",eye:"4550344493397"}],
+  ["ライトグレー",1,{np:"4550344493557",p:"4550344493472",eye:"4550344493632"}]]},
+ {id:"dobby",n:"ポリエステルドビー織（防炎・遮光性）",cat:"shade",fr:1,t:{np:"a7500",p:"a7500",eye:"e10500"},col:[
+  ["ベージュ",2,{np:"4550182609844",p:"4550182609769",eye:"4550182609929"}],
+  ["フェードブルー",2,{np:"4550512362548",p:"4550512362463",eye:"4550512362623"}]]},
+ {id:"nanako",n:"ポリエステルななこ織（防炎・遮光）",cat:"shade",fr:1,t:{np:"a12500",p:"a12500",p2:"b14000"},col:[
+  ["ベージュ",2,{np:"4550182172706",p:"4550182172546",p2:"4550182172867"}],
+  ["ブラウン",1,{np:"4550182175585",p:"4550182175424",p2:"4550182175745"}],
+  ["チャコール",1,{np:"4550182173420",p:"4550182173260",p2:"4550182173581"}]]},
+ {id:"jacquard",n:"ポリエステルジャガード織波",cat:"thick",t:{np:"a10000",p:"a10000",p2:"b11000"},lt:{np:"a16000",p:"a16000",p2:"b18000"},col:[
+  ["ベージュ",0,{np:"4550512210863",p:"4550512186960",p2:"4550512172123"},{np:"4550512120087",p:"4550512204312",p2:"4550512128229"}]]},
+ {id:"matt",n:"ポリエステルマット織",cat:"thick",t:{np:"a10000",p:"a10000",p2:"b11000"},lt:{np:"a16000",p:"a16000",p2:"b18000"},col:[
+  ["マスタード",0,{np:"4550512120070",p:"4550512172093",p2:"4550512172338"},{np:"4550512186663",p:"4550512120131",p2:"4550512119869"}],
+  ["ライトブルー",0,{np:"4550512128090",p:"4550512120032",p2:"4550512120117"},{np:"4550512186281",p:"4550512172109",p2:"4550512187127"}]]},
+ {id:"grosgrain",n:"ポリエステルグログラン（防炎）",cat:"thick",fr:1,t:{np:"a10000",p:"a10000",p2:"b11000"},lt:{np:"a16000",p:"a16000",p2:"b18000"},col:[
+  ["ライトベージュ",0,{np:"4547315639717",p:"4547315637539",p2:"4547315640713"},{np:"4547315641949",p:"4547315641345",p2:"4547315651528"}],
+  ["グレー",0,{np:"4550002847401",p:"4550002847241",p2:"4550002847562"},{np:"4550002847920",p:"4550002847760",p2:"4550002848088"}]]},
+ {id:"chenille",n:"ポリエステルシェニールヘリンボーン（防炎）",cat:"thick",fr:1,t:{np:"a12500",p:"a12500",p2:"b14000"},lt:{np:"a18500",p:"a18500",p2:"b19000"},col:[
+  ["オフ白",0,{np:"4550182566932",p:"4550182566772",p2:"4550182567410"},{np:"4550182567250",p:"4550182567090",p2:"4550182567618"}],
+  ["アイボリー",0,{np:"4550182193787",p:"4550182193626",p2:"4550182261608"},{np:"4550182194104",p:"4550182193947",p2:"4550182261806"}],
+  ["ライトブラウン",0,{np:"4550583265908",p:"4550583265915",p2:"4550583266547"},{p2:"4550583266745"}]]},
+ {id:"kanoko",n:"ポリエステル鹿の子織",cat:"thick",t:{np:"a12500",p:"a12500",p2:"b14000"},col:[
+  ["チャコールグレー",0,{np:"4550583301484",p:"4550583300449",p2:"4550583300319"}],
+  ["ライトブラウン",0,{np:"4550583300913",p:"4550583300494",p2:"4550583300296"}]]},
+ {id:"tweed",n:"ツイード調リングヤーン使い（防炎）",cat:"thick",fr:1,t:{np:"a12500",p:"a12500",p2:"b14000"},col:[
+  ["グレー",0,{np:"4550723674805",p:"4550723675246",p2:"4550723675567"}],
+  ["ベージュ",0,{np:"4550723674812",p:"4550723675253",p2:"4550723675574"}]]},
+ {id:"cottonlike",n:"コットンライク平織",cat:"thick",t:{np:"a11500",p:"a11500",p2:"b13000"},col:[
+  ["白",0,{np:"4550723330824",p:"4550723332422",p2:"4550723334020"}],
+  ["ベージュ",0,{np:"4550723330848",p:"4550723332446",p2:"4550723334044"}],
+  ["グレー",0,{np:"4550723330831",p:"4550723332439",p2:"4550723334037"}],
+  ["ブラウン",0,{np:"4550723330916",p:"4550723332514",p2:"4550723334112"}],
+  ["ネイビー",0,{np:"4550723330909",p:"4550723332507",p2:"4550723334105"}],
+  ["グリーン",0,{np:"4550723330886",p:"4550723332484",p2:"4550723334082"}],
+  ["ライトグリーン",0,{np:"4550723330879",p:"4550723332477",p2:"4550723334075"}],
+  ["ペールグリーン",0,{np:"4550723330893",p:"4550723332491",p2:"4550723334099"}],
+  ["イエロー",0,{np:"4550723330862",p:"4550723332460",p2:"4550723334068"}],
+  ["ピンク",0,{np:"4550723330855",p:"4550723332453",p2:"4550723334051"}]]},
+ {id:"mokuasa",n:"杢麻調平織",cat:"thick",t:{np:"a11500",p:"a11500",p2:"b13000"},col:[
+  ["ライトベージュ",0,{np:"4550723329262",p:"4550723329743",p2:"4550723330220"}],
+  ["ベージュ",0,{np:"4550723329279",p:"4550723329750",p2:"4550723330237"}],
+  ["ライトグレー",0,{np:"4550723329286",p:"4550723329767",p2:"4550723330244"}]]},
+ {id:"cottonwash",n:"綿洗いざらし平織",cat:"thick",t:{np:"a7500",p:"a7500"},col:[
+  ["オフ白",0,{np:"4550583302917",p:"4550583300517"}],
+  ["生成",0,{np:"4550583300890",p:"4550583300487"}],
+  ["ペールブラウン",0,{np:"4550583300272",p:"4550583301477"}],
+  ["グリーン",0,{np:"4550584851414",p:"4550584851339"}]]},
+ {id:"linen",n:"麻平織",cat:"thick",t:{np:"a13500",p:"a13500"},col:[
+  ["オフ白",0,{np:"4550344907795",p:"4550344907559"}],
+  ["ライトベージュ",0,{np:"4550344907955",p:"4550344907719"}],
+  ["生成",0,{np:"4547315694389",p:"4547315694228",p2:"4547315694549",ga:"4547315694747"},null,{np:"a13500x",p:"a13500x",p2:"b16000",ga:"b16000"}]]},
+ {id:"linenthick",n:"麻平織太番手",cat:"thick",t:{np:"a16500",p:"a16500",p2:"b19500"},col:[
+  ["オフ白",0,{np:"4547315761937",p:"4547315758661",p2:"4547315765010"}],
+  ["生成",0,{np:"4547315772452",p:"4547315771783",p2:"4547315777266"}]]},
+ {id:"ox",n:"ポリエステルオックス",cat:"thick",t:{np:"a10000",p:"a10000",p2:"b11000"},col:[
+  ["ピンク",0,{np:"4550512120063",p:"4550512120094",p2:"4550512263050"}],
+  ["ブルー",0,{np:"4550512170662",p:"4550512187141",p2:"4550512128236"}]]},
+ {id:"mokuhira",n:"ポリエステル杢調平織",cat:"thick",t:{np:"a10000",p:"a10000",p2:"b11000"},col:[
+  ["アイボリー",0,{np:"4550182549751",p:"4550182549591",p2:"4550182551754"}],
+  ["ベージュ",0,{np:"4550182550078",p:"4550182549911",p2:"4550182550238"}],
+  ["ブルーグレー",0,{np:"4550182550597",p:"4550182550436",p2:"4550182550757"}],
+  ["ライトグリーン",0,{np:"4550583267124",p:"4550583267223",p2:"4550583267148"}]]},
+ {id:"linenlike2",n:"リネンライク二重織（防炎）",cat:"thick",fr:1,t:{np:"a12500",p:"a12500",p2:"b14000"},col:[
+  ["アイボリー",0,{np:"4550723328302",p:"4550723328548",p2:"4550723328869"}],
+  ["サンドベージュ",0,{np:"4550723328319",p:"4550723328555",p2:"4550723328876"}]]},
+ {id:"pollen",n:"花粉をキャッチし熱を通しにくいレース",cat:"lace",t:{np:"a7000",p:"a7000"},col:[["オフ白",0,{np:"4550344909157",p:"4550344909072"}]]},
+ {id:"slub",n:"ポリエステルスラブボイル",cat:"lace",t:{np:"a6500",p:"a6500"},col:[["オフ白",0,{np:"4550344908839",p:"4550344908754"}]]},
+ {id:"cottonvoile",n:"綿ボイル",cat:"lace",t:{np:"a7000",p:"a7000"},col:[
+  ["オフ白",0,{np:"4550583476953",p:"4550583476793"}],["ベージュ",0,{np:"4550583477035",p:"4550583476878"}]]},
+ {id:"heatcut",n:"熱を通しにくく透けにくいレース",cat:"lace",t:{np:"a7000",p:"a7000"},col:[["オフ白",0,{np:"4550512022374",p:"4550512022299"}]]},
+ {id:"mildew",n:"防カビポリエステル レース",cat:"lace",t:{np:"a7000",p:"a7000"},col:[["オフ白",0,{np:"4550583385446",p:"4550583385286"}]]},
+ {id:"chiffon",n:"シフォン調ボイル レース（防炎）",cat:"lace",fr:1,t:{np:"a9000",p:"a9000",p2:"b10000"},col:[
+  ["オフ白",0,{np:"4550583295592",p:"4550583295516",p2:"4550583295509"}],
+  ["ライトグレー",0,{np:"4550583296148",p:"4550583295868",p2:"4550583295622"}]]},
+ {id:"bunsen",n:"ポリエステル分繊糸ボイル（防炎）",cat:"lace",fr:1,t:{np:"a9000",p:"a9000",p2:"b10000"},col:[
+  ["オフ白",0,{np:"4547315808632",p:"4547315808472",p2:"4547315809318"}]]},
+ {id:"mokuvoile",n:"ポリエステル杢調ボイル",cat:"lace",t:{np:"a10000",p:"a10000",p2:"b11000"},col:[
+  ["アイボリー",0,{np:"4550182552119",p:"4550182551952",p2:"4550182552270"}],
+  ["ベージュ",0,{np:"4550182552638",p:"4550182552478",p2:"4550182552799"}],
+  ["ライトグレー",0,{np:"4550583267391",p:"4550583267179",p2:"4550583267285"}],
+  ["ブルーグレー",0,{np:"4550182553154",p:"4550182552997",p2:"4550182553314"}]]},
+ {id:"gisha",n:"ポリエステル擬紗（防炎）",cat:"lace",fr:1,t:{np:"a10000",p:"a10000",p2:"b11000"},col:[
+  ["オフ白",0,{np:"4550182571707",p:"4550182571547",p2:"4550182571868"}],
+  ["ライトグレー",0,{np:"4550182572742",p:"4550182572582",p2:"4550182572902"}]]},
+ {id:"polylace",n:"ポリエステル平織レース",cat:"lace",t:{np:"a10000",p:"a10000",p2:"b11000"},col:[
+  ["オフ白",0,{np:"4550002803582",p:"4550002803421",p2:"4550002803742"}],
+  ["アイボリー",0,{np:"4550002804305",p:"4550002804145",p2:"4550002804466"}]]},
+ {id:"linenlikelace",n:"リネンライク レース（防炎）",cat:"lace",fr:1,t:{np:"a10000",p:"a10000",p2:"b11000"},col:[
+  ["オフ白",0,{np:"4550583300289",p:"4550583300111",p2:"4550583300654"}],
+  ["マスタード",0,{np:"4550583300098",p:"4550583300135",p2:"4550583301200"}]]},
+ {id:"linenvoile",n:"麻ボイル",cat:"lace",t:{np:"a12500",p:"a12500",p2:"b14000"},col:[
+  ["オフ白",0,{np:"4550002795405",p:"4550002795245",p2:"4550002795566"}],
+  ["生成",0,{np:"4550182545319",p:"4550182545159",p2:"4550182545470"}]]}
+];
+/* 素材の説明（ネットストアの商品説明をもとに言い換え）・雰囲気（スタッフ向けの目安） */
+var MOODS=[["natural","ナチュラル"],["simple","シンプル"],["warm","やわらか・あたたか"],["hotel","上質・ホテルライク"],["bright","軽やか・明るい"],["chic","落ち着いた・シック"],["color","色で楽しむ"]];
+var DARK={"チャコール":1,"チャコールグレー":1,"ブラウン":1,"ネイビー":1,"グレー":1},VIVID={"イエロー":1,"ピンク":1,"グリーン":1,"ライトグリーン":1,"ペールグリーン":1,"ライトブルー":1,"ブルー":1,"マスタード":1,"フェードブルー":1};
+var INFO={
+ mokudobby:{m:["warm","natural"],d:"色の違う糸を撚り合わせた杢糸で織った遮光生地です。表面に凹凸があり、遮光カーテンでもあたたかみのある表情になります。",mat:"ポリエステル",care:"洗える"},
+ nijuori:{m:["simple"],d:"糸を高密度に織り込んで光を通しにくくした、いちばんベーシックな遮光生地です。寝室や価格を抑えたい窓に向きます。",mat:"ポリエステル100%",care:"洗える（洗濯ネット使用）"},
+ dobby:{m:["natural","simple"],d:"ざっくりした織りと杢調の表情がある遮光生地です。難燃糸を使った防炎タイプです。",mat:"ポリエステル",care:"洗える"},
+ nanako:{m:["natural","chic"],d:"ななこ織で天然素材のような表情を出した遮光生地です。濃い色は部屋を落ち着いた印象にまとめます。",mat:"ポリエステル100%",care:"洗える"},
+ jacquard:{m:["hotel","chic"],d:"立体的なジャガード織りで幾何学模様を浮かせた、重みのある表情の生地です。遮光裏地付も選べます。",mat:"ポリエステル100%",care:"洗える"},
+ matt:{m:["simple"],d:"シンプルなマット織に杢調の落ち着いた表情を合わせた生地です。色を差したい部屋に。遮光裏地付も選べます。",mat:"ポリエステル",care:"洗える"},
+ grosgrain:{m:["hotel","simple"],d:"細い糸で横畝を織り出した生地で、吊るときれいなドレープが出ます。遮光裏地付も選べます。",mat:"ポリエステル100%",care:"洗える（洗濯ネット使用）"},
+ chenille:{m:["hotel","warm"],d:"モール状のシェニール糸でヘリンボーン柄を表した、厚手でやわらかな生地です。MUJI HOTEL GINZA でも使われています。",mat:"ポリエステル",care:"洗える"},
+ kanoko:{m:["natural","warm"],d:"太さの違う糸を組み合わせて、凹凸のある鹿の子織に仕上げた生地です。",mat:"ポリエステル100%",care:"洗える"},
+ tweed:{m:["warm","natural"],d:"太さに変化のあるリングヤーンで表面にやわらかな凹凸を出した、部屋になじむ生地です。",mat:"",care:"洗える"},
+ cottonlike:{m:["warm","bright","color"],d:"綿のようなやわらかい風合いに仕上げた平織です。凹凸があり、部屋をカジュアルな印象にします。色数がいちばん多い生地です。",mat:"",care:""},
+ mokuasa:{m:["natural","simple"],d:"ポリエステルを高密度に織り、麻のようなあたたかみのある風合いに仕上げた生地です。",mat:"ポリエステル100%",care:"洗える"},
+ cottonwash:{m:["natural","bright"],d:"綿に洗い加工をかけた、くったりとしたカジュアルな風合いの生地です。",mat:"綿100%",care:"洗える"},
+ linen:{m:["natural","bright"],d:"シャリ感と光沢のあるリネン100%の生地です。吊ると伸び、洗うと縮むので、アジャスターフックで丈を合わせます。",mat:"麻（リネン）100%",care:"ドライクリーニング推奨"},
+ linenthick:{m:["natural","hotel"],d:"太い糸で織ったリネン100%の厚地です。麻らしい光沢と発色のよさがあります。天然素材のため伸び縮みします。",mat:"麻（リネン）100%",care:"ドライクリーニング推奨"},
+ ox:{m:["simple","color"],d:"シンプルで丈夫なオックス織の生地です。手入れのしやすいポリエステルです。",mat:"ポリエステル100%",care:"洗える"},
+ mokuhira:{m:["natural","simple"],d:"麻のような風合いに仕上げたポリエステルの平織です。生地の一部に再生糸を使っています。",mat:"ポリエステル（一部再生糸）",care:"洗える"},
+ linenlike2:{m:["natural","hotel"],d:"リネンのようなシャリ感と光沢感に仕上げた二重織の防炎生地です。",mat:"",care:"洗える"},
+ pollen:{m:["simple"],d:"特殊な糸を編み込み、外からの花粉をキャッチし、熱も通しにくくしたレースです。日中は外から見えにくく、紫外線も通しにくくなっています。",mat:"",care:"洗える",fx:["花粉キャッチ","遮熱","UVカット","見えにくい"]},
+ slub:{m:["natural","bright"],d:"節のあるスラブ糸で織った、自然な透け感のボイルです。いちばん手ごろなレースです。",mat:"ポリエステル100%",care:"洗える"},
+ cottonvoile:{m:["natural","bright"],d:"綿100%の薄地ボイルです。天然素材らしいやわらかな透け感があります。",mat:"綿100%",care:"洗える（洗濯ネット使用）"},
+ heatcut:{m:["simple"],d:"特殊な糸で熱を通しにくくし、裏面の光る糸で日中の見えにくさを高めたラッセル編みのレースです。",mat:"",care:"洗える",fx:["遮熱","見えにくい"]},
+ mildew:{m:["simple"],d:"カビが生えにくい加工をしたレースです。結露しやすい窓に向きます。",mat:"ポリエステル",care:"洗える（洗濯ネット使用）",fx:["防カビ","遮熱","見えにくい"]},
+ chiffon:{m:["bright","hotel"],d:"極細の糸で織った、シフォンのように軽やかなボイルです。適度な透け感があります。",mat:"ポリエステル100%",care:"洗える（洗濯ネット使用）"},
+ bunsen:{m:["bright","simple"],d:"分繊糸を使った、透明感のあるボイルです。",mat:"ポリエステル",care:"洗える（洗濯ネット使用）"},
+ mokuvoile:{m:["natural"],d:"天然素材のような質感の杢調ボイルです。色のあるレースを探す方に。",mat:"再生ポリエステル混",care:"洗える"},
+ gisha:{m:["natural"],d:"ざっくりとした風合いと透け感のある擬紗織のレースです。",mat:"ポリエステル",care:"洗える"},
+ polylace:{m:["simple","natural"],d:"天然素材のような風合いに仕上げた平織のレースです。手入れが簡単です。",mat:"ポリエステル100%",care:"洗える"},
+ linenlikelace:{m:["natural","color"],d:"太い糸で麻のような風合いを出したレースです。",mat:"ポリエステル",care:"洗える"},
+ linenvoile:{m:["natural","hotel"],d:"シャリ感と光沢のある麻の薄地です。吊ると伸び、洗うと縮む天然素材です。",mat:"麻",care:"ドライクリーニング推奨"}
+};
+function moodsOf(f,c){var m=(INFO[f.id]&&INFO[f.id].m||[]).slice();if(c){if(DARK[c]&&m.indexOf("chic")<0)m.push("chic");if(VIVID[c]&&m.indexOf("color")<0)m.push("color")}return m}
+function hasMood(f,k){if(!k)return true;if(moodsOf(f).indexOf(k)>=0)return true;return f.col.some(function(c){return moodsOf(f,c[0]).indexOf(k)>=0})}
+var STY={};STYLES.forEach(function(s){STY[s.k]=s});
+function fab(id){for(var i=0;i<F.length;i++)if(F[i].id===id)return F[i];return null}
+function color(f,c){for(var i=0;i<f.col.length;i++)if(f.col[i][0]===c)return f.col[i];return null}
+/* その色・スタイル・裏地で選べるか、価格表キー */
+function tierKey(f,c,st,lined){var cc=color(f,c);if(!cc)return null;
+ if(lined){if(!cc[3]||!cc[3][st])return null;return f.lt&&f.lt[st]}
+ if(!cc[2][st])return null;return (cc[4]&&cc[4][st])||f.t[st]}
+function jan(f,c,st,lined){var cc=color(f,c);if(!cc)return"";return (lined?(cc[3]||{})[st]:cc[2][st])||""}
+function band(list,x){for(var i=0;i<list.length;i++)if(x>=list[i][0]&&x<=list[i][1])return i;return -1}
+/* 1枚の見積 */
+function quote(o){var f=fab(o.fab);if(!f)return{err:"生地が見つかりません"};
+ var k=tierKey(f,o.color,o.style,o.lined);if(!k)return{err:"この色では選べないスタイルです"};
+ var t=T[k],w=+o.w,h=Math.round(+o.h);
+ if(!(h>=20&&h<=300))return{err:"丈は20〜300cmで入力してください",key:k};
+ var ci;if(t.eye){ci=t.c.indexOf(w);if(ci<0)return{err:"ハトメの幅は100・140・180・220cmから選んでください",key:k}}
+ else{w=Math.round(w);var lo=t.c[0][0];if(!(w>=lo&&w<=300))return{err:"幅は"+lo+"〜300cmで入力してください",key:k};ci=band(t.c,w)}
+ var ri=band(t.r,h);
+ return{price:t.v[ri][ci],key:k,ci:ci,ri:ri,jan:jan(f,o.color,o.style,o.lined),url:"https://www.muji.com/jp/ja/store/cmdty/detail/"+jan(f,o.color,o.style,o.lined)}}
+function minPrice(f){var m=1e9;f.col.forEach(function(cc){Object.keys(cc[2]).forEach(function(st){var k=(cc[4]&&cc[4][st])||f.t[st];if(T[k])m=Math.min(m,T[k].v[0][0])})});return m}
+function count(){var n=0;F.forEach(function(f){f.col.forEach(function(cc){n+=Object.keys(cc[2]).length+(cc[3]?Object.keys(cc[3]).length:0)})});return n}
+window.MUJI_CURTAIN={info:INFO,moods:MOODS,moodsOf:moodsOf,hasMood:hasMood,asOf:"2026-10-07",tables:T,styles:STYLES,swatch:SW,eyePole:EYE_POLE,fabrics:F,fab:fab,color:color,tierKey:tierKey,quote:quote,minPrice:minPrice,count:count};
+})();
+
+/* ===== 画面 ===== */
+(function(){
+var M=window.MUJI_CURTAIN,$=function(i){return document.getElementById(i)};
+var yen=function(n){return"¥"+Number(n).toLocaleString("ja-JP")};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var GR=["","遮光1級","遮光2級"],CATN={shade:"遮光",thick:"厚地",lace:"レース"};
+var HANG={front:"正面付け",ceil:"天井付け",pole:"ポール"};
+/* 例として最初から入れておく明細（初回のみ） */
+var S={mood:"",cat:"shade",q:"",fab:"nijuori",color:"ベージュ",style:"np",lined:false,w:100,h:200,eyeW:100,qty:2,hang:"front",room:"",lines:[],cust:"",staff:"",shop:"",tab:"make"};
+var SAMPLE=[{fab:"nijuori",color:"ベージュ",style:"np",lined:false,w:100,h:200,hang:"front",qty:2,room:"リビング 掃き出し窓（例）"},
+ {fab:"pollen",color:"オフ白",style:"np",lined:false,w:100,h:198,hang:"front",qty:2,room:"リビング レース（例）"}];
+try{var sv=JSON.parse(localStorage.getItem("mujiCurtainQuote")||"null");if(sv&&typeof sv==="object")Object.keys(S).forEach(function(k){if(k in sv)S[k]=sv[k]});else S.lines=SAMPLE.slice()}catch(e){S.lines=SAMPLE.slice()}
+if(!M.fab(S.fab)){S.fab="nijuori";S.color="ベージュ"}
+function save(){try{localStorage.setItem("mujiCurtainQuote",JSON.stringify(S))}catch(e){}}
+function toast(t){var b=$("toast");b.textContent=t;b.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){b.hidden=true},1800)}
+
+/* カーテン上部の形（スタイル見本） */
+function icon(k){var p={
+ np:'<path d="M6 6h44"/><path d="M10 7v28M46 7v28"/><path d="M10 35h36" opacity=".35"/>',
+ p:'<path d="M6 6h44"/><path d="M10 8c3 0 3 4 6 4s3-4 6-4 3 4 6 4 3-4 6-4 3 4 6 4 3-4 6-4"/><path d="M10 8v27M46 8v27M22 12v23M34 12v23" opacity=".55"/>',
+ p2:'<path d="M6 6h44"/><path d="M10 8c2 0 2 4 4 4s2-4 4-4 2 4 4 4 2-4 4-4 2 4 4 4 2-4 4-4 2 4 4 4 2-4 4-4 2 4 4 4"/><path d="M10 8v27M46 8v27M18 12v23M26 12v23M34 12v23M42 12v23" opacity=".55"/>',
+ eye:'<path d="M4 7h48"/><circle cx="12" cy="10" r="2.6"/><circle cx="22" cy="10" r="2.6"/><circle cx="32" cy="10" r="2.6"/><circle cx="42" cy="10" r="2.6"/><path d="M10 13v22M46 13v22M17 13c0 7 0 15 0 22M27 13v22M37 13v22" opacity=".55"/>',
+ ga:'<path d="M6 6h44"/><path d="M10 9c1.5 2 3-2 4.5 0s3-2 4.5 0 3-2 4.5 0 3-2 4.5 0 3-2 4.5 0 3-2 4.5 0 3-2 4.5 0 3-2 4.5 0"/><path d="M10 9v26M46 9v26M14 11v24M19 11v24M23 11v24M28 11v24M32 11v24M37 11v24M41 11v24" opacity=".4"/>'}[k];
+ return'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">'+p+'</svg>'}
+
+/* --- 1 生地 --- */
+function norm(s){return String(s||"").replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)}).toLowerCase()}
+function renderFab(){
+ [].forEach.call($("catseg").children,function(b){b.classList.toggle("on",b.dataset.c===S.cat)});
+ var q=norm(S.q).trim(),list=M.fabrics.filter(function(f){
+  if(q)return norm(f.n+" "+(f.fr?"防炎":"")+" "+f.col.map(function(c){return c[0]}).join(" ")+" "+CATN[f.cat]).indexOf(q)>=0;
+  return f.cat===S.cat}).filter(function(f){return M.hasMood(f,S.mood)});
+ $("fabcount").textContent=list.length+"種類"+(q?"（すべての種類から）":"")+(S.mood?"・"+moodName(S.mood):"");
+ $("moods").innerHTML='<span class="lab">雰囲気</span><button data-m="" class="'+(S.mood?"":"on")+'">すべて</button>'+M.moods.map(function(m){return'<button data-m="'+m[0]+'" class="'+(S.mood===m[0]?"on":"")+'">'+m[1]+'</button>'}).join("");
+ $("flist").innerHTML=list.length?list.map(function(f){
+  var gr={};f.col.forEach(function(c){if(c[1])gr[c[1]]=1});
+  var tags=(f.fr?'<span class="tag">防炎</span>':"")+Object.keys(gr).sort().map(function(g){return'<span class="tag'+(g==="1"?" s1":"")+'">'+GR[g]+'</span>'}).join("")+(f.lt?'<span class="tag s1">遮光裏地付あり</span>':"")+(q?'<span class="tag">'+CATN[f.cat]+'</span>':"");
+  return'<button class="fab'+(f.id===S.fab?" on":"")+'" data-f="'+f.id+'"><span class="n">'+esc(f.n)+'</span><span class="p">1枚 <b class="yen">'+yen(M.minPrice(f))+'</b>〜</span><span class="tg">'+tags+'<span class="dots">'+f.col.map(function(c){return'<i style="background:'+(M.swatch[c[0]]||"#ccc")+'"></i>'}).join("")+'</span></span></button>'}).join("")
+  :'<div class="empty">'+(q?"「"+esc(S.q)+"」に合う生地はありません。言葉を短くするか、消して種類から選んでください。":"この種類には「"+moodName(S.mood)+"」の生地がありません。上のタブで種類を変えるか、雰囲気を「すべて」に戻してください。")+'</div>';
+ var f=M.fab(S.fab);
+ $("sws").innerHTML=f.col.map(function(c){return'<button class="sw'+(c[0]===S.color?" on":"")+(S.mood&&M.moodsOf(f,c[0]).indexOf(S.mood)<0?" dim":"")+'" data-c="'+esc(c[0])+'"><i style="background:'+(M.swatch[c[0]]||"#ccc")+'"></i><span>'+esc(c[0])+(c[1]?' <small>'+GR[c[1]]+'</small>':"")+'</span></button>'}).join("");
+}
+function moodName(k){for(var i=0;i<M.moods.length;i++)if(M.moods[i][0]===k)return M.moods[i][1];return""}
+function renderAbout(){var f=M.fab(S.fab),I=M.info[f.id]||{},cc=M.color(f,S.color),fx=[];
+ if(f.fr)fx.push("防炎");if(cc&&cc[1])fx.push(GR[cc[1]]);if(f.lt)fx.push("遮光裏地付あり");(I.fx||[]).forEach(function(x){fx.push(x)});
+ $("about").innerHTML='<h3>'+esc(f.n)+'<small>'+CATN[f.cat]+'・'+esc(S.color)+'</small></h3><p>'+esc(I.d||"")+'</p><dl>'+
+  '<dt>素材</dt><dd>'+esc(I.mat||"商品ページで確認してください")+'</dd>'+
+  '<dt>お手入れ</dt><dd>'+esc(I.care||"商品ページで確認してください")+'</dd>'+
+  '<dt>雰囲気</dt><dd class="tg">'+M.moodsOf(f,S.color).map(function(k){return'<span class="tag m">'+moodName(k)+'</span>'}).join("")+'</dd>'+
+  (fx.length?'<dt>機能</dt><dd class="tg">'+fx.map(function(x){return'<span class="tag fx">'+esc(x)+'</span>'}).join("")+'</dd>':"")+
+  '</dl><a href="https://www.muji.com/jp/ja/store/cmdty/detail/'+(cc?cc[2][Object.keys(cc[2])[0]]:"")+'" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--acc)">ネットストアの商品ページ</a>'}
+$("moods").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.mood=b.dataset.m;
+ var f=M.fab(S.fab);if(S.mood&&M.moodsOf(f,S.color).indexOf(S.mood)<0){var c=f.col.filter(function(c){return M.moodsOf(f,c[0]).indexOf(S.mood)>=0})[0];if(c){S.color=c[0];fixStyle()}}
+ renderAll()});
+$("catseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.cat=b.dataset.c;S.q="";$("q").value="";renderFab();save()});
+$("q").addEventListener("input",function(){S.q=this.value;renderFab()});
+$("flist").addEventListener("click",function(e){var b=e.target.closest(".fab");if(!b)return;var f=M.fab(b.dataset.f);S.fab=f.id;
+ if(!M.color(f,S.color))S.color=f.col[0][0];fixStyle();renderAll()});
+$("sws").addEventListener("click",function(e){var b=e.target.closest(".sw");if(!b)return;S.color=b.dataset.c;fixStyle();renderAll()});
+
+/* --- 2 スタイル --- */
+function avail(st,lined){return!!M.tierKey(M.fab(S.fab),S.color,st,lined)}
+function fixStyle(){if(S.lined&&!avail(S.style,true))S.lined=avail(S.style,true);if(!avail(S.style,S.lined)){S.lined=false;
+ for(var i=0;i<M.styles.length;i++)if(avail(M.styles[i].k,false)){S.style=M.styles[i].k;break}}
+ if(S.style==="eye")S.hang="pole";else if(S.hang==="pole")S.hang="front"}
+function renderStyle(){
+ $("styles").innerHTML=M.styles.map(function(s){var ok=avail(s.k,false)||avail(s.k,true);
+  return'<button class="st'+(s.k===S.style?" on":"")+'" data-s="'+s.k+'"'+(ok?"":" disabled")+'>'+icon(s.k)+s.n+'<small>'+(ok?s.s:"この色はなし")+'</small></button>'}).join("");
+ var canL=avail(S.style,true);$("lnwrap").hidden=!canL;$("lined").checked=!!S.lined&&canL;
+}
+$("styles").addEventListener("click",function(e){var b=e.target.closest(".st");if(!b||b.disabled)return;S.style=b.dataset.s;if(!avail(S.style,S.lined))S.lined=!S.lined&&avail(S.style,true);fixStyle();renderAll()});
+$("lined").addEventListener("change",function(){S.lined=this.checked;renderAll()});
+
+/* --- 3 サイズ・4 吊り方 --- */
+function cur(){var w=S.style==="eye"?S.eyeW:S.w;return{fab:S.fab,color:S.color,style:S.style,lined:S.lined,w:w,h:S.h,hang:S.hang,qty:S.qty,room:S.room}}
+function renderSize(){
+ var eye=S.style==="eye";$("wbox").hidden=eye;$("eyebox").hidden=!eye;
+ var r=M.quote(cur()),t=r.key&&M.tables[r.key];
+ if(eye){$("eyeseg").innerHTML=[100,140,180,220].map(function(w){return'<button data-w="'+w+'" class="'+(w===S.eyeW?"on":"")+'">'+w+'</button>'}).join("");
+  var pi=[100,140,180,220].indexOf(S.eyeW),pp=M.eyePole[pi];$("eyeh").textContent=pp?"ポールの長さ "+pp[0]+"〜"+pp[1]+"cm の窓向け（片開き1枚の目安）":""}
+ else $("wh").textContent=(t&&!t.eye?t.c[0][0]:51)+"〜300cm";
+ $("szerr").hidden=!r.err;$("szerr").textContent=r.err||"";
+ [].forEach.call($("openseg").children,function(b){b.classList.toggle("on",+b.dataset.q===S.qty)});
+ $("qty").textContent=S.qty;
+ /* 価格表 */
+ if(t){var head=t.eye?t.c.map(function(w){return"幅"+w}):t.c.map(function(c){return"幅"+c[0]+"–"+c[1]});
+  $("ptab").innerHTML='<table><tr><th>cm</th>'+head.map(function(h){return"<th>"+h+"</th>"}).join("")+'</tr>'+t.r.map(function(rw,ri){return'<tr><th>丈'+rw[0]+"–"+rw[1]+'</th>'+t.v[ri].map(function(v,ci){return'<td class="'+(!r.err&&ri===r.ri&&ci===r.ci?"hit":"")+'">'+yen(v)+'</td>'}).join("")+'</tr>'}).join("")+'</table>'}
+ /* 吊り方 */
+ var hs=$("hangseg");
+ if(eye){hs.innerHTML='<button class="on" disabled>ポールに通す（ハトメ）</button>';$("hangh").textContent="仕上がり丈は注文より約2.5cm長くなります（"+(S.h+2.5)+"cm 前後）。ハトメ内径40mm、太さ28・35mmのポール向け。"}
+ else{hs.innerHTML='<button data-g="front" class="'+(S.hang==="front"?"on":"")+'">正面付け</button><button data-g="ceil" class="'+(S.hang==="ceil"?"on":"")+'">天井付け</button>';
+  var add=S.hang==="ceil"?1:4;$("hangh").textContent=(S.hang==="ceil"?"天井や窓枠の内側にレールを付ける場合。":"窓枠の上の壁にレールを付ける場合。")+"仕上がり総丈は注文＋"+add+"cm（"+(Math.round(S.h)+add)+"cm 前後）。"+(S.style==="ga"?"ギャザー用フックが付きます。":"アジャスターフックで上下に調整できます。")}
+}
+$("w").addEventListener("input",function(){S.w=+this.value;renderSum();renderSize()});
+$("h").addEventListener("input",function(){S.h=+this.value;renderSum();renderSize()});
+["w","h"].forEach(function(id){$(id).addEventListener("change",save)});
+$("eyeseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.eyeW=+b.dataset.w;renderAll()});
+$("openseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.qty=+b.dataset.q;renderAll()});
+$("qm").onclick=function(){S.qty=Math.max(1,S.qty-1);renderAll()};
+$("qp").onclick=function(){S.qty=Math.min(20,S.qty+1);renderAll()};
+$("hangseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b||!b.dataset.g)return;S.hang=b.dataset.g;renderAll()});
+$("room").addEventListener("input",function(){S.room=this.value;save()});
+
+/* --- 合計バー --- */
+function desc(o){var f=M.fab(o.fab);return f.n+"／"+o.color+"・"+M.styles.filter(function(s){return s.k===o.style})[0].n+(o.lined?"・遮光裏地付":"")}
+function renderSum(){
+ if(S.tab!=="make"){var tot=S.lines.reduce(function(a,l){var r=M.quote(l);return a+(r.price||0)*l.qty},0);
+  $("sumsub").textContent="見積合計（"+S.lines.length+"件・税込）";$("sumv").innerHTML=yen(tot);$("add").textContent="カーテンを追加";$("add").disabled=false;return}
+ var r=M.quote(cur());$("add").textContent="見積に追加";
+ if(r.err){$("sumsub").textContent=r.err;$("sumv").textContent="—";$("add").disabled=true;return}
+ $("sumsub").textContent=desc(cur())+"・幅"+(S.style==="eye"?S.eyeW:Math.round(S.w))+"×丈"+Math.round(S.h)+"cm";
+ $("sumv").innerHTML=yen(r.price*S.qty)+'<span>'+yen(r.price)+" × "+S.qty+"枚</span>";$("add").disabled=false;
+}
+$("add").onclick=function(){
+ if(S.tab!=="make"){go("make");return}
+ var o=cur();if(M.quote(o).err)return;o.w=S.style==="eye"?S.eyeW:Math.round(S.w);o.h=Math.round(S.h);
+ if(!o.room)o.room="窓"+(S.lines.length+1);
+ S.lines.push(o);S.room="";$("room").value="";save();renderQuote();toast("見積に追加しました（"+S.lines.length+"件）")};
+
+/* --- 見積 --- */
+function hangText(l){return l.style==="eye"?"ポール":HANG[l.hang]}
+function renderQuote(){
+ var tot=0,rows=S.lines.map(function(l,i){var r=M.quote(l),f=M.fab(l.fab),sub=(r.price||0)*l.qty;tot+=sub;
+  return'<div class="qi"><span class="cs" style="background:'+(M.swatch[l.color]||"#ccc")+'"></span><span class="nm">'+esc(l.room)+'</span><span class="pr yen">'+(r.err?"—":yen(sub))+'<small>'+(r.err?"":yen(r.price)+"×"+l.qty+"枚")+'</small></span>'+
+  '<span class="sp">'+esc(desc(l))+'</span><span class="sp">幅'+l.w+'×丈'+l.h+'cm・'+hangText(l)+'・JAN '+(r.jan||"")+(r.err?'　<b style="color:var(--warn)">'+esc(r.err)+'</b>':"")+'</span>'+
+  '<span class="ac"><a href="'+(r.url||"#")+'" target="_blank" rel="noopener">商品ページ</a><button class="lnk" data-e="'+i+'">選び直す</button><button class="lnk rm" data-d="'+i+'">削除</button></span></div>'}).join("");
+ $("qlist").innerHTML=rows||'<div class="empty">まだ明細がありません。「つくる」で生地とサイズを選んで「見積に追加」を押してください。</div>';
+ $("qsum").textContent=yen(tot);$("qcount").textContent=S.lines.length+"件";
+ $("bdg").hidden=!S.lines.length;$("bdg").textContent=S.lines.length;
+ renderDoc(tot);renderSum();
+}
+$("qlist").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+ if(b.dataset.d!=null){S.lines.splice(+b.dataset.d,1);save();renderQuote();toast("削除しました")}
+ if(b.dataset.e!=null){var l=S.lines.splice(+b.dataset.e,1)[0];S.fab=l.fab;S.color=l.color;S.style=l.style;S.lined=l.lined;S.cat=M.fab(l.fab).cat;S.qty=l.qty;S.hang=l.hang;S.room=l.room;
+  if(l.style==="eye")S.eyeW=l.w;else S.w=l.w;S.h=l.h;$("w").value=S.w;$("h").value=S.h;$("room").value=S.room;save();go("make");renderAll();toast("明細を戻しました。直して追加し直してください")}});
+function today(){var d=new Date();return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"}
+function renderDoc(tot){
+ $("doc").innerHTML='<div class="dh"><h3>御見積書</h3><div style="text-align:right;font-size:.72rem;color:var(--sub)">'+today()+'<br>'+esc(S.shop||"無印良品")+(S.staff?'<br>担当：'+esc(S.staff):"")+'</div></div>'+
+ '<div class="to">'+esc(S.cust||"　　　　")+' 様</div><div style="font-size:.76rem;color:var(--sub)">オーダーカーテンのお見積りです。</div>'+
+ '<div class="big"><span>お見積金額（税込）</span><b class="yen">'+yen(tot)+'</b></div>'+
+ '<div class="tw"><table><tr><th>設置場所</th><th>商品</th><th>サイズ</th><th>単価</th><th>枚</th><th>金額</th></tr>'+
+ S.lines.map(function(l){var r=M.quote(l);return'<tr><td>'+esc(l.room)+'</td><td>'+esc(desc(l))+'<br><span style="color:var(--sub)">JAN '+(r.jan||"")+'</span></td><td>幅'+l.w+'×丈'+l.h+'<br>'+hangText(l)+'</td><td>'+(r.err?"—":yen(r.price))+'</td><td>'+l.qty+'</td><td>'+(r.err?"—":yen(r.price*l.qty))+'</td></tr>'}).join("")+
+ '</table></div><div class="nt">・価格は無印良品ネットストアの2026年10月7日時点の価格（税込）です。お届け前に変わることがあります。<br>・受注生産のため、ご注文後のサイズ変更・キャンセル・返品はできません。<br>・お届けまで約10〜14日。サイズにより生地のハギ合わせが入ります。</div>';
+}
+["cust","staff","shop"].forEach(function(k){$(k).value=S[k]||"";$(k).addEventListener("input",function(){S[k]=this.value;save();renderDoc(S.lines.reduce(function(a,l){return a+(M.quote(l).price||0)*l.qty},0))})});
+function qText(){var tot=0,t="【御見積書】"+today()+"\n"+(S.cust?S.cust+" 様\n":"")+(S.shop?S.shop+(S.staff?"　担当："+S.staff:"")+"\n":"")+"\n";
+ S.lines.forEach(function(l,i){var r=M.quote(l);tot+=(r.price||0)*l.qty;t+=(i+1)+". "+l.room+"\n   "+desc(l)+"\n   幅"+l.w+"×丈"+l.h+"cm・"+hangText(l)+"\n   "+yen(r.price||0)+" × "+l.qty+"枚 = "+yen((r.price||0)*l.qty)+"（JAN "+r.jan+"）\n"});
+ return t+"\n合計（税込） "+yen(tot)+"\n※ネットストア 2026/10/7時点の価格"}
+$("cpy").onclick=function(){var t=qText(),ta=$("qtxt");
+ try{navigator.clipboard.writeText(t).then(function(){toast("コピーしました")},function(){ta.hidden=false;ta.value=t;ta.select();toast("下の文章を選択してコピーしてください")})}
+ catch(e){ta.hidden=false;ta.value=t;ta.select();toast("下の文章を選択してコピーしてください")}};
+function clrBtn(){$("clrwrap").innerHTML='<button class="sec" id="clr">明細をすべて消す</button>';$("clr").onclick=function(){
+ $("clrwrap").innerHTML='<span class="confirm">消しますか？ <button class="sec" id="cy">消す</button><button class="sec" id="cn">やめる</button></span>';
+ $("cy").onclick=function(){S.lines=[];save();renderQuote();clrBtn();toast("明細を消しました")};$("cn").onclick=clrBtn}}
+clrBtn();
+
+/* --- タブ --- */
+function go(t){S.tab=t;["make","quote","memo"].forEach(function(k){$("pg-"+k).hidden=k!==t});
+ [].forEach.call(document.querySelectorAll(".tabs button"),function(b){b.classList.toggle("on",b.dataset.t===t)});
+ $("sum").hidden=t==="memo";renderSum();save();window.scrollTo(0,0)}
+document.querySelector(".tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(b)go(b.dataset.t)});
+
+function renderAll(){renderFab();renderAbout();renderStyle();renderSize();renderSum();save()}
+$("mcount").textContent=M.count();$("w").value=S.w;$("h").value=S.h;$("room").value=S.room||"";
+fixStyle();renderAll();renderQuote();
+var hs=(location.hash||"").slice(1);go(["make","quote","memo"].indexOf(hs)>=0?hs:(S.tab||"make"));
+window.MUJI_CURTAIN.lines=function(){return S.lines.slice()};
+})();
+
+/* ===== オープニング：カーテンが閉じ、タッセルで留められて真ん中に I が現れる ===== */
+(function(){
+var op=document.getElementById("op");if(!op)return;
+var NS="http://www.w3.org/2000/svg",L=document.getElementById("opL"),R=document.getElementById("opR"),sill=document.getElementById("opSill"),
+ rail=document.getElementById("opRail"),c1=document.getElementById("opC1"),c2=document.getElementById("opC2"),BG=getComputedStyle(document.documentElement).getPropertyValue("--acc").trim()||"#9f2a37";
+var CX=619,Y0=470,YW=630,YB=706,N=4,G=3;
+/* 左カーテンの形（外側の端=552）：[上の左右, 留め位置の左右, 裾の左右] */
+/* 内側の端はまっすぐ（x=597）に保ち、左右のカーテンの間にできる空間を「I」の形にする */
+var BUNCH=[[546,554],[546,554],[546,554]],CLOSE=[[546,619],[546,619],[546,619]],TIE=[[546,597],[572,597],[550,597]];
+var mix=function(a,b,t){return a+(b-a)*t},ease=function(t){t=Math.max(0,Math.min(1,t));return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
+function shape(a,b,t){return a.map(function(r,i){return[mix(r[0],b[i][0],t),mix(r[1],b[i][1],t)]})}
+function mk(g){var ps=[];for(var i=0;i<N;i++){var p=document.createElementNS(NS,"path");g.appendChild(p);ps.push(p)}
+ var tb=document.createElementNS(NS,"rect");tb.setAttribute("height","13");tb.setAttribute("rx","3");tb.setAttribute("stroke",BG);tb.setAttribute("stroke-width","3");g.appendChild(tb);return{ps:ps,tb:tb}}
+var LP=mk(L),RP=mk(R);
+function edge(sh,u,mir){var x=[0,1,2].map(function(k){return mix(sh[k][0],sh[k][1],u)});return mir?x.map(function(v){return 2*CX-v}):x}
+function strip(a,b){var y0=Y0,yw=YW,yb=YB;
+ return"M"+a[0]+" "+y0+"C"+a[0]+" "+(y0+(yw-y0)*.55)+" "+a[1]+" "+(yw-(yw-y0)*.3)+" "+a[1]+" "+yw+"C"+a[1]+" "+(yw+(yb-yw)*.35)+" "+a[2]+" "+(yb-(yb-yw)*.45)+" "+a[2]+" "+yb+
+  "L"+b[2]+" "+yb+"C"+b[2]+" "+(yb-(yb-yw)*.45)+" "+b[1]+" "+(yw+(yb-yw)*.35)+" "+b[1]+" "+yw+"C"+b[1]+" "+(yw-(yw-y0)*.3)+" "+b[0]+" "+(y0+(yw-y0)*.55)+" "+b[0]+" "+y0+"Z"}
+function draw(P,sh,mir,tie){for(var i=0;i<N;i++){var u0=i/N,u1=(i+1)/N,a=edge(sh,u0,mir),b=edge(sh,u1,mir),h=G/2;
+  var ia=i?h:0,ib=i<N-1?h:0;a=a.map(function(v){return v+(mir?-ia:ia)});b=b.map(function(v){return v-(mir?-ib:ib)});P.ps[i].setAttribute("d",strip(a,b))}
+ var w=edge(sh,0,mir)[1],e=edge(sh,1,mir)[1],x0=Math.min(w,e)-3,x1=Math.max(w,e)+3,hh=13*tie;
+ P.tb.setAttribute("x",x0);P.tb.setAttribute("width",x1-x0);P.tb.setAttribute("y",YW-6.5*tie);P.tb.setAttribute("height",hh);P.tb.setAttribute("opacity",tie>0?1:0)}
+function frame(ms){var s=ms/1000,sh;
+ var r=ease(s/0.5);rail.setAttribute("transform","scale("+r+" 1)");sill.setAttribute("transform","scale("+ease((s-.15)/.5)+" 1)");c1.setAttribute("opacity",ease((s-.35)/.2));c2.setAttribute("opacity",ease((s-.35)/.2));
+ if(s<1.2)sh=shape(BUNCH,CLOSE,ease((s-.4)/.8));else sh=shape(CLOSE,TIE,ease((s-1.35)/.8));
+ var tie=ease((s-1.95)/.25);draw(LP,sh,false,tie);draw(RP,sh,true,tie);
+ if(s>1.7)op.classList.add("ltr");if(s>2.3)op.classList.add("subon")}
+var done=false;function close(){if(done)return;done=true;op.classList.add("out");setTimeout(function(){op.hidden=true},500)}
+op.addEventListener("click",close);
+var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(reduce){frame(4000);setTimeout(close,1400);return}
+var t0=null;function loop(ts){if(done)return;if(t0==null)t0=ts;var e=ts-t0;frame(e);if(e<3700)requestAnimationFrame(loop);else close()}
+frame(0);requestAnimationFrame(loop);
+})();
+</script>

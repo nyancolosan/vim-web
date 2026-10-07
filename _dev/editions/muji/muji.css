@@ -1,5 +1,5 @@
-/* VIM for MUJI staff：追加の見た目 */
-.mjhd{display:inline-block;vertical-align:middle;margin-left:6px;font-size:.62rem;font-weight:700;letter-spacing:.08em;color:var(--headink);opacity:.85;border:1px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap}
+/* MUJI Store Assistant：追加の見た目 */
+.mjhd{display:inline-block;vertical-align:middle;margin-left:4px;font-family:"Poppins","Hiragino Sans",system-ui,sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.04em;line-height:1.2;color:var(--headink);white-space:nowrap}
 #prob,.probadge,#bill,.pro-tag{display:none!important}
 .mjbox{max-width:640px;width:100%;display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px)}
 #mjq{width:100%;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
@@ -22,3 +22,17 @@
 .mjst{margin:6px 0;padding:8px 10px;border-radius:8px;font-size:.85rem;font-weight:600}.mjst.ok{background:#e8f3ea;color:#1b5e20}.mjst.bad{background:#fdecea;color:#b71c1c}
 /* ===== 接客・売場づくりに必要なものだけ残す ===== */
 #pjnew,#syncf,#v4 .fold.mj-cmp,#shpb,#shest,#sht,#v5 .fold.mj-ai,#tuban,.setg.mj-guide,#hhelp,#t6{display:none!important}
+
+/* ===== カーテン見積（MUJI Store Assistant の中で開く） ===== */
+#mjcur{position:fixed;inset:0;z-index:9000;background:#ffffff;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#mjcur iframe{flex:1;width:100%;border:0;display:block;background:#ffffff}
+#mjcurf{position:absolute;left:16px;right:16px;top:calc(40% + env(safe-area-inset-top,0px));text-align:center;font-size:.86rem;color:var(--sub);line-height:1.7}
+#mjcurf a{color:var(--acc);font-weight:700}
+#mjcurf button{margin-top:10px}
+.mjcurb{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 4px;padding:12px 14px;border:1.5px solid var(--acc);border-radius:12px;background:var(--accbg);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.mjcurb svg{width:40px;height:30px;flex:none;color:var(--acc)}
+.mjcurb b{display:block;font-size:.95rem;color:var(--acc)}
+.mjcurb small{display:block;font-size:.74rem;color:var(--sub);font-weight:400}
+/* ヘッダーに「カーテン」が増えたので、狭い画面ではボタンを詰める */
+@media (max-width:440px){h1 .hbt{gap:0}h1 .hbt button,h1>button{min-width:38px!important;padding-left:1px!important;padding-right:1px!important}h1 #undo,h1 #redo{min-width:32px!important}.mjhd{font-size:.54rem;margin-left:2px}h1 .vlogo{margin-right:0}}
+#mjcurh{white-space:nowrap;letter-spacing:-.02em}

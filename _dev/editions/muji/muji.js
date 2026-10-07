@@ -1,6 +1,6 @@
-/* ===== VIM for MUJI staff（店舗スタッフ向け・接客と売場づくり） =====
+/* ===== MUJI Store Assistant（旧 VIM for MUJI staff。店舗スタッフ向け・接客と売場づくり・カーテン見積） =====
  * VIM 本体の上に重ねて動く追加分。VIM 本体には入らない（_dev/editions/muji/build_muji.py で別ファイルに組み立てる）。
- * ・プランの切り替えなし（全機能）・赤のテーマ
+ * ・プランの切り替えなし（全機能）・白地にエンジのテーマ
  * ・はじめの画面を「接客」「売場（vmd）」に
  * ・無印良品ネットストアの家具（スナップショット）を検索して、実寸のまま置ける
  * ・見積書に JAN コードを載せる */
@@ -10,12 +10,12 @@ var q=function(i){return document.getElementById(i)},esc2=function(s){return Str
 document.documentElement.classList.add("ed-muji");
 /* 1) 全機能・課金なし */
 try{setTier("pro",true)}catch(e){}
-/* 2) 赤のテーマ */
-var RED="#7f0019";
-function red(){try{var V=themeVars(RED),r=document.documentElement;Object.keys(V).forEach(function(k){r.style.setProperty(k,V[k])});var mt=document.querySelector('meta[name="theme-color"]');if(mt)mt.setAttribute("content",RED)}catch(e){}}
+/* 2) 白地にエンジのテーマ（カーテン見積と同じ色） */
+var RED="#9f2a37",WHITE={"--bg":"#ffffff","--card":"#ffffff","--fill":"#ffffff","--line":"#e3dfdf","--ink":"#333333","--sub":"#7d7778","--accbg":"#f9eef0","--head":"#ffffff","--headink":"#333333","--logo":"#ffffff","--logobg":RED,"--headline":"#e3dfdf","--hi":RED,"--hiink":"#ffffff","--segon":RED,"--segink":"#ffffff"};
+function red(){try{var V=themeVars(RED),r=document.documentElement;Object.keys(WHITE).forEach(function(k){V[k]=WHITE[k]});Object.keys(V).forEach(function(k){r.style.setProperty(k,V[k])});var mt=document.querySelector('meta[name="theme-color"]');if(mt)mt.setAttribute("content",RED)}catch(e){}}
 if(typeof setTheme==="function"){var oST=setTheme;setTheme=function(){var r=oST.apply(this,arguments);red();return r}}red();
-/* 3) 見出しの「for MUJI staff」 */
-var hv=document.querySelector("h1 .vlogo");if(hv&&!q("mjhd")){var s=document.createElement("span");s.id="mjhd";s.className="mjhd";s.textContent="for MUJI staff";hv.insertAdjacentElement("afterend",s)}
+/* 3) 見出しのアプリ名 */
+var hv=document.querySelector("h1 .vlogo");if(hv&&!q("mjhd")){var s=document.createElement("span");s.id="mjhd";s.className="mjhd";s.innerHTML="MUJI<br>Store Assistant";hv.insertAdjacentElement("afterend",s)}
 /* 4) はじめの画面：接客／売場 */
 var rb=document.querySelector('#stmk [data-k="room"]'),vb=document.querySelector('#stmk [data-k="vmd"]');
 if(rb)rb.innerHTML='接客<small>お客さまのお部屋</small>';if(vb)vb.innerHTML='売場づくり<small>vmd・什器</small>';
@@ -77,7 +77,7 @@ function wire(){[].forEach.call(q("mjl").querySelectorAll("[data-mp]"),function(
 ["plb","plb3"].forEach(function(id){var b=q(id);if(b)b.onclick=function(){open(true)}});
 var tb=q("tplb");if(tb){tb.onclick=function(){open(true)};var l1=tb.querySelector(".lb"),s1=tb.querySelector("small");if(l1)l1.textContent="無印良品の商品を置く";if(s1)s1.textContent="ネットストアの家具を、名前やサイズで探せます"}
 ["plb","plb3"].forEach(function(id){var b=q(id),l=b&&b.querySelector(".lb");if(l)l.textContent="無印良品の商品を置く";else if(b&&!b.children.length)b.textContent="無印良品の商品を置く"});
-/* ロゴの下に「for MUJI staff」 */[].forEach.call(document.querySelectorAll(".stmbrand,.verlogo"),function(el){if(el.querySelector(".mjsub"))return;var t=document.createElement("small");t.className="mjsub";t.textContent="for MUJI staff — VIM";el.appendChild(t)});
+/* ロゴの下にアプリ名 */[].forEach.call(document.querySelectorAll(".stmbrand,.verlogo"),function(el){if(el.querySelector(".mjsub"))return;var t=document.createElement("small");t.className="mjsub";t.textContent="powered by VIM";el.appendChild(t)});
 /* 6) 見積書に JAN コード */
 if(typeof dimText==="function"){var oDT=dimText;dimText=function(it){var r=oDT(it),th=window.mjTotalH&&mjTotalH(it);if(th)r=r.concat([(window.mjLegName?mjLegName(it):"脚")+"込みの総高さ H"+Math.round(th)+" mm"]);if(it&&it.f4==="mjssh"&&it.lay==="h")r=r.concat(["横置き"]);if(it&&it.jan)r=r.concat(["JAN "+it.jan]);return r}}
 /* 棚の詳細に「置き方（縦置き・横置き）」を出す（スタッキングシェルフ） */
@@ -98,5 +98,27 @@ function mjPrune(){try{
 mjPrune();
 /* 置き方（縦・横）を変えたら幅と高さを入れ替える */
 (function(){var g=document.getElementById("grid");if(!g)return;g.addEventListener("change",function(e){var t=e.target,i=t.getAttribute&&t.getAttribute("data-i"),f=t.getAttribute&&t.getAttribute("data-f");if(i===null||f!=="lay")return;var it=items[+i];if(!it)return;it.lay=t.value;if(window.mjLay&&mjLay(it)){save();try{render();rplan();after3d()}catch(x){}}else save()})})();
+
+/* ===== カーテン見積：同じアプリの中で開く（curtain.html を全画面で重ねる） ===== */
+(function(){
+var IC='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18"/><path d="M5 4c0 6 3 8 3 10s-2 4-3 6h5V4"/><path d="M19 4c0 6-3 8-3 10s2 4 3 6h-5V4"/></svg>';
+var ov=null,ready=false,timer=null;
+function close(){if(ov)ov.hidden=true;document.documentElement.style.overflow=""}
+function fail(){if(ready||!ov)return;var f=q("mjcurf");if(f)f.hidden=false}
+function openCur(){var st=q("stm");if(st)st.hidden=true;
+ if(!ov){ov=document.createElement("div");ov.id="mjcur";ov.setAttribute("role","dialog");ov.setAttribute("aria-label","カーテン見積");
+  ov.innerHTML='<div id="mjcurf" hidden>カーテン見積をここで開けませんでした。<br><a href="curtain.html" target="_blank" rel="noopener">別のタブで開く</a><br><button type="button" class="ib" id="mjcurx">閉じる</button></div><iframe src="curtain.html" title="カーテン見積"></iframe>';
+  document.body.appendChild(ov);q("mjcurx").onclick=close;timer=setTimeout(fail,6000)}
+ ov.hidden=false;document.documentElement.style.overflow="hidden"}
+window.addEventListener("message",function(e){var d=e.data||{};if(d.mj==="cur-ready"){ready=true;clearTimeout(timer);var f=q("mjcurf");if(f)f.hidden=true}if(d.mj==="cur-close")close()});
+/* ヘッダーに「カーテン」 */
+var hb=document.querySelector("h1 .hbt"),th=q("thb");
+if(hb&&!q("mjcurh")){var b=document.createElement("button");b.id="mjcurh";b.className="hb";b.type="button";b.setAttribute("aria-label","カーテン見積");b.innerHTML=IC+"カーテン";b.onclick=openCur;hb.insertBefore(b,th&&th.parentNode===hb?th:null)}
+/* はじめの画面にも */
+var sk=q("stmk");if(sk&&!q("mjcurs")){var c=document.createElement("button");c.id="mjcurs";c.type="button";c.className="mjcurb";
+ c.innerHTML=IC.replace('width="22" height="22"','')+'<span><b>オーダーカーテンの見積</b><small>生地・スタイル・サイズ・吊り方から金額を出す</small></span>';c.onclick=openCur;sk.insertAdjacentElement("afterend",c)}
+window.mjCurtainOpen=openCur;
+if((location.hash||"")==="#curtain")setTimeout(openCur,0);
+})();
 window.mujiOpen=open;window.__toItem=toItem;
 })();
