@@ -20,3 +20,5 @@
 
 #toast{z-index:99!important}
 .mjst{margin:6px 0;padding:8px 10px;border-radius:8px;font-size:.85rem;font-weight:600}.mjst.ok{background:#e8f3ea;color:#1b5e20}.mjst.bad{background:#fdecea;color:#b71c1c}
+/* ===== 接客・売場づくりに必要なものだけ残す ===== */
+#pjnew,#syncf,#v4 .fold.mj-cmp,#shpb,#shest,#sht,#v5 .fold.mj-ai,#tuban,.setg.mj-guide,#hhelp,#t6{display:none!important}

@@ -73,7 +73,7 @@ F4OPT.mjssh=[["lay","置き方",[["v","縦置き"],["h","横置き"]]]];
 window.mjLay=function(it){if(!it||it.f4!=="mjssh")return false;var want=it.lay==="h",cur=!!it.layH;if(want===cur)return false;var w=it.w;it.w=it.h;it.h=w;it.layH=want;return true};
 window.mjLegName=function(it){return{o:"木製脚 ナチュラル",w:"木製脚 ブラウン",s:"スチール脚"}[it.lgm||"o"]+" "+Math.round(bedLegH(it)*100)+"cm"};
 window.mjTotalH=function(it){if(!it||(it.f4!=="mjlm"&&it.f4!=="mjbed"))return null;return(+it.h||0)+bedLegH(it)*1000};
-if(typeof TPLF!=="undefined")["lgm","lgh","lay","layH","mjv"].forEach(function(k){if(TPLF.indexOf(k)<0)TPLF.push(k)});
+if(typeof TPLF!=="undefined")["lgm","lgh","lay","layH","mjv","jan","url"].forEach(function(k){if(TPLF.indexOf(k)<0)TPLF.push(k)});
 
 /* ---------- ソファ ---------- */
 /* arm: w=幅広アーム n=なし t=木のフレーム / leg: s=短い木脚 h=高い木脚（リビングでもダイニングでも） f=床置き */

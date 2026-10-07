@@ -36,7 +36,11 @@ s = s.rstrip() + "\n" + add + "\n"
 sys.path.insert(0, E)
 from guard import guard
 s, _ng = guard(s); print("guarded", _ng)
+# VIM 本体のHTMLの閉じタグが1つ多く、3D の設定（写真のように仕上げる・照明・色・素材・表示設定）が全ページに出ていたのを直す
+bad = '<button id="ppr">ここを戻す</button><button id="ppa">すべて戻す</button></div></div></div></div></div>'
+if bad in s: s = s.replace(bad, '<button id="ppr">ここを戻す</button><button id="ppa">すべて戻す</button></div></div></div></div>', 1); print("fixed v3 div")
 open(sys.argv[1], "w", encoding="utf-8").write(s)
+import shutil; shutil.copy(os.path.join(ROOT, "bimini-pt.js"), os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "bimini-pt.js"))
 # 6) アイコン（赤の角丸に VIM と英字）
 P = json.load(open(os.path.join(D, "brand", "vim-parts.json")))
 icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1254 1254"><rect width="1254" height="1254" rx="260" fill="#7f0019"/><g fill="#fff" transform="translate(627 640) scale(1.05) translate(-622 -640)"><path d="%s"/><path d="%s"/><path d="%s"/><path d="%s"/></g></svg>' % (P["V"], P["LAMP"], P["M"], TAG)

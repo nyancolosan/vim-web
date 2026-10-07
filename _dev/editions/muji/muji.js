@@ -83,7 +83,19 @@ if(typeof dimText==="function"){var oDT=dimText;dimText=function(it){var r=oDT(i
 /* 棚の詳細に「置き方（縦置き・横置き）」を出す（スタッキングシェルフ） */
 function layUI(){try{items.forEach(function(it,i){if(!it||it.f4!=="mjssh")return;var g=document.getElementById("grid");if(!g||g.querySelector('select[data-f="lay"][data-i="'+i+'"]'))return;var a=g.querySelector('select[data-f="st"][data-i="'+i+'"]');var host=a&&a.closest("label");if(!host)return;
  var l=document.createElement("label");l.innerHTML='置き方<select data-f="lay" data-i="'+i+'"><option value="v"'+(it.lay==="h"?"":" selected")+'>縦置き</option><option value="h"'+(it.lay==="h"?" selected":"")+'>横置き</option></select>';host.parentNode.insertBefore(l,host)})}catch(e){}}
-if(typeof render==="function"){var oRender=render;render=function(){var r=oRender.apply(this,arguments);layUI();return r}}
+if(typeof render==="function"){var oRender=render;render=function(){var r=oRender.apply(this,arguments);layUI();mjPrune();return r}}
+/* ===== 接客・売場づくりに必要なものだけ残す（保存・渡すは保存に関わるものだけ） ===== */
+function mjPrune(){try{
+ [].forEach.call(document.querySelectorAll("#v4 details.fold"),function(d){var s=d.querySelector("summary");if(s&&/案を比べる/.test(s.textContent))d.classList.add("mj-cmp")});
+ [].forEach.call(document.querySelectorAll("#v5 details.fold"),function(d){var s=d.querySelector("summary");if(s&&/画像生成AI/.test(s.textContent))d.classList.add("mj-ai");if(s&&/その他の書き出し/.test(s.textContent)){s.textContent="そのほかの画像";d.open=true}});
+ var g=document.getElementById("setgd");g=g&&g.closest(".setg");if(g)g.classList.add("mj-guide");
+ var ld=document.querySelector("#v5>p.lead");if(ld)ld.textContent="プランを画像やPDFにして、この端末に保存します。";
+ var l4=document.querySelector("#v4 details.fold:not(.mj-cmp):not(#syncf) summary");
+ /* 無印良品の商品は、種類・カテゴリ・棚のタイプ・段数を固定（商品のまま） */
+ items.forEach(function(it,i){if(!it||!(it.jan||it.mjv))return;["kind","fs","st"].forEach(function(f){var e=document.querySelector('#grid select[data-f="'+f+'"][data-i="'+i+'"]');var l=e&&e.closest("label");if(l)l.style.display="none"});
+  var tp=document.querySelector('#grid .tpk[data-i="'+i+'"]');if(tp)tp.style.display="none";var t=document.querySelector('#grid input[data-f="tiers"][data-i="'+i+'"]');var td=t&&t.closest(".dims");if(td)td.style.display="none"});
+}catch(e){}}
+mjPrune();
 /* 置き方（縦・横）を変えたら幅と高さを入れ替える */
 (function(){var g=document.getElementById("grid");if(!g)return;g.addEventListener("change",function(e){var t=e.target,i=t.getAttribute&&t.getAttribute("data-i"),f=t.getAttribute&&t.getAttribute("data-f");if(i===null||f!=="lay")return;var it=items[+i];if(!it)return;it.lay=t.value;if(window.mjLay&&mjLay(it)){save();try{render();rplan();after3d()}catch(x){}}else save()})})();
 window.mujiOpen=open;window.__toItem=toItem;
