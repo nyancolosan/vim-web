@@ -61,3 +61,4 @@
 #ideahome .phia{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;display:flex;align-items:center;gap:6px;border:1.5px solid var(--acc,#9f2a37);background:#fff;color:var(--acc,#9f2a37);border-radius:999px;min-height:40px;padding:0 14px;font:inherit;font-size:.82rem;font-weight:700;cursor:pointer}
 #ideahome .phia svg{width:18px;height:18px}
 #iaheader{white-space:nowrap}
+#iaov th{background:#faf7f7!important;color:#6f696a!important}#iaov td{background:transparent}#iaov tr.cur td{background:#f9eef0}

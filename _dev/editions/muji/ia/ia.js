@@ -3,7 +3,7 @@
  * 保存先：claude.ai の db（data/users/<Claudeのユーザーid>/ia_<ユーザー名> 以下。本人だけが読み書きできる）
  *   ia_<ユーザー名>                 … アカウント（パスワードは PBKDF2 のハッシュだけ）と、使っている期
  *   ia_<ユーザー名>/periods/<開始日> … 半期の予算と26週の予算
- *   ia_<ユーザー名>/days/<日付>      … その日の売上（合計・消費税・配送料・付帯作業料・その他・売上）
+ *   ia_<ユーザー名>/days/<日付>      … その日の会計の一覧 entries（合計・消費税・配送料・付帯作業料・その他・売上・メモ）と、その日の合計 total・net
  * 売れ筋：window.IDEA_TREND（build_muji.py が ia/trend.json を埋め込む） */
 (function(){
 var $=function(i){return document.getElementById(i)};
@@ -130,29 +130,53 @@ function svgDays(p,w,a,f){var W=380,H=190,pad=16,bw=(W-pad*2)/7,mx=1,tgt=[];for(
   s+='<text x="'+(x+bw/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="12" fill="'+(isT?"#9f2a37":"#7d7778")+'" font-weight="'+(isT?700:400)+'">'+md(d)+wd(d)+'</text>'}
  return s+'</svg><p class="ia-note" style="margin-top:4px">薄い棒は、その日の目安（週の予算×曜日の売れ方）。濃い棒は目安を超えた日です。</p>'}
 
-/* 入力 */
-var IDATE=null;
-function rInput(){var d=IDATE||today(),e=DAYS[d]||{};
+/* 入力：1日に何件でも会計を登録できる。日のドキュメントに entries（会計の一覧）と、その合計（total・net）を持つ */
+var IDATE=null,IEDIT=null,IITEMS=[],IQ="";
+/* 売った商品：アプリに入っているネットストアの商品（window.IA_ITEMS = [[JAN,名前,分類,価格],…]）から探す */
+function nz(t){return String(t||"").normalize("NFKC").toLowerCase().replace(/\s+/g," ")}
+var IX=null;function idx(){if(!IX)IX=(window.IA_ITEMS||[]).map(function(r){return{jan:r[0],name:r[1],cat:r[2],price:r[3],k:nz(r[1]+" "+r[0]+" "+r[2])}});return IX}
+function search(q){var t=nz(q).trim().split(" ").filter(Boolean);if(!t.length)return[];return idx().filter(function(x){return t.every(function(w){return x.k.indexOf(w)>=0})}).slice(0,8)}
+function itemsBox(){var R=search(IQ);
+ return'<div style="margin-top:14px"><label for="iaq">売った商品（任意）</label><input id="iaq" type="search" value="'+esc(IQ)+'" placeholder="商品名・JANで探す（例：スタッキングシェルフ、蒸篭）" autocomplete="off"></div>'+
+ '<div id="iar">'+resHtml(R)+'</div>'+
+ '<div id="iasel">'+selHtml()+'</div>'}
+function resHtml(R){if(!IQ.trim())return"";if(!R.length)return'<p class="ia-note">見つかりませんでした。<button type="button" class="ia-lnk" data-a="free">「'+esc(IQ.trim())+'」を名前だけで追加</button></p>';
+ return'<div class="ia-rk" style="margin-top:8px">'+R.map(function(x){return'<a href="#" data-a="addi" data-j="'+x.jan+'"><i>＋</i><span style="white-space:normal"><b>'+esc(x.name)+'</b><small>'+esc(x.cat)+'・JAN '+x.jan+'</small></span><span>'+(x.price?yen(x.price):"")+'</span></a>'}).join("")+'</div><button type="button" class="ia-lnk" data-a="free">見つからないときは「'+esc(IQ.trim())+'」を名前だけで追加</button>'}
+function selHtml(){if(!IITEMS.length)return'<p class="ia-note">商品を選ぶと、傾向で「よく売れた商品」がわかるようになります。</p>';
+ var t=0;IITEMS.forEach(function(x){t+=num(x.price)*num(x.qty)});
+ return'<div class="ia-tw" style="margin-top:10px"><table><tr><th>この会計で売った商品</th><th>数</th><th></th></tr>'+IITEMS.map(function(x,i){return'<tr><td style="white-space:normal">'+esc(x.name)+'<br><small style="color:#7d7778">'+esc(x.cat)+(x.price?'・'+yen(x.price):'')+'</small></td><td><button type="button" class="ia-b" style="min-height:34px;padding:0 10px" data-a="qm" data-i="'+i+'" aria-label="1つ減らす">−</button> '+x.qty+' <button type="button" class="ia-b" style="min-height:34px;padding:0 10px" data-a="qp" data-i="'+i+'" aria-label="1つ増やす">＋</button></td><td><button type="button" class="ia-lnk" data-a="rmi" data-i="'+i+'">外す</button></td></tr>'}).join("")+'</table>'+(t?'<p class="ia-note">選んだ商品のネットストア価格の合計：'+yen(t)+'（参考）</p>':'')+'</div>'}
+function redrawItems(){var r=$("iar"),l=$("iasel");if(r)r.innerHTML=resHtml(search(IQ));if(l)l.innerHTML=selHtml()}
+function entries(d){var e=DAYS[d];if(!e)return[];if(e.entries)return e.entries;return e.total!=null?[{id:"e0",total:e.total,tax:e.tax,ship:e.ship,work:e.work,other:e.other,net:e.net,memo:e.memo||"",items:e.items||[],at:e.at||""}]:[]}
+function rInput(){var d=IDATE||today(),L=entries(d),ed=IEDIT?L.filter(function(x){return x.id===IEDIT})[0]:null,e=ed||{};if(!ed)IEDIT=null;
  var f=function(id,lab,v){return'<div><label for="'+id+'">'+lab+'</label><input id="'+id+'" class="num" inputmode="decimal" autocomplete="off" value="'+(v?Math.round(num(v)).toLocaleString("ja-JP"):"")+'" placeholder="0"></div>'};
+ var sum=L.reduce(function(s,x){return s+num(x.net)},0);
  $("iab").innerHTML='<h3>売上を入れる</h3><div class="ia-card"><div><label for="iad">日付</label><input id="iad" type="date" value="'+d+'"></div>'+
- '<div class="ia-row" style="margin-top:12px">'+f("iat","合計金額",e.total)+f("iax","消費税",e.tax)+f("iash","配送料",e.ship)+f("iaw","付帯作業料",e.work)+f("iao","その他",e.other)+'</div>'+
+ (L.length?'<div class="ia-tw" style="margin-top:12px"><table><tr><th>この日の会計</th><th>合計金額</th><th>売上</th><th></th></tr>'+L.map(function(x,i){return'<tr class="'+(x.id===IEDIT?"cur":"")+'"><td>'+(i+1)+'件目'+(x.memo?'<br><small style="color:#7d7778;font-weight:400">'+esc(x.memo)+'</small>':'')+'</td><td>'+yen(x.total)+'</td><td>'+yen(x.net)+'</td><td><button type="button" class="ia-lnk" data-a="edit" data-e="'+esc(x.id)+'">直す</button></td></tr>'}).join("")+
+  '<tr><td><b>この日の合計</b><br><small style="color:#7d7778;font-weight:400">'+L.length+'件</small></td><td></td><td><b>'+yen(sum)+'</b></td><td></td></tr></table></div>':'<p class="ia-note">この日の会計はまだありません。下から1件ずつ追加してください。</p>')+'</div>'+
+ '<h3>'+(ed?'会計を直す':'会計を追加')+'<small>'+md(d)+'（'+wd(d)+'）'+(ed?'':'・'+(L.length+1)+'件目')+'</small></h3><div class="ia-card">'+
+ '<div class="ia-row">'+f("iat","合計金額",e.total)+f("iax","消費税",e.tax)+f("iash","配送料",e.ship)+f("iaw","付帯作業料",e.work)+f("iao","その他",e.other)+'</div>'+
  '<button type="button" class="ia-lnk" data-a="tax">合計金額から消費税（10%）を計算して入れる</button>'+
- '<div><label for="iamemo">メモ（任意）</label><input id="iamemo" value="'+esc(e.memo||"")+'" placeholder="例：雨・イベントあり"></div>'+
- '<div class="ia-net"><span>売上（合計−消費税−配送料−付帯作業料−その他）</span><b id="ianet">'+yen(calc())+'</b></div>'+
- '<button type="button" class="ia-p" style="width:100%;margin-top:14px" data-a="save">この日の売上を保存</button><div class="ia-msg" id="iasm" hidden></div>'+
- (DAYS[d]?'<button type="button" class="ia-lnk" data-a="del">この日の入力を消す</button>':'')+'</div>'+weekList(d);
+ itemsBox()+
+ '<div style="margin-top:12px"><label for="iamemo">メモ（任意）</label><input id="iamemo" value="'+esc(e.memo||"")+'" placeholder="例：ソファ配送あり・カーテン注文"></div>'+
+ '<div class="ia-net"><span>売上（合計−消費税−配送料−付帯作業料−その他）</span><b id="ianet"></b></div>'+
+ '<button type="button" class="ia-p" style="width:100%;margin-top:14px" data-a="save">'+(ed?'この会計を直して保存':'この会計を追加')+'</button><div class="ia-msg" id="iasm" hidden></div>'+
+ (ed?'<div style="display:flex;justify-content:space-between;margin-top:6px"><button type="button" class="ia-lnk" data-a="cancel">直すのをやめる</button><button type="button" class="ia-lnk" data-a="del">この会計を消す</button></div>':'')+'</div>'+weekList(d);
  $("ianet").textContent=yen(calc())}
 function calc(){var g=function(i){var x=$(i);return x?num(x.value):0};return g("iat")-g("iax")-g("iash")-g("iaw")-g("iao")}
 function weekList(d){var p=per();if(!p)return"";var i=Math.floor(diff(p.start,d)/7);if(i<0||i>25)return'<p class="ia-note">この日は「'+esc(p.name)+'」の期間外です。保存はできますが、週の集計には入りません。</p>';
- var w=wk(p,i),rows="",sum=0;for(var k=0;k<7;k++){var s=add(w.start,k),e=DAYS[s];if(e)sum+=num(e.net);
-  rows+='<tr class="'+(s===d?"cur":"")+'"><td><button type="button" class="ia-lnk" data-a="pick" data-d="'+s+'">'+md(s)+'（'+wd(s)+'）</button></td><td>'+(e?yen(e.total):"—")+'</td><td>'+(e?yen(e.net):"未入力")+'</td></tr>'}
- return'<h3>第'+(i+1)+'週の入力<small>日付を押すと直せます</small></h3><div class="ia-card ia-tw"><table><tr><th>日付</th><th>合計金額</th><th>売上</th></tr>'+rows+'<tr><td><b>合計</b></td><td></td><td><b>'+yen(sum)+'</b></td></tr></table><p class="ia-note">今週の予算 '+yen(w.budget)+'・達成率 '+pct(sum,w.budget)+'</p></div>'}
+ var w=wk(p,i),rows="",sum=0;for(var k=0;k<7;k++){var s=add(w.start,k),L=entries(s),n=L.reduce(function(t,x){return t+num(x.net)},0);sum+=n;
+  rows+='<tr class="'+(s===d?"cur":"")+'"><td><button type="button" class="ia-lnk" data-a="pick" data-d="'+s+'">'+md(s)+'（'+wd(s)+'）</button></td><td>'+(L.length?L.length+'件':"—")+'</td><td>'+(L.length?yen(n):"未入力")+'</td></tr>'}
+ return'<h3>第'+(i+1)+'週の入力<small>日付を押すとその日の会計を見られます</small></h3><div class="ia-card ia-tw"><table><tr><th>日付</th><th>会計</th><th>売上</th></tr>'+rows+'<tr><td><b>合計</b></td><td></td><td><b>'+yen(sum)+'</b></td></tr></table><p class="ia-note">今週の予算 '+yen(w.budget)+'・達成率 '+pct(sum,w.budget)+'</p></div>'}
+function putDay(d,L){var o={date:d,entries:L,total:L.reduce(function(t,x){return t+num(x.total)},0),net:L.reduce(function(t,x){return t+num(x.net)},0),at:new Date().toISOString()};
+ return(L.length?base().collection("days").doc(d).set(o):base().collection("days").doc(d).delete()).then(function(){if(L.length)DAYS[d]=o;else delete DAYS[d]})}
 function saveDay(){var d=$("iad").value,m=$("iasm");if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){m.hidden=false;m.className="ia-msg bad";m.textContent="日付を選んでください。";return}
  var g=function(i){return Math.round(num($(i).value))};
- var o={date:d,total:g("iat"),tax:g("iax"),ship:g("iash"),work:g("iaw"),other:g("iao"),memo:$("iamemo").value.slice(0,200),at:new Date().toISOString()};o.net=o.total-o.tax-o.ship-o.work-o.other;
+ var o={id:IEDIT||("e"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36)),total:g("iat"),tax:g("iax"),ship:g("iash"),work:g("iaw"),other:g("iao"),memo:$("iamemo").value.slice(0,200),items:IITEMS.map(function(x){return{jan:x.jan||"",name:x.name,cat:x.cat,price:Math.round(num(x.price)),qty:Math.max(1,Math.round(num(x.qty)))}}),at:new Date().toISOString()};o.net=o.total-o.tax-o.ship-o.work-o.other;
  if(!o.total){m.hidden=false;m.className="ia-msg bad";m.textContent="合計金額を入れてください。";return}
- base().collection("days").doc(d).set(o).then(function(){DAYS[d]=o;IDATE=d;rInput();var mm=$("iasm");mm.hidden=false;mm.className="ia-msg ok";mm.textContent=md(d)+"（"+wd(d)+"）の売上 "+yen(o.net)+" を保存しました。"})
+ var L=entries(d).slice(),was=!!IEDIT,ix=-1;L.forEach(function(x,i){if(x.id===o.id)ix=i});if(ix>=0)L[ix]=o;else L.push(o);
+ putDay(d,L).then(function(){IDATE=d;IEDIT=null;IITEMS=[];IQ="";rInput();var mm=$("iasm");mm.hidden=false;mm.className="ia-msg ok";mm.textContent=(was?"会計を直しました。":"会計を追加しました（"+L.length+"件目）。")+md(d)+"（"+wd(d)+"）の売上は合計 "+yen(DAYS[d].net)+" です。"})
  .catch(function(){m.hidden=false;m.className="ia-msg bad";m.textContent="保存できませんでした。通信を確かめて、もう一度押してください。"})}
+function delEntry(){var d=$("iad").value,L=entries(d).filter(function(x){return x.id!==IEDIT});putDay(d,L).then(function(){IEDIT=null;rInput()}).catch(function(){})}
 
 /* 予算 */
 var BDRAFT=null;
@@ -192,12 +216,32 @@ function rTrend(){var p=per();if(!p)return needPer();var ci=Math.min(25,curIdx(p
  if(avg4!=null&&done.length>=5)ins.push("直近4週の平均は "+Math.round(avg4*1000)/10+"%で、"+(avg4>=avg?"全体の平均より上向きです。":"全体の平均より下向きです。"));
  if(best>=0)ins.push("いちばん売れる曜日は"+wd(add(p.start,best))+"曜日（平均 "+yen(bv)+"）です。");
  if(done.length>=2){var l=done[done.length-1],pv=done[done.length-2];ins.push("先週は前の週と比べて "+(pv.a.sum>0?(l.a.sum>=pv.a.sum?"+":"")+Math.round((l.a.sum/pv.a.sum-1)*1000)/10+"%":"—")+"でした。")}
+ var IS=itemStats(p,ci);if(IS.top.length)ins.push((TP==="week"?"今週":TP==="4w"?"直近4週":"この期")+"いちばん売れた商品は「"+IS.top[0].name+"」（"+IS.top[0].qty+"点）、点数が多い分類は"+IS.cats[0][0]+"です。");
  if(!ins.length)ins.push("売上を入れていくと、週ごとの傾向がここに出ます。");
  $("iab").innerHTML='<h3>わかったこと</h3><div class="ia-card"><ul style="margin:0;padding-left:1.2em;font-size:.86rem;line-height:1.8">'+ins.map(function(t){return"<li>"+esc(t)+"</li>"}).join("")+'</ul></div>'+
+ '<h3>売れた商品<small>会計ごとに選んだ商品から</small></h3>'+itemSection(p,ci)+
  '<h3>週ごとの予算と売上</h3><div class="ia-card">'+svgWeeks(rows,ci)+'</div>'+
  '<h3>曜日別の平均売上</h3><div class="ia-card">'+svgWd(p,wdA)+'</div>'+
  '<h3>週ごとの数字</h3><div class="ia-card ia-tw"><table><tr><th>週</th><th>予算</th><th>売上</th><th>達成率</th><th>前週比</th></tr>'+
  rows.map(function(r,i){var pv=i?rows[i-1].a.sum:0;return'<tr class="'+(i===ci?"cur":"")+'"><td>第'+(i+1)+'週 '+md(r.w.start)+'</td><td>'+yen(r.w.budget)+'</td><td>'+(r.a.n?yen(r.a.sum):"—")+'</td><td>'+(r.a.n?pct(r.a.sum,r.w.budget):"—")+'</td><td>'+(i&&pv>0&&r.a.n?((r.a.sum>=pv?"+":"")+Math.round((r.a.sum/pv-1)*1000)/10+"%"):"—")+'</td></tr>'}).reverse().join("")+'</table></div>'}
+/* 売れた商品の集計（期間：今週・直近4週・この期） */
+var TP="4w";
+function itemStats(p,ci){var from=TP==="week"?ci:TP==="4w"?Math.max(0,ci-3):0,a=add(p.start,from*7),b=add(p.start,ci*7+6),M={},C={},nE=0,nI=0;
+ Object.keys(DAYS).forEach(function(d){if(d<a||d>b)return;entries(d).forEach(function(e){nE++;var it=e.items||[];if(it.length)nI++;var seen={};
+  it.forEach(function(x){var k=x.jan||("n:"+x.name),q=Math.max(1,num(x.qty));if(!M[k])M[k]={jan:x.jan,name:x.name,cat:x.cat||"その他",price:num(x.price),qty:0,n:0};M[k].qty+=q;if(!seen[k]){M[k].n++;seen[k]=1}C[x.cat||"その他"]=(C[x.cat||"その他"]||0)+q})})});
+ var top=Object.keys(M).map(function(k){return M[k]}).sort(function(x,y){return y.qty-x.qty||y.n-x.n}).slice(0,10);
+ var cats=Object.keys(C).map(function(k){return[k,C[k]]}).sort(function(x,y){return y[1]-x[1]});return{top:top,cats:cats,nE:nE,nI:nI,M:M,a:a,b:b}}
+function itemSection(p,ci){var S=itemStats(p,ci),tq=S.cats.reduce(function(t,c){return t+c[1]},0),T=window.IDEA_TREND;
+ var seg='<div class="ia-tab2" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px">'+[["week","今週"],["4w","直近4週"],["all","この期"]].map(function(x){return'<button type="button" data-a="tp" data-p="'+x[0]+'" class="'+(TP===x[0]?"on":"")+'">'+x[1]+'</button>'}).join("")+'</div>';
+ if(!S.nI)return seg+'<div class="ia-card"><p class="ia-note" style="margin:0">'+md(S.a)+'〜'+md(S.b)+'に、商品を選んだ会計はまだありません。「入力」で会計ごとに売った商品を選ぶと、ここに出ます。</p></div>';
+ var COL=["#9f2a37","#c4636e","#e0a3aa","#7d7778","#b9b2b3","#e3dfdf","#5e1a22","#d9c2c5"];
+ var bar='<div style="display:flex;height:14px;border-radius:999px;overflow:hidden;margin:6px 0 8px">'+S.cats.map(function(c,i){return'<span style="width:'+(c[1]/tq*100)+'%;background:'+COL[i%COL.length]+'" title="'+esc(c[0])+'"></span>'}).join("")+'</div>'+
+  '<div style="display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.76rem">'+S.cats.map(function(c,i){return'<span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;background:'+COL[i%COL.length]+'"></i>'+esc(c[0])+' '+c[1]+'点（'+Math.round(c[1]/tq*100)+'%）</span>'}).join("")+'</div>';
+ var net="";if(T&&T.top){var hit=T.top.filter(function(x){return S.M[x.jan]}),miss=T.top.filter(function(x){return!S.M[x.jan]}).slice(0,3);
+  net='<p class="ia-note">ネットの売れ筋（生活雑貨）上位10件のうち、この期間に店で売れたのは '+hit.length+'件です。'+(miss.length?'まだ店で売れていない上位：'+miss.map(function(x){return esc(x.name)}).join("、")+'。売場やおすすめで目に入るようにすると伸びしろがあります。':'')+'</p>'}
+ return seg+'<div class="ia-card"><div style="font-size:.78rem;color:#7d7778">'+md(S.a)+'〜'+md(S.b)+'・商品を選んだ会計 '+S.nI+'件／全'+S.nE+'件</div>'+
+  '<div style="font-weight:700;font-size:.86rem;margin-top:10px">分類ごとの点数</div>'+bar+
+  '<div style="font-weight:700;font-size:.86rem;margin-top:14px">よく売れた商品</div><div class="ia-rk" style="margin-top:6px">'+S.top.map(function(x,i){return'<a href="'+(x.jan?'https://www.muji.com/jp/ja/store/cmdty/detail/'+esc(x.jan):'#')+'" target="_blank" rel="noopener"><i>'+(i+1)+'</i><span style="white-space:normal"><b>'+esc(x.name)+'</b><small>'+esc(x.cat)+'・'+x.n+'件の会計</small></span><span>'+x.qty+'点</span></a>'}).join("")+'</div>'+net+'</div>'}
 function svgWeeks(rows,ci){var W=380,H=190,pad=16,n=rows.length,bw=(W-pad*2)/Math.max(n,1),mx=1;rows.forEach(function(r){mx=Math.max(mx,r.w.budget,r.a.sum)});mx*=1.12;var y=function(v){return H-24-(H-44)*v/mx};
  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="週ごとの予算と売上"><line x1="'+pad+'" y1="'+(H-24)+'" x2="'+(W-pad)+'" y2="'+(H-24)+'" stroke="#e3dfdf"/>',pts=[];
  rows.forEach(function(r,i){var x=pad+bw*i;if(r.a.n)s+='<rect x="'+(x+bw*.2)+'" y="'+y(r.a.sum)+'" width="'+bw*.6+'" height="'+Math.max(1,H-24-y(r.a.sum))+'" fill="'+(r.a.sum>=r.w.budget?"#9f2a37":"#c98a92")+'" rx="3"/>';pts.push((x+bw/2)+","+y(r.w.budget));
@@ -226,15 +270,23 @@ function onClick(e){var b=e.target.closest("[data-a]");if(!b)return;var a=b.getA
  else if(a==="tab"){TAB=b.getAttribute("data-t");if(TAB==="budget")BDRAFT=null;main();ov.scrollTop=0}
  else if(a==="tax"){var t=num($("iat").value);$("iax").value=Math.round(t*10/110).toLocaleString("ja-JP");$("ianet").textContent=yen(calc())}
  else if(a==="save")saveDay();
- else if(a==="pick"){IDATE=b.getAttribute("data-d");rInput()}
- else if(a==="del"){var d=$("iad").value;if(!b.dataset.sure){b.dataset.sure="1";b.textContent="もう一度押すと消します";return}
-  base().collection("days").doc(d).delete().then(function(){delete DAYS[d];rInput()}).catch(function(){})}
+ else if(a==="pick"){IDATE=b.getAttribute("data-d");IEDIT=null;IITEMS=[];IQ="";rInput()}
+ else if(a==="del"){if(!b.dataset.sure){b.dataset.sure="1";b.textContent="もう一度押すと消します";return}delEntry()}
+ else if(a==="edit"){IEDIT=b.getAttribute("data-e");var EE=entries($("iad").value).filter(function(x){return x.id===IEDIT})[0];IITEMS=EE&&EE.items?JSON.parse(JSON.stringify(EE.items)):[];IQ="";rInput();var t=$("iat");if(t)t.scrollIntoView({block:"center"})}
+ else if(a==="cancel"){IEDIT=null;IITEMS=[];IQ="";rInput()}
+ else if(a==="addi"){e.preventDefault();var j=b.getAttribute("data-j"),x=idx().filter(function(r){return r.jan===j})[0];if(x){var f=IITEMS.filter(function(y){return y.jan===j})[0];if(f)f.qty++;else IITEMS.push({jan:x.jan,name:x.name,cat:x.cat,price:x.price,qty:1})}IQ="";var q=$("iaq");if(q)q.value="";redrawItems()}
+ else if(a==="free"){var nm=IQ.trim();if(nm){IITEMS.push({jan:"",name:nm,cat:"その他",price:0,qty:1});IQ="";var q2=$("iaq");if(q2)q2.value="";redrawItems()}}
+ else if(a==="qp"){IITEMS[+b.getAttribute("data-i")].qty++;redrawItems()}
+ else if(a==="qm"){var it=IITEMS[+b.getAttribute("data-i")];it.qty=Math.max(1,it.qty-1);redrawItems()}
+ else if(a==="rmi"){IITEMS.splice(+b.getAttribute("data-i"),1);redrawItems()}
+ else if(a==="tp"){TP=b.getAttribute("data-p");rTrend()}
  else if(a==="even"){var B=BDRAFT,t=Math.round(B.total),u=Math.floor(t/26/1000)*1000;for(var i=0;i<26;i++)B.weeks[i]=u;B.weeks[25]=t-u*25;rBudget()}
  else if(a==="bsave")bSave();
  else if(a==="bnew"){var st=add(per().start,182);BDRAFT={name:defName(st),start:st,total:0,weeks:[]};for(var j=0;j<26;j++)BDRAFT.weeks.push(0);rBudget()}
  else if(a==="useper"){var k=b.getAttribute("data-p");ACC.active=k;base().update({active:k}).catch(function(){});BDRAFT=null;rBudget()}}
 function onInput(e){var t=e.target;
- if(t.id==="iad"){IDATE=t.value;rInput();return}
+ if(t.id==="iad"){IDATE=t.value;IEDIT=null;IITEMS=[];IQ="";rInput();return}
+ if(t.id==="iaq"){IQ=t.value;var r=$("iar");if(r)r.innerHTML=resHtml(search(IQ));return}
  if(/^ia(t|x|sh|w|o)$/.test(t.id)){var n=$("ianet");if(n)n.textContent=yen(calc());return}
  if(!BDRAFT)return;
  if(t.id==="ibn")BDRAFT.name=t.value;
