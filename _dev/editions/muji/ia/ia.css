@@ -1,0 +1,63 @@
+/* ===== idea：IA モード（売上管理） ===== */
+#iaov{position:fixed;inset:0;z-index:8600;background:#ffffff;overflow-y:auto;-webkit-overflow-scrolling:touch;color:#333;font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;padding:env(safe-area-inset-top,0px) 0 calc(24px + env(safe-area-inset-bottom,0px))}
+#iaov *{box-sizing:border-box}
+#iaov .ia-in{max-width:720px;margin:0 auto;padding:0 16px}
+#iaov .ia-hd{position:sticky;top:0;z-index:3;background:#fff;margin:0 -16px;padding:10px 16px;border-bottom:1px solid var(--line,#e3dfdf);display:flex;align-items:center;gap:10px;min-height:58px}
+#iaov .ia-hd b{font-size:1rem}
+#iaov .ia-hd small{display:block;font-size:.7rem;color:#7d7778;font-weight:400}
+#iaov .ia-x{margin-left:auto;display:flex;gap:6px}
+#iaov button{font:inherit;color:inherit;cursor:pointer}
+#iaov .ia-b{border:1px solid var(--line,#e3dfdf);background:#fff;border-radius:999px;min-height:40px;padding:0 14px;font-size:.84rem}
+#iaov .ia-p{border:0;background:var(--acc,#9f2a37);color:#fff;border-radius:10px;min-height:46px;padding:0 18px;font-weight:700;font-size:.95rem}
+#iaov .ia-p:disabled{opacity:.4;cursor:default}
+#iaov .ia-seg{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line,#e3dfdf);border-radius:10px;overflow:hidden;margin-top:14px}
+#iaov .ia-seg button{border:0;background:#fff;color:#7d7778;min-height:44px;font-size:.82rem;padding:0 2px}
+#iaov .ia-seg button+button{border-left:1px solid var(--line,#e3dfdf)}
+#iaov .ia-seg button.on{background:var(--acc,#9f2a37);color:#fff;font-weight:700}
+#iaov h3{font-size:1rem;margin:22px 0 10px;border-left:3px solid var(--acc,#9f2a37);padding-left:8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+#iaov h3 small{font-weight:400;font-size:.74rem;color:#7d7778}
+#iaov .ia-card{border:1px solid var(--line,#e3dfdf);border-radius:14px;padding:14px;background:#fff}
+#iaov label{display:block;font-size:.74rem;color:#7d7778;margin:0 0 4px}
+#iaov input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line,#e3dfdf);border-radius:8px;background:#fff;color:#333}
+#iaov input.num{text-align:right;font-variant-numeric:tabular-nums}
+#iaov .ia-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+#iaov .ia-msg{font-size:.82rem;margin-top:10px;font-weight:700}
+#iaov .ia-msg.bad{color:#b3261e}#iaov .ia-msg.ok{color:#2e6b3a}
+#iaov .ia-note{font-size:.74rem;color:#7d7778;line-height:1.7;margin-top:10px}
+#iaov .ia-kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#iaov .ia-kpi div{border:1px solid var(--line,#e3dfdf);border-radius:12px;padding:10px 12px}
+#iaov .ia-kpi small{display:block;font-size:.7rem;color:#7d7778}
+#iaov .ia-kpi b{font-size:1.25rem;font-variant-numeric:tabular-nums}
+#iaov .ia-big{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#iaov .ia-big b{font-size:2rem;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+#iaov .ia-bar{height:12px;border-radius:999px;background:#f1eded;overflow:hidden;margin-top:8px;position:relative}
+#iaov .ia-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--acc,#9f2a37);border-radius:999px}
+#iaov .ia-bar u{position:absolute;top:-3px;bottom:-3px;width:2px;background:#333;opacity:.5}
+#iaov .ia-chip{display:inline-block;font-size:.76rem;font-weight:700;padding:3px 10px;border-radius:999px}
+#iaov .ia-chip.ok{background:#e6f2e8;color:#2e6b3a}#iaov .ia-chip.mid{background:#fdf1dc;color:#8a5300}#iaov .ia-chip.bad{background:#fbe7e6;color:#b3261e}#iaov .ia-chip.none{background:#f1eded;color:#6f696a}
+#iaov table{border-collapse:collapse;width:100%;font-size:.8rem;font-variant-numeric:tabular-nums}
+#iaov th,#iaov td{border-bottom:1px solid var(--line,#e3dfdf);padding:7px 6px;text-align:right;white-space:nowrap}
+#iaov th:first-child,#iaov td:first-child{text-align:left}
+#iaov th{font-weight:600;color:#7d7778;font-size:.72rem}
+#iaov .ia-tw{overflow-x:auto}
+#iaov tr.cur td{background:#f9eef0;font-weight:700}
+#iaov .ia-net{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid #333;margin-top:12px;padding-top:10px}
+#iaov .ia-net b{font-size:1.4rem;font-variant-numeric:tabular-nums}
+#iaov .ia-lnk{background:none;border:0;color:var(--acc,#9f2a37);font-size:.8rem;text-decoration:underline;padding:4px 0;min-height:32px}
+#iaov .ia-rk{display:flex;flex-direction:column;border:1px solid var(--line,#e3dfdf);border-radius:12px;overflow:hidden}
+#iaov .ia-rk a{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;text-decoration:none;color:#333}
+#iaov .ia-rk a+a{border-top:1px solid var(--line,#e3dfdf)}
+#iaov .ia-rk i{font-style:normal;font-weight:700;color:var(--acc,#9f2a37);font-size:1rem;text-align:center}
+#iaov .ia-rk b{display:block;font-size:.84rem;font-weight:600;line-height:1.4}
+#iaov .ia-rk small{display:block;font-size:.68rem;color:#7d7778}
+#iaov .ia-rk span{font-size:.84rem;font-weight:700;white-space:nowrap}
+#iaov svg text{font-family:inherit}
+#iaov .ia-login{max-width:420px;margin:28px auto 0;display:flex;flex-direction:column;gap:14px}
+#iaov .ia-logo{color:var(--acc,#9f2a37);display:flex;justify-content:center}
+#iaov .ia-logo svg{width:150px;height:auto}
+#iaov .ia-tab2{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line,#e3dfdf);border-radius:10px;overflow:hidden}
+#iaov .ia-tab2 button{border:0;background:#fff;color:#7d7778;min-height:44px}
+#iaov .ia-tab2 button.on{background:var(--acc,#9f2a37);color:#fff;font-weight:700}
+#ideahome .phia{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;display:flex;align-items:center;gap:6px;border:1.5px solid var(--acc,#9f2a37);background:#fff;color:var(--acc,#9f2a37);border-radius:999px;min-height:40px;padding:0 14px;font:inherit;font-size:.82rem;font-weight:700;cursor:pointer}
+#ideahome .phia svg{width:18px;height:18px}
+#iaheader{white-space:nowrap}
