@@ -1,4 +1,4 @@
-/* ===== idea（旧 POAD / MUJI Store Assistant / VIM for MUJI staff。店舗スタッフ向け・部屋づくり・カーテン見積・素材知識） =====
+/* ===== idea（旧 POAD / MUJI Store Assistant / VIM for MUJI staff。店舗スタッフ向け・H&B・住空間（部屋づくり・カーテン見積）・素材図鑑） =====
  * VIM 本体の上に重ねて動く追加分。VIM 本体には入らない（_dev/editions/muji/build_muji.py で別ファイルに組み立てる）。
  * ・プランの切り替えなし（全機能）・白地にエンジのテーマ
  * ・はじめの画面を「接客」「売場（vmd）」に
@@ -99,18 +99,19 @@ mjPrune();
 /* 置き方（縦・横）を変えたら幅と高さを入れ替える */
 (function(){var g=document.getElementById("grid");if(!g)return;g.addEventListener("change",function(e){var t=e.target,i=t.getAttribute&&t.getAttribute("data-i"),f=t.getAttribute&&t.getAttribute("data-f");if(i===null||f!=="lay")return;var it=items[+i];if(!it)return;it.lay=t.value;if(window.mjLay&&mjLay(it)){save();try{render();rplan();after3d()}catch(x){}}else save()})})();
 
-/* ===== idea：はじめの選択画面と、オーダーカーテン見積・素材知識（同じフォルダのページを全画面で重ねる） ===== */
+/* ===== idea：はじめの選択画面と、オーダーカーテン見積・H&B・素材図鑑（同じフォルダのページを全画面で重ねる） ===== */
 (function(){
 var IC={
  room:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20 24 7l18 13"/><path d="M10 17v24h28V17"/><path d="M15 34v-6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v6"/><path d="M13 34h22v4H13z"/><path d="M15 38v3M33 38v3"/></svg>',
  curtain:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h38"/><circle cx="5" cy="7" r="1.6"/><circle cx="43" cy="7" r="1.6"/><path d="M9 8c0 10 6 14 6 18s-4 7-6 13h11V8"/><path d="M39 8c0 10-6 14-6 18s4 7 6 13H28V8"/><path d="M12 26h5M31 26h5"/><path d="M14 13v5M33 13v5" opacity=".5"/></svg>',
  hb:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 6h10v6H19z"/><path d="M17 12h14a3 3 0 0 1 3 3v24a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3V15a3 3 0 0 1 3-3z"/><path d="M14 22h20M14 34h20" opacity=".5"/><path d="M24 25.5c1.8 0 3 1.2 3 2.6 0 1.6-1.4 2.8-3 2.8s-3-1.2-3-2.8c0-1.4 1.2-2.6 3-2.6z"/></svg>',
+ living:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="20" height="17" rx="1.5"/><path d="M17 7v17M7 15.5h20"/><path d="M5 7h24" /><path d="M9 34v-4a3 3 0 0 1 3-3h24a3 3 0 0 1 3 3v4"/><path d="M7 34h34v5H7z"/><path d="M10 39v3M38 39v3"/><path d="M33 7v14M30 21h6"/></svg>',
  know:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="11" width="20" height="28" rx="3" transform="rotate(-12 16 25)"/><rect x="20" y="8" width="21" height="30" rx="3"/><path d="M25 15h11M25 21h11M25 27h7" opacity=".55"/><circle cx="30.5" cy="33" r="1.4"/></svg>',
  menu:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>'};
 /* --- 全画面で重ねるページ（curtain.html・knowledge.html）--- */
 var subs={},cur=null,timer=null;
-function closeSub(back){if(cur&&subs[cur])subs[cur].el.hidden=true;cur=null;document.documentElement.style.overflow="";if(back!==false)showHome()}
-function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb.html"}[k],title={curtain:"オーダーカーテン見積",know:"素材知識",hb:"H&B"}[k];
+function closeSub(back){var was=cur;if(cur&&subs[cur])subs[cur].el.hidden=true;cur=null;document.documentElement.style.overflow="";if(back!==false)showHome(was==="curtain"?"living":"top")}
+function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb.html"}[k],title={curtain:"オーダーカーテン見積",know:"素材図鑑",hb:"H&B"}[k];
  hideHome();var st=q("stm");if(st)st.hidden=true;
  if(!subs[k]){var el=document.createElement("div");el.className="mjsub-ov";el.setAttribute("role","dialog");el.setAttribute("aria-label",title);
   el.innerHTML='<div class="mjsubf" hidden>'+title+'をここで開けませんでした。<br><a href="'+src+'" target="_blank" rel="noopener">別のタブで開く</a><br><button type="button" class="ib">メニューに戻る</button></div><iframe src="'+src+'" title="'+title+'"></iframe>';
@@ -123,12 +124,19 @@ window.addEventListener("message",function(e){var d=e.data||{},k=null;Object.key
 /* --- はじめの選択画面 --- */
 var home=document.createElement("div");home.id="ideahome";home.setAttribute("role","dialog");home.setAttribute("aria-label","idea メニュー");
 home.innerHTML='<div class="phin"><div class="phlogo" role="img" aria-label="idea"></div>'+
- '<p class="phq">今日は何をしますか？</p><div class="phgrid">'+
- '<button type="button" class="phc" data-go="room"><span class="phi">'+IC.room+'</span><span><b>部屋に家具を置く</b><small>間取りに無印良品の家具を実寸で置いて、3Dで確かめる</small></span></button>'+
- '<button type="button" class="phc" data-go="curtain"><span class="phi">'+IC.curtain+'</span><span><b>オーダーカーテンの見積り</b><small>生地・スタイル・サイズ・吊り方から金額と見積書をつくる</small></span></button>'+
- '<button type="button" class="phc" data-go="hb"><span class="phi">'+IC.hb+'</span><span><b>H&amp;B（ヘルス&amp;ビューティー）</b><small>肌の悩みや好みから、おすすめのスキンケアと使い方を出す</small></span></button>'+
- '<button type="button" class="phc" data-go="know"><span class="phi">'+IC.know+'</span><span><b>素材知識</b><small>木材・繊維・カーテン生地の特長と、接客のひとこと</small></span></button>'+
- '</div><section class="nw" id="nw" aria-labelledby="nwt"></section><p class="phsup">supported by VIM</p></div>';
+ '<p class="phq" id="phq">今日は何をしますか？</p><div class="phgrid" id="phgrid"></div>'+
+ '<section class="nw" id="nw" aria-labelledby="nwt"></section><p class="phsup">supported by VIM</p></div>';
+/* はじめの画面：H&B・住空間・素材図鑑。住空間を押すと、家具を置く／オーダーカーテンの2つが出る */
+var MENU={top:[["hb",IC.hb,"H&amp;B（ヘルス&amp;ビューティー）","肌の悩みや好みから、おすすめのスキンケアと使い方を出す"],
+  ["living",IC.living,"住空間","部屋に家具を置く・オーダーカーテンの見積り"],
+  ["know",IC.know,"素材図鑑","木材・繊維・カーテン生地の特長と、接客のひとこと"]],
+ living:[["room",IC.room,"部屋に家具を置く","間取りに無印良品の家具を実寸で置いて、3Dで確かめる"],
+  ["curtain",IC.curtain,"オーダーカーテンの見積り","生地を選んでサイズを入れると、金額と見積書をつくる"]]};
+function menu(lv){var g=home.querySelector("#phgrid"),qq=home.querySelector("#phq");
+ qq.innerHTML=lv==="living"?'<button type="button" class="phback" data-go="top" aria-label="はじめの画面に戻る"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button><span>住空間</span>':"今日は何をしますか？";
+ g.innerHTML=MENU[lv].map(function(m){return'<button type="button" class="phc" data-go="'+m[0]+'"><span class="phi">'+m[1]+'</span><span><b>'+m[2]+'</b><small>'+m[3]+'</small></span>'+(m[0]==="living"?'<svg class="phgo" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>':'')+'</button>'}).join("");
+ home.querySelector("#nw").hidden=lv!=="top"}
+menu("top");
 document.body.appendChild(home);
 /* --- 新商品（ネットストアの各カテゴリで NEW 表記のもの。build_muji.py が news/news.json を埋め込む） --- */
 (function(){var N=window.IDEA_NEWS,box=home.querySelector("#nw");if(!N||!box||!N.items||!N.items.length){if(box)box.hidden=true;return}
@@ -152,15 +160,15 @@ document.body.appendChild(home);
  box.addEventListener("click",function(e){var b=e.target.closest(".nwc button");if(b){S.c=b.getAttribute("data-c");S.more=false;draw();return}if(e.target.closest(".nwm2")){S.more=!S.more;draw()}});
  draw()})();
 try{home.querySelector(".phlogo").innerHTML=vimWord()}catch(e){}
-function showHome(){home.hidden=false;document.documentElement.style.overflow="hidden"}
+function showHome(lv){home.hidden=false;menu(typeof lv==="string"?lv:"top");document.documentElement.style.overflow="hidden"}
 function hideHome(){home.hidden=true;document.documentElement.style.overflow=""}
-home.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(!b)return;var g=b.getAttribute("data-go");if(g==="room")hideHome();else openSub(g)});
+home.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(!b)return;var g=b.getAttribute("data-go");if(g==="top"||g==="living"){menu(g);home.scrollTop=0}else if(g==="room")hideHome();else openSub(g)});
 /* ヘッダーに「メニュー」、ロゴを押してもメニューへ */
 var hb=document.querySelector("h1 .hbt"),th=q("thb");
 if(hb&&!q("ideamenu")){var b=document.createElement("button");b.id="ideamenu";b.className="hb";b.type="button";b.setAttribute("aria-label","メニュー");b.innerHTML=IC.menu+"メニュー";b.onclick=showHome;hb.insertBefore(b,th&&th.parentNode===hb?th:null)}
 var lg=document.querySelector("h1 .vlogo");if(lg){lg.style.cursor="pointer";lg.addEventListener("click",showHome)}
 window.ideaMenu=showHome;window.mjCurtainOpen=function(){openSub("curtain")};
-var h=(location.hash||"").slice(1);if(h==="curtain"||h==="know"||h==="hb")openSub(h);else if(h==="room")hideHome();else showHome();
+var h=(location.hash||"").slice(1);if(h==="curtain"||h==="know"||h==="hb")openSub(h);else if(h==="room")hideHome();else if(h==="living")showHome("living");else showHome();
 })();
 window.mujiOpen=open;window.__toItem=toItem;
 })();

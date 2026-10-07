@@ -1,4 +1,4 @@
-"""素材知識（idea の「素材知識」）を組み立てる。カーテン生地の説明は curtain.src.html のデータをそのまま使う。"""
+"""素材図鑑（idea の「素材図鑑」）を組み立てる。カーテン生地の説明は curtain.src.html のデータをそのまま使う。"""
 import os, re
 K = os.path.dirname(os.path.abspath(__file__)); C = os.path.join(os.path.dirname(K), "curtain")
 

@@ -1,230 +1,253 @@
-<title>MUJI Store Assistant for curtain</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap">
+<title>オーダーカーテン見積</title>
 <style>
-/* Layout: VIM for MUJI と同じ骨格。白いヘッダー＋1カラム（最大720px）＋下部固定タブ。見積額は常にタブの上に出す */
+/* Layout: ネットストアの商品ページの流れ（生地一覧 → 商品ページ → オーダー内容の入力シート）。白地・エンジ、1カラム最大720px、下部固定タブ */
 :root{
-  --bg:#ffffff;--card:#ffffff;--ink:#333333;--sub:#7d7778;--line:#e3dfdf;--fill:#ffffff;
-  --acc:#9f2a37;--accink:#ffffff;--accbg:#f9eef0;--ok:#4f6b45;--warn:#a5520f;
-  --head:#ffffff;--headink:#333333;--logo:#ffffff;--logobg:#9f2a37;--shadow:rgba(60,30,35,.05);
-  --rc:6px;--rb:4px;color-scheme:light;
+  --bg:#ffffff;--card:#ffffff;--ink:#333333;--sub:#6f696a;--line:#e3dfdf;--fill:#ffffff;--soft:#f7f5f5;
+  --acc:#9f2a37;--accink:#ffffff;--accbg:#f9eef0;--ok:#3f6b46;--warn:#a5520f;
+  --head:#ffffff;--headink:#333333;--logo:#ffffff;--logobg:#9f2a37;--shadow:rgba(60,30,35,.06);
+  --rc:8px;color-scheme:light;
   --f-body:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --f-num:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
-main{max-width:720px;margin:0 auto;padding:0 14px}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+main{max-width:720px;margin:0 auto;padding:0 16px}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.num,.yen{font-variant-numeric:tabular-nums}
-/* header */
-header.hd{background:var(--head);color:var(--headink);margin:0 -14px 14px;padding:10px 12px 10px 16px;border-bottom:1px solid var(--line);border-radius:0 0 var(--rc) var(--rc);display:flex;align-items:center;gap:8px;min-height:58px}
+.yen,.num{font-variant-numeric:tabular-nums}
+header.hd{position:sticky;top:0;z-index:15;background:var(--head);color:var(--headink);margin:0 -16px;padding:10px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;min-height:58px}
 .vlogo{display:inline-flex;align-items:center;background:var(--logobg);color:var(--logo);padding:5px 9px;border-radius:6px;line-height:0}
 .vlogo svg{height:22px;width:auto;display:block}
-.mjhd{font-size:.62rem;font-weight:700;letter-spacing:.08em;border:1px solid currentColor;border-radius:999px;padding:2px 8px;white-space:nowrap;opacity:.85}
 .hdt{margin-left:auto;text-align:right;line-height:1.25;min-width:0}
-.hdt b{display:block;font-size:.95rem;font-family:"Poppins","Hiragino Sans",system-ui,sans-serif;letter-spacing:.01em}
+.hdt b{display:block;font-size:.95rem}
 .hdt small{color:var(--sub);font-size:.7rem}
-/* sections */
-h2{font-size:.95rem;margin:22px 0 8px;border-left:3px solid var(--acc);padding-left:8px;display:flex;align-items:baseline;gap:8px;text-wrap:balance}
+h2{font-size:1rem;margin:22px 0 10px;border-left:3px solid var(--acc);padding-left:8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 h2 small{font-weight:400;color:var(--sub);font-size:.74rem}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--rc);padding:12px;box-shadow:0 1px 3px var(--shadow)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--rc);padding:14px}
 .seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
-.seg button{flex:1;border:0;background:none;color:var(--sub);min-height:42px;font-size:.88rem;padding:0 4px}
+.seg button{flex:1;border:0;background:none;color:var(--sub);min-height:44px;font-size:.88rem;padding:0 4px}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button.on{background:var(--acc);color:var(--accink);font-weight:700}
-.seg button:disabled{opacity:.35;cursor:default}
-input[type=text],input[type=number],input[type=search],select{width:100%;font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--fill);color:var(--ink)}
-label.lb{display:block;font-size:.72rem;color:var(--sub);margin-bottom:4px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
-.row>*{flex:1 1 140px;min-width:0}
-.hint{font-size:.74rem;color:var(--sub);margin-top:4px}
-.err{font-size:.78rem;color:var(--warn);margin-top:4px;font-weight:700}
-/* fabric list */
-.flist{display:flex;flex-direction:column;max-height:330px;overflow:auto;margin-top:10px;border:1px solid var(--line);border-radius:var(--rc);background:var(--card)}
-.fab{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:10px 12px;min-height:56px}
-.fab:last-child{border-bottom:0}
-.fab .n{font-weight:700;font-size:.9rem;overflow-wrap:anywhere}
-.fab .p{grid-row:span 2;align-self:center;font-size:.8rem;color:var(--sub);white-space:nowrap}
-.fab .p b{color:var(--ink);font-size:.92rem}
-.fab .tg{display:flex;gap:4px;flex-wrap:wrap}
-.fab.on{background:var(--accbg);box-shadow:inset 3px 0 0 var(--acc)}
-.tag{font-size:.66rem;padding:1px 7px;border-radius:999px;background:var(--fill);border:1px solid var(--line);color:var(--sub);white-space:nowrap}
+input[type=text],input[type=number],input[type=search]{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--fill);color:var(--ink)}
+label.lb{display:block;font-size:.76rem;color:var(--sub);margin-bottom:4px}
+.hint{font-size:.76rem;color:var(--sub);margin-top:6px;line-height:1.6}
+.err{font-size:.8rem;color:#b3261e;margin-top:8px;font-weight:700}
+.tag{font-size:.66rem;padding:1px 7px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--sub);white-space:nowrap}
 .tag.s1{border-color:var(--acc);color:var(--acc)}
-.dots{display:flex;gap:3px;align-items:center}
-.dots i{width:10px;height:10px;border-radius:50%;border:1px solid var(--line);display:block}
+.tag.fx{border-color:var(--ok);color:var(--ok)}
+.lnk{background:none;border:0;color:var(--acc);font-size:.8rem;padding:4px 0;min-height:32px;text-decoration:underline}
+.pri{border:0;background:var(--acc);color:var(--accink);font-weight:700;border-radius:8px;min-height:46px;padding:0 18px;white-space:nowrap}
+.pri:disabled{opacity:.35;cursor:default}
+.sec{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;min-height:42px;padding:0 14px}
 .empty{padding:18px;color:var(--sub);font-size:.85rem;text-align:center}
-/* colors */
-.sws{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.sw{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px 4px 4px;min-height:40px;font-size:.84rem}
-.sw i{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.12);flex:none}
-.sw.on{border-color:var(--acc);color:var(--acc);font-weight:700}
-.sw small{font-size:.66rem;color:var(--sub);font-weight:400}
-/* style buttons */
-.styles{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px}
-.st{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px 8px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-size:.76rem;font-weight:700;line-height:1.2;text-align:center}
-.st svg{width:56px;height:40px;color:var(--sub)}
+
+/* ---- 生地一覧 ---- */
+.mood{display:flex;flex-wrap:wrap;gap:6px;padding:10px 0 2px}
+.mood button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;min-height:36px;padding:0 12px;font-size:.8rem}
+.mood button.on{background:var(--accbg);border-color:var(--acc);color:var(--acc);font-weight:700}
+.mood .lab{align-self:center;font-size:.72rem;color:var(--sub)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+@media (min-width:560px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.fc{display:flex;flex-direction:column;text-align:left;border:1px solid var(--line);border-radius:10px;background:#fff;padding:0;overflow:hidden}
+.fc .ph{aspect-ratio:4/3;max-width:100%;position:relative;display:block}
+.fc .ph i{position:absolute;inset:0}
+.fc .bd{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fc .ol{font-size:.64rem;color:var(--acc);font-weight:700;letter-spacing:.04em}
+.fc b{font-size:.84rem;line-height:1.45;overflow-wrap:anywhere}
+.fc .pr{font-size:.82rem}
+.fc .pr b{font-size:.92rem}
+.fc .tg{display:flex;gap:4px;flex-wrap:wrap}
+.dots{display:flex;gap:3px}
+.dots i{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.weave{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.10) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(0,0,0,.06) 0 1px,transparent 1px 4px)}
+.fold{background-image:linear-gradient(90deg,rgba(0,0,0,.10),rgba(255,255,255,.08) 18%,rgba(0,0,0,.08) 36%,rgba(255,255,255,.08) 54%,rgba(0,0,0,.10) 72%,rgba(255,255,255,.06) 90%,rgba(0,0,0,.08))}
+
+/* ---- 商品ページ ---- */
+.crumb{display:flex;align-items:center;gap:4px;margin-top:12px;font-size:.78rem;color:var(--sub);flex-wrap:wrap}
+.crumb button{background:none;border:0;color:var(--acc);padding:6px 0;min-height:36px;font-size:.84rem;font-weight:700;display:flex;align-items:center;gap:2px}
+.hero{margin-top:6px;border-radius:10px;overflow:hidden;aspect-ratio:16/9;max-width:100%;position:relative;border:1px solid var(--line)}
+.hero i{position:absolute;inset:0}
+.hero svg{position:absolute;right:12px;bottom:12px;width:64px;height:46px;color:rgba(255,255,255,.9);filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+.olim{display:inline-block;margin-top:14px;font-size:.72rem;font-weight:700;color:var(--acc);border:1px solid var(--acc);border-radius:4px;padding:1px 8px}
+.ptitle{font-size:1.15rem;line-height:1.5;margin:8px 0 4px;text-wrap:pretty}
+.psub{font-size:.86rem}
+.pno{font-size:.76rem;color:var(--sub)}
+.blk{margin-top:18px}
+.blk>.lab{font-size:.84rem;margin-bottom:8px}
+.blk>.lab small{color:var(--sub);margin-left:6px}
+.sws{display:flex;flex-wrap:wrap;gap:10px}
+.sw{width:46px;height:46px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
+.sw.on{box-shadow:0 0 0 2px var(--acc)}
+.sw.dim{opacity:.45}
+.styles{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.st{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px 8px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:.76rem;font-weight:700;line-height:1.2;text-align:center;min-height:86px}
+.st svg{width:52px;height:36px;color:var(--sub)}
 .st small{font-weight:400;color:var(--sub);font-size:.66rem}
 .st.on{border-color:var(--acc);background:var(--accbg);color:var(--acc)}
 .st.on svg,.st.on small{color:var(--acc)}
 .st:disabled{opacity:.3;cursor:default}
-.ck{display:flex;gap:10px;align-items:center;margin-top:12px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--rc);background:var(--fill);font-size:.86rem}
+.ck{display:flex;gap:10px;align-items:center;margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:.86rem}
 .ck input{width:20px;height:20px;accent-color:var(--acc);flex:none}
-.ck b{color:var(--acc)}
-.mood{display:flex;flex-wrap:wrap;gap:6px;padding:10px 0 2px}
-.mood::-webkit-scrollbar{display:none}
-.mood button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;min-height:34px;padding:0 12px;font-size:.8rem;white-space:nowrap}
-.mood button.on{background:var(--accbg);border-color:var(--acc);color:var(--acc);font-weight:700}
-.mood .lab{flex:none;align-self:center;font-size:.72rem;color:var(--sub);padding-right:2px}
-.sw.dim{opacity:.45}
-.about{margin-top:12px;border:1px solid var(--line);border-radius:var(--rc);padding:12px 14px;background:var(--fill)}
-.about h3{margin:0 0 6px;font-size:.88rem;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
-.about h3 small{font-weight:400;font-size:.7rem;color:var(--sub)}
-.about p{margin:0 0 10px;font-size:.85rem;line-height:1.7;max-width:62ch}
-.about dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0 0 10px;font-size:.8rem}
-.about dt{color:var(--sub)}
-.about dd{margin:0}
-.about .tg{display:flex;gap:4px;flex-wrap:wrap}
-.tag.m{background:var(--card);color:var(--ink)}
-.tag.fx{border-color:var(--ok);color:var(--ok)}
-/* opening */
-#op{position:fixed;inset:0;z-index:100;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;cursor:pointer;transition:opacity .45s ease}
-#op.out{opacity:0;pointer-events:none}
-#op svg{width:min(84vw,540px);height:auto;overflow:visible}
-#op .skip{position:absolute;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));color:var(--accink);opacity:.7;font-size:.75rem;letter-spacing:.08em;background:none;border:1px solid currentColor;border-radius:999px;padding:4px 12px;min-height:30px}
-#op .lt{transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
-#op .lv{opacity:0;transform:translateX(-26px)}
-#op .lm{opacity:0;transform:translateX(26px)}
-#op.ltr .lv,#op.ltr .lm{opacity:1;transform:none}
-#op .sub{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease;font-family:"Poppins","Hiragino Sans",system-ui,sans-serif;font-weight:700}
-#op.subon .sub{opacity:1;transform:none}
-#op.subon .sub+.sub{transition-delay:.25s}
-/* stepper */
-.stp{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;background:var(--fill);height:42px}
-.stp button{width:44px;height:100%;border:0;background:none;font-size:1.2rem;color:var(--acc)}
-.stp output{flex:1;text-align:center;font-weight:700}
-/* price table */
-details.pt{margin-top:12px}
-details.pt summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--acc);padding:6px 0;list-style:none}
-details.pt summary::-webkit-details-marker{display:none}
-details.pt summary::before{content:"＋ "}
-details.pt[open] summary::before{content:"－ "}
 .tw{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:.78rem;background:var(--card);font-variant-numeric:tabular-nums}
-th,td{border:1px solid var(--line);padding:5px 7px;text-align:right;white-space:nowrap}
-th{background:var(--accbg);font-weight:600;text-align:center}
-td.hit{background:var(--acc);color:var(--accink);font-weight:700}
-/* sticky total */
-.sum{position:fixed;left:0;right:0;bottom:calc(57px + env(safe-area-inset-bottom,0px));z-index:19;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -4px 14px var(--shadow)}
-.sum .in{max-width:720px;margin:0 auto;padding:8px 14px;display:flex;align-items:center;gap:10px}
+table{border-collapse:collapse;width:100%;font-size:.8rem;font-variant-numeric:tabular-nums}
+.pt th,.pt td{border:1px solid var(--line);padding:7px 8px;text-align:right;white-space:nowrap}
+.pt th{background:var(--soft);font-weight:600;text-align:center;font-size:.74rem;color:var(--sub)}
+.pt td.hit{background:var(--acc);color:#fff;font-weight:700}
+/* サイズオーダー（ネットストアの購入ボックス） */
+.so{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff;display:flex;flex-direction:column;gap:12px}
+.so .h{font-weight:700;font-size:.95rem}
+.so .open{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:1.5px solid var(--ink);background:#fff;border-radius:8px;min-height:52px;padding:0 14px;font-weight:700;font-size:.92rem;text-align:left}
+.so .open svg{flex:none}
+.so .open.done{border-color:var(--line);font-weight:400}
+.so .open.done b{font-weight:700}
+.so .p{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.so .p small{font-size:.76rem;color:var(--sub)}
+.so .p b{font-size:1.6rem}
+.so .p span{font-size:.8rem;color:var(--sub)}
+.so .st2{font-size:.8rem;color:var(--sub)}
+.so .st2.ok{color:var(--ink)}
+/* 注意事項 */
+.acc{margin-top:18px;border-top:1px solid var(--line)}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;min-height:52px;font-weight:700;font-size:.92rem}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin-right:4px}
+.acc details[open] summary::after{transform:rotate(-135deg)}
+.acc .in{padding:0 0 16px;font-size:.86rem;line-height:1.75}
+.acc ul{margin:0;padding-left:1.2em}
+.acc li+li{margin-top:4px}
+.acc dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:0}
+.acc dt{color:var(--sub)}
+.acc dd{margin:0}
+.acc figure{margin:10px 0 0}
+
+/* ---- オーダー内容の入力シート ---- */
+.sheet{position:fixed;inset:0;z-index:60;background:rgba(30,20,22,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet .in{background:#fff;width:100%;max-width:720px;max-height:calc(100% - 24px - env(safe-area-inset-top,0px));border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden}
+.sheet .sh{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.sheet .sh b{font-size:1rem}
+.sheet .sh button{margin-left:auto;border:1px solid var(--line);background:#fff;border-radius:999px;min-height:40px;padding:0 14px;font-size:.84rem}
+.sheet .sb{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 16px 20px}
+.sheet .prod{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line)}
+.sheet .prod i{width:40px;height:40px;border-radius:6px;flex:none;border:1px solid var(--line)}
+.sheet .prod span{font-size:.8rem;line-height:1.45}
+.step{padding:16px 0;border-bottom:1px solid var(--line)}
+.step h3{margin:0 0 10px;font-size:.95rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.step h3 i{font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-size:.74rem;display:flex;align-items:center;justify-content:center;flex:none}
+.step h3 small{font-weight:400;color:var(--sub);font-size:.74rem}
+.hg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.hc{display:flex;flex-direction:column;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:10px;background:#fff;padding:12px 8px;text-align:center}
+.hc svg{width:100%;max-width:150px;height:auto}
+.hc b{font-size:.9rem}
+.hc small{font-size:.72rem;color:var(--sub);line-height:1.45}
+.hc.on{border-color:var(--acc);background:var(--accbg)}
+.hc.on b{color:var(--acc)}
+.nf{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;border:1px solid var(--line);border-radius:8px;overflow:hidden;height:50px}
+.nf button{border:0;background:var(--soft);font-size:1.2rem;color:var(--acc)}
+.nf input{border:0!important;border-radius:0!important;text-align:center;font-size:1.15rem!important;font-weight:700;padding:0!important;height:100%}
+.nf2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.calc{border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;background:var(--soft)}
+.calc .r{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);flex-wrap:wrap}
+.calc .r b{font-size:1.1rem}
+.fin{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;align-items:center;margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:10px}
+.fin svg{width:110px;height:auto}
+.fin dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;margin:0;font-size:.82rem}
+.fin dt{color:var(--sub)}
+.fin dd{margin:0;font-weight:700}
+.stp{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;height:50px;max-width:220px}
+.stp button{width:50px;height:100%;border:0;background:var(--soft);font-size:1.2rem;color:var(--acc)}
+.stp output{flex:1;text-align:center;font-weight:700;font-size:1.1rem}
+.sheet .sf{border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:12px}
+.sheet .sf .t{flex:1;min-width:0;line-height:1.25}
+.sheet .sf .t small{display:block;font-size:.72rem;color:var(--sub)}
+.sheet .sf .t b{font-size:1.35rem}
+
+/* ---- 下の合計バー・タブ ---- */
+.sum{position:fixed;left:0;right:0;bottom:calc(57px + env(safe-area-inset-bottom,0px));z-index:19;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 14px var(--shadow)}
+.sum .in{max-width:720px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;gap:10px}
 .sum .t{flex:1;min-width:0;line-height:1.25}
-.sum .t small{display:block;color:var(--sub);font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sum .t b{font-size:1.35rem;letter-spacing:.01em}
+.sum .t small{display:block;color:var(--sub);font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sum .t b{font-size:1.3rem}
 .sum .t b span{font-size:.72rem;font-weight:400;color:var(--sub);margin-left:4px}
-.pri{border:0;background:var(--acc);color:var(--accink);font-weight:700;border-radius:8px;min-height:44px;padding:0 16px;white-space:nowrap}
-.pri:disabled{opacity:.35;cursor:default}
-.sec{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;min-height:40px;padding:0 14px}
-/* tabs */
-.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
 .tabs button{flex:1;border:0;background:none;color:var(--sub);padding:7px 0 8px;font-size:.72rem;border-top:3px solid transparent;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:56px;position:relative}
 .tabs button svg{width:22px;height:22px}
 .tabs button.on{color:var(--acc);border-top-color:var(--acc);font-weight:700}
-.badge{position:absolute;top:4px;left:calc(50% + 6px);background:var(--acc);color:var(--accink);font-size:.62rem;border-radius:999px;padding:0 6px;min-width:18px;line-height:16px;font-weight:700}
-/* quote */
-.ql{display:flex;flex-direction:column;gap:10px}
+.badge{position:absolute;top:4px;left:calc(50% + 6px);background:var(--acc);color:#fff;font-size:.62rem;border-radius:999px;padding:0 6px;min-width:18px;line-height:16px;font-weight:700}
+
+/* ---- 見積 ---- */
+.ql{display:flex;flex-direction:column;gap:12px}
 .qi{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:4px 12px;align-items:start}
 .qi .cs{width:44px;height:56px;border-radius:4px;border:1px solid var(--line);grid-row:span 3}
-.qi .nm{font-weight:700;font-size:.88rem;overflow-wrap:anywhere}
+.qi .nm{font-weight:700;font-size:.9rem;overflow-wrap:anywhere}
 .qi .sp{font-size:.76rem;color:var(--sub);grid-column:2}
 .qi .pr{text-align:right;font-weight:700;white-space:nowrap}
 .qi .pr small{display:block;font-weight:400;color:var(--sub);font-size:.7rem}
-.qi .ac{grid-column:2/4;display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;align-items:center}
-.qi .ac a{font-size:.76rem;color:var(--acc)}
-.qi .ac .rm{margin-left:auto}
-.lnk{background:none;border:0;color:var(--sub);font-size:.76rem;padding:4px 6px;min-height:32px;text-decoration:underline}
+.qi .ac{grid-column:2/4;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.qi .ac a{font-size:.78rem;color:var(--acc)}
+.qi .ac .rm{margin-left:auto;color:var(--sub)}
 .qtot{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--ink);margin-top:12px;padding-top:10px}
 .qtot b{font-size:1.5rem}
-/* document */
-.doc{background:var(--card);border:1px solid var(--line);border-radius:var(--rc);padding:18px 16px;font-size:.84rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.row>*{flex:1 1 140px;min-width:0}
+.doc{background:#fff;border:1px solid var(--line);border-radius:var(--rc);padding:18px 16px;font-size:.84rem}
 .doc .dh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border-bottom:2px solid var(--acc);padding-bottom:10px;margin-bottom:12px}
 .doc .dh h3{margin:0;font-size:1.15rem;letter-spacing:.2em}
-.doc .dh .vlogo svg{height:16px}
 .doc .to{font-size:1rem;border-bottom:1px solid var(--ink);display:inline-block;padding:0 24px 2px 0;margin-bottom:8px}
 .doc .big{display:flex;justify-content:space-between;align-items:baseline;background:var(--accbg);padding:8px 12px;margin:10px 0 12px;border-radius:4px}
 .doc .big b{font-size:1.3rem}
-.doc table{min-width:540px}.doc td,.doc th{font-size:.74rem;white-space:normal}.doc td:first-child{min-width:84px}.doc td:nth-child(2){min-width:170px}.doc td:nth-child(3){white-space:nowrap}
+.doc table{min-width:540px}
+.doc th,.doc td{border:1px solid var(--line);padding:6px 8px;font-size:.74rem;white-space:normal;text-align:right}
+.doc th{background:var(--soft);font-weight:600;text-align:center}
 .doc td:first-child,.doc td:nth-child(2){text-align:left}
+.doc td:nth-child(3){white-space:nowrap}
 .doc .nt{color:var(--sub);font-size:.7rem;margin-top:10px;line-height:1.6}
 .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-textarea#qtxt{width:100%;min-height:160px;font:inherit;font-size:13px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--fill);color:var(--ink);margin-top:8px}
+textarea#qtxt{width:100%;min-height:160px;font:inherit;font-size:13px;padding:8px;border:1px solid var(--line);border-radius:6px;margin-top:8px}
 .memo p,.memo li{font-size:.86rem}
 .memo ul{padding-left:1.2em;margin:6px 0}
-.memo code{font-size:.8rem;background:var(--fill);padding:1px 4px;border-radius:3px}
-#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(132px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:.85rem;max-width:calc(100% - 32px)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(132px + env(safe-area-inset-bottom,0px));z-index:70;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:.85rem;max-width:calc(100% - 32px)}
 .confirm{display:flex;gap:6px;align-items:center;font-size:.78rem;color:var(--warn)}
-@media (prefers-reduced-motion:no-preference){.fab,.sw,.st,.seg button{transition:background .15s,border-color .15s}}
+@media (prefers-reduced-motion:no-preference){.fc,.sw,.st,.hc,.seg button{transition:background .15s,border-color .15s,box-shadow .15s}}
 </style>
 
-<div id="op" role="img" aria-label="MUJI Store Assistant for curtain">
-<svg viewBox="200 430 860 430" aria-hidden="true">
- <g fill="#ffffff">
-  <g class="lt lv">%%V%%</g>
-  <g class="lt lm">%%M%%</g>
-  <g id="opL"></g><g id="opR"></g>
-  <rect id="opRail" x="540" y="456" width="158" height="10" rx="5" transform="scale(0 1)" style="transform-origin:619px 461px"/>
-  <rect id="opSill" x="544" y="710" width="150" height="8" rx="4" transform="scale(0 1)" style="transform-origin:619px 714px"/>
-  <circle id="opC1" cx="540" cy="461" r="7" opacity="0"/><circle id="opC2" cx="698" cy="461" r="7" opacity="0"/>
-  <text class="sub" x="621" y="792" text-anchor="middle" font-size="58" letter-spacing="1">MUJI Store Assistant</text>
-  <text class="sub" x="621" y="842" text-anchor="middle" font-size="34" letter-spacing="6" opacity=".85">for curtain</text>
- </g>
-</svg>
-<button class="skip" id="opskip">スキップ</button>
-</div>
 <main>
 <header class="hd">
-  <span class="vlogo" role="img" aria-label="VIM"><svg viewBox="235 455 775 275" aria-hidden="true"><g fill="currentColor">%%VIMW%%</g></svg></span>
-  <span class="hdt"><b>MUJI Store Assistant</b><small>for curtain・オーダーカーテン見積</small></span>
+  <span class="vlogo" role="img" aria-label="idea"><svg viewBox="235 455 775 275" aria-hidden="true"><g fill="currentColor">%%VIMW%%</g></svg></span>
+  <span class="hdt"><b>オーダーカーテン見積</b><small>ネットストア価格（税込）</small></span>
 </header>
 
 <!-- ===== つくる ===== -->
 <section id="pg-make">
-  <h2>1 生地 <small id="fabcount"></small></h2>
-  <div class="seg" id="catseg" role="tablist">
-    <button data-c="shade" class="on">遮光</button><button data-c="thick">厚地</button><button data-c="lace">レース</button>
+  <!-- 生地一覧 -->
+  <div id="v-list">
+    <h2>生地を選ぶ <small id="fabcount"></small></h2>
+    <div class="seg" id="catseg" role="tablist"><button data-c="shade" class="on">遮光</button><button data-c="thick">厚地</button><button data-c="lace">レース</button></div>
+    <div class="mood" id="moods" aria-label="雰囲気で選ぶ"></div>
+    <div style="margin-top:8px"><input type="search" id="q" placeholder="生地名で探す（例：麻、防炎、二重織）" aria-label="生地名で探す"></div>
+    <div class="grid" id="flist"></div>
   </div>
-  <div class="mood" id="moods" aria-label="雰囲気で選ぶ"></div>
-  <div style="margin-top:8px"><input type="search" id="q" placeholder="生地名で探す（例：麻、防炎、二重織）" aria-label="生地名で探す"></div>
-  <div class="flist" id="flist"></div>
-  <div class="sws" id="sws"></div>
-  <div class="about" id="about"></div>
-
-  <h2>2 スタイル</h2>
-  <div class="styles" id="styles"></div>
-  <label class="ck" id="lnwrap" hidden><input type="checkbox" id="lined"><span>遮光裏地付にする <b>（遮光1級）</b></span></label>
-
-  <h2>3 サイズ <small>1枚あたり・1cm単位</small></h2>
-  <div class="card">
-    <div class="row" id="szrow">
-      <div id="wbox"><label class="lb" for="w">幅（cm）</label><input type="number" id="w" inputmode="numeric" value="100"><div class="hint" id="wh"></div></div>
-      <div><label class="lb" for="h">丈（cm）</label><input type="number" id="h" inputmode="numeric" value="200"><div class="hint" id="hh">20〜300cm</div></div>
+  <!-- 商品ページ -->
+  <div id="v-item" hidden>
+    <div class="crumb"><button type="button" id="toList"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>生地一覧</button><span id="bc"></span></div>
+    <div class="hero" id="hero"></div>
+    <span class="olim">オーダー限定</span>
+    <h1 class="ptitle" id="ptitle"></h1>
+    <div class="psub" id="psub"></div>
+    <div class="pno" id="pno"></div>
+    <div class="blk"><div class="lab">カラー：<b id="cname"></b></div><div class="sws" id="sws"></div></div>
+    <div class="blk"><div class="lab">スタイル</div><div class="styles" id="styles"></div>
+      <label class="ck" id="lnwrap" hidden><input type="checkbox" id="lined"><span>遮光裏地付にする（遮光1級）</span></label></div>
+    <div class="blk"><div class="lab">価格表<small>価格は消費税込です</small></div><div class="tw" id="ptab"></div></div>
+    <div class="so" id="so">
+      <div class="h">サイズオーダー</div>
+      <button type="button" class="open" id="soOpen"></button>
+      <div class="p"><small>消費税込みで</small><b class="yen" id="soPrice"></b><span id="soEach"></span></div>
+      <div class="st2" id="soSt"></div>
+      <button type="button" class="pri" id="soAdd" style="width:100%">見積に追加</button>
     </div>
-    <div id="eyebox" hidden>
-      <label class="lb">幅（ハトメは4サイズから）</label>
-      <div class="seg" id="eyeseg"></div>
-      <div class="hint" id="eyeh"></div>
-    </div>
-    <div class="err" id="szerr" hidden></div>
-    <div class="row" style="margin-top:12px">
-      <div><label class="lb">開き方</label><div class="seg" id="openseg"><button data-q="1">片開き</button><button data-q="2" class="on">両開き</button></div></div>
-      <div><label class="lb">枚数</label><div class="stp"><button id="qm" aria-label="1枚減らす">−</button><output id="qty" class="num">2</output><button id="qp" aria-label="1枚増やす">＋</button></div></div>
-    </div>
-    <details class="pt" id="ptd"><summary>この生地の価格表</summary><div class="tw" id="ptab"></div></details>
-  </div>
-
-  <h2>4 吊り方</h2>
-  <div class="card">
-    <div class="seg" id="hangseg"><button data-g="front" class="on">正面付け</button><button data-g="ceil">天井付け</button></div>
-    <div class="hint" id="hangh"></div>
-    <div style="margin-top:12px"><label class="lb" for="room">設置場所（見積書に載ります）</label><input type="text" id="room" placeholder="例：リビング 掃き出し窓"></div>
+    <div class="acc" id="acc"></div>
   </div>
 </section>
 
@@ -235,7 +258,6 @@ textarea#qtxt{width:100%;min-height:160px;font:inherit;font-size:13px;padding:8p
     <div class="ql" id="qlist"></div>
     <div class="qtot"><span>合計（税込）</span><b class="yen" id="qsum">¥0</b></div>
   </div>
-
   <h2>見積書</h2>
   <div class="card row" style="margin-bottom:10px">
     <div><label class="lb" for="cust">お客さま名</label><input type="text" id="cust" placeholder="例：山田"></div>
@@ -245,7 +267,7 @@ textarea#qtxt{width:100%;min-height:160px;font:inherit;font-size:13px;padding:8p
   <div class="doc" id="doc"></div>
   <div class="tools">
     <button class="sec" id="cpy">見積をテキストでコピー</button>
-    <span id="clrwrap"><button class="sec" id="clr">明細をすべて消す</button></span>
+    <span id="clrwrap"></span>
   </div>
   <textarea id="qtxt" readonly hidden aria-label="見積テキスト"></textarea>
 </section>
@@ -261,28 +283,42 @@ textarea#qtxt{width:100%;min-height:160px;font:inherit;font-size:13px;padding:8p
   <div class="card"><ul>
     <li>幅・丈は1cm単位。丈は20〜300cm。</li>
     <li>ノンプリーツ・プリーツの幅は51〜300cm、2倍ヒダとギャザーは30〜300cm。</li>
-    <li>ハトメは幅100・140・180・220cmの4サイズ（丈は1cm単位）。仕上がり丈は注文より約2.5cm長くなります。</li>
-    <li>フック式の仕上がり総丈は、正面付けで＋4cm、天井付けで＋1cm。誤差は±1cm程度。</li>
-    <li>生地幅の都合で、サイズによってはハギ合わせ（縫い合わせ）が入ります。</li>
+    <li>ハトメは幅100・140・180・220cmの4サイズ（丈は1cm単位）。</li>
+    <li>仕上がり総丈は、正面付けで注文丈＋4cm、天井付けで＋1cm、ハトメで約＋2.5cm。誤差は±1cm程度。</li>
     <li>届くまで約10〜14日。受注生産のため、注文後のサイズ変更・キャンセル・返品はできません。</li>
-    <li>タッセル・アジャスターフック付き（レースはタッセルなし。ギャザーはギャザー用フック）。</li>
   </ul></div>
-  <h2>VIM for MUJI との統合</h2>
-  <div class="card" style="margin-bottom:10px"><p>アプリ名は「MUJI Store Assistant for curtain」です。</p></div>
-  <div class="card">
-    <p>素材の説明はネットストアの商品説明をもとに書き直したものです。雰囲気の分類はスタッフ向けの目安で、ネットストアの分類ではありません。</p><p>見た目と部品（ヘッダー、下のタブ、選択ボタン、色）は VIM for MUJI と同じ作りにしています。計算部分は画面と切り離してあり、<code>window.MUJI_CURTAIN</code> から呼べます。</p>
-    <ul>
-      <li><code>MUJI_CURTAIN.fabrics</code>：生地・色・JAN・価格表</li>
-      <li><code>MUJI_CURTAIN.quote({fab,color,style,lined,w,h})</code>：1枚の金額とJAN</li>
-      <li><code>MUJI_CURTAIN.lines()</code>：いまの見積明細</li>
-    </ul>
-  </div>
+  <h2>このページについて</h2>
+  <div class="card"><p>素材の説明はネットストアの商品説明をもとに書き直したものです。雰囲気の分類はスタッフ向けの目安です。採寸からのおすすめサイズは、無印良品の「カーテンのサイズの測り方」の目安で計算しています。</p></div>
 </section>
 </main>
 
+<!-- ===== オーダー内容の入力シート ===== -->
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="shT">
+ <div class="in">
+  <div class="sh"><b id="shT">オーダー内容を入力する</b><button type="button" id="shX">閉じる</button></div>
+  <div class="sb" id="sb">
+   <div class="prod" id="shProd"></div>
+   <div class="step"><h3><i>1</i>取り付け方法</h3><div class="hg" id="hang"></div><div class="hint" id="hangh"></div></div>
+   <div class="step"><h3><i>2</i>サイズ<small>1枚あたり・1cm単位</small></h3>
+     <div class="seg" id="szmode"><button type="button" data-m="calc">採寸から計算</button><button type="button" data-m="direct">サイズを直接入力</button></div>
+     <div id="calcBox"></div>
+     <div id="directBox"></div>
+     <div class="err" id="szerr" hidden></div>
+     <div id="fin"></div>
+   </div>
+   <div class="step"><h3><i>3</i>枚数</h3>
+     <div class="seg" id="openseg" style="max-width:320px;margin-bottom:10px"><button type="button" data-q="2">両開き（2枚）</button><button type="button" data-q="1">片開き（1枚）</button></div>
+     <div class="stp"><button type="button" id="qm" aria-label="1枚減らす">−</button><output id="qty" class="num">2</output><button type="button" id="qp" aria-label="1枚増やす">＋</button></div>
+   </div>
+   <div class="step" style="border-bottom:0"><h3><i>4</i>設置場所<small>見積書に載ります（任意）</small></h3><input type="text" id="room" placeholder="例：リビング 掃き出し窓"></div>
+  </div>
+  <div class="sf"><div class="t"><small>消費税込みで</small><b class="yen" id="shPrice">—</b><small id="shEach"></small></div><button type="button" class="pri" id="shOk">この内容で決める</button></div>
+ </div>
+</div>
+
 <div class="sum" id="sum"><div class="in">
-  <div class="t"><small id="sumsub">生地を選んでください</small><b class="yen" id="sumv">—</b></div>
-  <button class="pri" id="add" disabled>見積に追加</button>
+  <div class="t"><small id="sumsub"></small><b class="yen" id="sumv">—</b></div>
+  <button class="pri" id="add" type="button"></button>
 </div></div>
 
 <nav class="tabs" aria-label="画面の切り替え">
@@ -494,207 +530,256 @@ function count(){var n=0;F.forEach(function(f){f.col.forEach(function(cc){n+=Obj
 window.MUJI_CURTAIN={info:INFO,moods:MOODS,moodsOf:moodsOf,hasMood:hasMood,asOf:"2026-10-07",tables:T,styles:STYLES,swatch:SW,eyePole:EYE_POLE,fabrics:F,fab:fab,color:color,tierKey:tierKey,quote:quote,minPrice:minPrice,count:count};
 })();
 
-/* ===== 画面 ===== */
+/* ===== 画面：生地一覧 → 商品ページ（ネットストアと同じ並び） → オーダー内容の入力シート ===== */
 (function(){
 var M=window.MUJI_CURTAIN,$=function(i){return document.getElementById(i)};
 var yen=function(n){return"¥"+Number(n).toLocaleString("ja-JP")};
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
-var GR=["","遮光1級","遮光2級"],CATN={shade:"遮光",thick:"厚地",lace:"レース"};
-var HANG={front:"正面付け",ceil:"天井付け",pole:"ポール"};
-/* 例として最初から入れておく明細（初回のみ） */
-var S={mood:"",cat:"shade",q:"",fab:"nijuori",color:"ベージュ",style:"np",lined:false,w:100,h:200,eyeW:100,qty:2,hang:"front",room:"",lines:[],cust:"",staff:"",shop:"",tab:"make"};
+var GR=["","遮光1級","遮光2級"],CATN={shade:"遮光",thick:"厚地（遮光なし）",lace:"レース"};
+var HANG={front:"正面付け",ceil:"天井付け",pole:"ポール（ハトメ）"};
+var SNAME={np:"ノンプリーツカーテン",p:"プリーツカーテン",p2:"２倍ヒダプリーツカーテン",eye:"ハトメカーテン",ga:"ギャザーカーテン"};
+var WIN={haki:["掃き出し窓","床"],koshi:["腰窓","窓枠の下"],de:["出窓","窓台"]};
+var EYEW=[100,140,180,220];
+var S={mood:"",cat:"shade",q:"",fab:"nijuori",color:"ベージュ",style:"np",lined:false,w:100,h:200,eyeW:100,qty:2,open:2,hang:"front",room:"",lines:[],cust:"",staff:"",shop:"",tab:"make",
+ view:"list",ordered:false,szmode:"calc",win:"haki",rail:180,mh:200};
 var SAMPLE=[{fab:"nijuori",color:"ベージュ",style:"np",lined:false,w:100,h:200,hang:"front",qty:2,room:"リビング 掃き出し窓（例）"},
- {fab:"pollen",color:"オフ白",style:"np",lined:false,w:100,h:198,hang:"front",qty:2,room:"リビング レース（例）"}];
+ {fab:"pollen",color:"オフ白",style:"np",lined:false,w:100,h:198,hang:"ceil",qty:2,room:"リビング レース（例）"}];
 try{var sv=JSON.parse(localStorage.getItem("mujiCurtainQuote")||"null");if(sv&&typeof sv==="object")Object.keys(S).forEach(function(k){if(k in sv)S[k]=sv[k]});else S.lines=SAMPLE.slice()}catch(e){S.lines=SAMPLE.slice()}
 if(!M.fab(S.fab)){S.fab="nijuori";S.color="ベージュ"}
 function save(){try{localStorage.setItem("mujiCurtainQuote",JSON.stringify(S))}catch(e){}}
-function toast(t){var b=$("toast");b.textContent=t;b.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){b.hidden=true},1800)}
-
-/* カーテン上部の形（スタイル見本） */
+function toast(t){var b=$("toast");b.textContent=t;b.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){b.hidden=true},1900)}
+function norm(s){return String(s||"").replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)}).toLowerCase()}
+function moodName(k){for(var i=0;i<M.moods.length;i++)if(M.moods[i][0]===k)return M.moods[i][1];return""}
+function swatch(c){return M.swatch[c]||"#ccc"}
 function icon(k){var p={
  np:'<path d="M6 6h44"/><path d="M10 7v28M46 7v28"/><path d="M10 35h36" opacity=".35"/>',
  p:'<path d="M6 6h44"/><path d="M10 8c3 0 3 4 6 4s3-4 6-4 3 4 6 4 3-4 6-4 3 4 6 4 3-4 6-4"/><path d="M10 8v27M46 8v27M22 12v23M34 12v23" opacity=".55"/>',
  p2:'<path d="M6 6h44"/><path d="M10 8c2 0 2 4 4 4s2-4 4-4 2 4 4 4 2-4 4-4 2 4 4 4 2-4 4-4 2 4 4 4 2-4 4-4 2 4 4 4"/><path d="M10 8v27M46 8v27M18 12v23M26 12v23M34 12v23M42 12v23" opacity=".55"/>',
- eye:'<path d="M4 7h48"/><circle cx="12" cy="10" r="2.6"/><circle cx="22" cy="10" r="2.6"/><circle cx="32" cy="10" r="2.6"/><circle cx="42" cy="10" r="2.6"/><path d="M10 13v22M46 13v22M17 13c0 7 0 15 0 22M27 13v22M37 13v22" opacity=".55"/>',
+ eye:'<path d="M4 7h48"/><circle cx="12" cy="10" r="2.6"/><circle cx="22" cy="10" r="2.6"/><circle cx="32" cy="10" r="2.6"/><circle cx="42" cy="10" r="2.6"/><path d="M10 13v22M46 13v22M17 13v22M27 13v22M37 13v22" opacity=".55"/>',
  ga:'<path d="M6 6h44"/><path d="M10 9c1.5 2 3-2 4.5 0s3-2 4.5 0 3-2 4.5 0 3-2 4.5 0 3-2 4.5 0 3-2 4.5 0 3-2 4.5 0 3-2 4.5 0"/><path d="M10 9v26M46 9v26M14 11v24M19 11v24M23 11v24M28 11v24M32 11v24M37 11v24M41 11v24" opacity=".4"/>'}[k];
  return'<svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">'+p+'</svg>'}
+var CHEV='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
 
-/* --- 1 生地 --- */
-function norm(s){return String(s||"").replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)}).toLowerCase()}
-function renderFab(){
+/* ---------- 生地一覧 ---------- */
+function renderList(){
  [].forEach.call($("catseg").children,function(b){b.classList.toggle("on",b.dataset.c===S.cat)});
  var q=norm(S.q).trim(),list=M.fabrics.filter(function(f){
   if(q)return norm(f.n+" "+(f.fr?"防炎":"")+" "+f.col.map(function(c){return c[0]}).join(" ")+" "+CATN[f.cat]).indexOf(q)>=0;
   return f.cat===S.cat}).filter(function(f){return M.hasMood(f,S.mood)});
  $("fabcount").textContent=list.length+"種類"+(q?"（すべての種類から）":"")+(S.mood?"・"+moodName(S.mood):"");
- $("moods").innerHTML='<span class="lab">雰囲気</span><button data-m="" class="'+(S.mood?"":"on")+'">すべて</button>'+M.moods.map(function(m){return'<button data-m="'+m[0]+'" class="'+(S.mood===m[0]?"on":"")+'">'+m[1]+'</button>'}).join("");
+ $("moods").innerHTML='<span class="lab">雰囲気</span><button type="button" data-m="" class="'+(S.mood?"":"on")+'">すべて</button>'+M.moods.map(function(m){return'<button type="button" data-m="'+m[0]+'" class="'+(S.mood===m[0]?"on":"")+'">'+m[1]+'</button>'}).join("");
  $("flist").innerHTML=list.length?list.map(function(f){
   var gr={};f.col.forEach(function(c){if(c[1])gr[c[1]]=1});
-  var tags=(f.fr?'<span class="tag">防炎</span>':"")+Object.keys(gr).sort().map(function(g){return'<span class="tag'+(g==="1"?" s1":"")+'">'+GR[g]+'</span>'}).join("")+(f.lt?'<span class="tag s1">遮光裏地付あり</span>':"")+(q?'<span class="tag">'+CATN[f.cat]+'</span>':"");
-  return'<button class="fab'+(f.id===S.fab?" on":"")+'" data-f="'+f.id+'"><span class="n">'+esc(f.n)+'</span><span class="p">1枚 <b class="yen">'+yen(M.minPrice(f))+'</b>〜</span><span class="tg">'+tags+'<span class="dots">'+f.col.map(function(c){return'<i style="background:'+(M.swatch[c[0]]||"#ccc")+'"></i>'}).join("")+'</span></span></button>'}).join("")
-  :'<div class="empty">'+(q?"「"+esc(S.q)+"」に合う生地はありません。言葉を短くするか、消して種類から選んでください。":"この種類には「"+moodName(S.mood)+"」の生地がありません。上のタブで種類を変えるか、雰囲気を「すべて」に戻してください。")+'</div>';
- var f=M.fab(S.fab);
- $("sws").innerHTML=f.col.map(function(c){return'<button class="sw'+(c[0]===S.color?" on":"")+(S.mood&&M.moodsOf(f,c[0]).indexOf(S.mood)<0?" dim":"")+'" data-c="'+esc(c[0])+'"><i style="background:'+(M.swatch[c[0]]||"#ccc")+'"></i><span>'+esc(c[0])+(c[1]?' <small>'+GR[c[1]]+'</small>':"")+'</span></button>'}).join("");
+  var c0=f.col.filter(function(c){return!S.mood||M.moodsOf(f,c[0]).indexOf(S.mood)>=0})[0]||f.col[0];
+  var tags=(f.fr?'<span class="tag">防炎</span>':"")+Object.keys(gr).sort().map(function(g){return'<span class="tag'+(g==="1"?" s1":"")+'">'+GR[g]+'</span>'}).join("")+(f.lt?'<span class="tag s1">遮光裏地付あり</span>':"");
+  return'<button type="button" class="fc" data-f="'+f.id+'" data-c="'+esc(c0[0])+'"><span class="ph"><i class="weave fold" style="background-color:'+swatch(c0[0])+'"></i></span><span class="bd"><span class="ol">オーダー限定・'+esc(CATN[f.cat])+'</span><b>'+esc(f.n)+'</b><span class="dots">'+f.col.map(function(c){return'<i style="background:'+swatch(c[0])+'"></i>'}).join("")+'</span><span class="pr">1枚 <b class="yen">'+yen(M.minPrice(f))+'</b>〜</span><span class="tg">'+tags+'</span></span></button>'}).join("")
+  :'<div class="empty" style="grid-column:1/-1">'+(q?"「"+esc(S.q)+"」に合う生地はありません。言葉を短くするか、消して種類から選んでください。":"この種類には「"+moodName(S.mood)+"」の生地がありません。上のタブで種類を変えるか、雰囲気を「すべて」に戻してください。")+'</div>';
 }
-function moodName(k){for(var i=0;i<M.moods.length;i++)if(M.moods[i][0]===k)return M.moods[i][1];return""}
-function renderAbout(){var f=M.fab(S.fab),I=M.info[f.id]||{},cc=M.color(f,S.color),fx=[];
- if(f.fr)fx.push("防炎");if(cc&&cc[1])fx.push(GR[cc[1]]);if(f.lt)fx.push("遮光裏地付あり");(I.fx||[]).forEach(function(x){fx.push(x)});
- $("about").innerHTML='<h3>'+esc(f.n)+'<small>'+CATN[f.cat]+'・'+esc(S.color)+'</small></h3><p>'+esc(I.d||"")+'</p><dl>'+
-  '<dt>素材</dt><dd>'+esc(I.mat||"商品ページで確認してください")+'</dd>'+
-  '<dt>お手入れ</dt><dd>'+esc(I.care||"商品ページで確認してください")+'</dd>'+
-  '<dt>雰囲気</dt><dd class="tg">'+M.moodsOf(f,S.color).map(function(k){return'<span class="tag m">'+moodName(k)+'</span>'}).join("")+'</dd>'+
-  (fx.length?'<dt>機能</dt><dd class="tg">'+fx.map(function(x){return'<span class="tag fx">'+esc(x)+'</span>'}).join("")+'</dd>':"")+
-  '</dl><a href="https://www.muji.com/jp/ja/store/cmdty/detail/'+(cc?cc[2][Object.keys(cc[2])[0]]:"")+'" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--acc)">ネットストアの商品ページ</a>'}
-$("moods").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.mood=b.dataset.m;
- var f=M.fab(S.fab);if(S.mood&&M.moodsOf(f,S.color).indexOf(S.mood)<0){var c=f.col.filter(function(c){return M.moodsOf(f,c[0]).indexOf(S.mood)>=0})[0];if(c){S.color=c[0];fixStyle()}}
- renderAll()});
-$("catseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.cat=b.dataset.c;S.q="";$("q").value="";renderFab();save()});
-$("q").addEventListener("input",function(){S.q=this.value;renderFab()});
-$("flist").addEventListener("click",function(e){var b=e.target.closest(".fab");if(!b)return;var f=M.fab(b.dataset.f);S.fab=f.id;
- if(!M.color(f,S.color))S.color=f.col[0][0];fixStyle();renderAll()});
-$("sws").addEventListener("click",function(e){var b=e.target.closest(".sw");if(!b)return;S.color=b.dataset.c;fixStyle();renderAll()});
+$("catseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.cat=b.dataset.c;S.q="";$("q").value="";renderList();save()});
+$("moods").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.mood=b.dataset.m;renderList();save()});
+$("q").addEventListener("input",function(){S.q=this.value;renderList()});
+$("flist").addEventListener("click",function(e){var b=e.target.closest(".fc");if(!b)return;var f=M.fab(b.dataset.f);
+ if(S.fab!==f.id)S.ordered=false;S.fab=f.id;S.color=b.dataset.c;fixStyle();showItem()});
 
-/* --- 2 スタイル --- */
+/* ---------- 商品ページ ---------- */
 function avail(st,lined){return!!M.tierKey(M.fab(S.fab),S.color,st,lined)}
-function fixStyle(){if(S.lined&&!avail(S.style,true))S.lined=avail(S.style,true);if(!avail(S.style,S.lined)){S.lined=false;
+function fixStyle(){if(S.lined&&!avail(S.style,true))S.lined=false;if(!avail(S.style,S.lined)){S.lined=false;
  for(var i=0;i<M.styles.length;i++)if(avail(M.styles[i].k,false)){S.style=M.styles[i].k;break}}
  if(S.style==="eye")S.hang="pole";else if(S.hang==="pole")S.hang="front"}
-function renderStyle(){
+function grade(){var cc=M.color(M.fab(S.fab),S.color);return S.lined?1:(cc&&cc[1])||0}
+function title(o){var f=M.fab(o.fab),cc=M.color(f,o.color),g=o.lined?1:(cc&&cc[1])||0;
+ return(g?"【遮光"+"１２"[g-1]+"級】":"")+f.n+SNAME[o.style]+(o.lined?"／遮光裏地付":"")+"／"+o.color}
+function curJan(){var f=M.fab(S.fab),cc=M.color(f,S.color);return cc?((S.lined?(cc[3]||{}):cc[2])[S.style]||""):""}
+function table(){var k=M.tierKey(M.fab(S.fab),S.color,S.style,S.lined);return k?M.tables[k]:null}
+function rangeText(t){return t&&t.eye?"幅100・140・180・220×丈20～300cm":"幅"+(t?t.c[0][0]:51)+"～300×丈20～300cm"}
+function showItem(){S.view="item";$("v-list").hidden=true;$("v-item").hidden=false;renderItem();renderSum();save();window.scrollTo(0,0)}
+function showList(){S.view="list";$("v-list").hidden=false;$("v-item").hidden=true;renderList();renderSum();save();window.scrollTo(0,0)}
+$("toList").onclick=showList;
+function renderItem(){var f=M.fab(S.fab),t=table(),j=curJan();
+ $("bc").textContent="／ "+CATN[f.cat]+" ／ "+M.styles.filter(function(s){return s.k===S.style})[0].n;
+ $("hero").innerHTML='<i class="weave fold" style="background-color:'+swatch(S.color)+'"></i>'+icon(S.style);
+ $("ptitle").textContent=title({fab:S.fab,color:S.color,style:S.style,lined:S.lined});
+ $("psub").textContent=rangeText(t)+"・"+S.color;
+ $("pno").textContent=j?"商品番号 "+j.slice(-8):"";
+ $("cname").textContent=S.color+(grade()?"（"+GR[grade()]+"）":"");
+ $("sws").innerHTML=f.col.map(function(c){return'<button type="button" class="sw weave'+(c[0]===S.color?" on":"")+(S.mood&&M.moodsOf(f,c[0]).indexOf(S.mood)<0?" dim":"")+'" data-c="'+esc(c[0])+'" style="background-color:'+swatch(c[0])+'" aria-label="'+esc(c[0])+'" aria-pressed="'+(c[0]===S.color)+'"></button>'}).join("");
  $("styles").innerHTML=M.styles.map(function(s){var ok=avail(s.k,false)||avail(s.k,true);
-  return'<button class="st'+(s.k===S.style?" on":"")+'" data-s="'+s.k+'"'+(ok?"":" disabled")+'>'+icon(s.k)+s.n+'<small>'+(ok?s.s:"この色はなし")+'</small></button>'}).join("");
+  return'<button type="button" class="st'+(s.k===S.style?" on":"")+'" data-s="'+s.k+'"'+(ok?"":" disabled")+'>'+icon(s.k)+s.n+'<small>'+(ok?s.s:"この色はなし")+'</small></button>'}).join("");
  var canL=avail(S.style,true);$("lnwrap").hidden=!canL;$("lined").checked=!!S.lined&&canL;
-}
-$("styles").addEventListener("click",function(e){var b=e.target.closest(".st");if(!b||b.disabled)return;S.style=b.dataset.s;if(!avail(S.style,S.lined))S.lined=!S.lined&&avail(S.style,true);fixStyle();renderAll()});
-$("lined").addEventListener("change",function(){S.lined=this.checked;renderAll()});
+ renderTable();renderSO();renderAcc()}
+function renderTable(){var t=table(),r=S.ordered?M.quote(cur()):{};if(!t){$("ptab").innerHTML="";return}
+ var head=t.eye?t.c.map(function(w){return"幅"+w}):t.c.map(function(c){return"幅"+c[0]+"-"+c[1]});
+ $("ptab").innerHTML='<table class="pt"><tr><th>(cm)</th>'+head.map(function(h){return"<th>"+h+"</th>"}).join("")+'</tr>'+t.r.map(function(rw,ri){return'<tr><th>丈'+rw[0]+"-"+rw[1]+'</th>'+t.v[ri].map(function(v,ci){return'<td class="'+(S.ordered&&!r.err&&ri===r.ri&&ci===r.ci?"hit":"")+'">'+yen(v)+'</td>'}).join("")+'</tr>'}).join("")+'</table>'}
+function orderText(o){return(o.style==="eye"?"ポール":HANG[o.hang])+"・幅"+o.w+"×丈"+o.h+"cm・"+o.qty+"枚"}
+function renderSO(){var t=table(),r=M.quote(cur()),ok=S.ordered&&!r.err;
+ $("soOpen").className="open"+(ok?" done":"");
+ $("soOpen").innerHTML=ok?'<span><b>オーダー内容</b><br>'+esc(orderText(curOut()))+'</span><span style="color:var(--acc);font-size:.84rem;font-weight:700;display:flex;align-items:center">変更'+CHEV+'</span>':'<span>オーダー内容を入力する</span>'+CHEV;
+ $("soPrice").textContent=ok?yen(r.price*S.qty):yen(t?t.v[0][0]:0);
+ $("soEach").textContent=ok?yen(r.price)+" × "+S.qty+"枚":"〜（1枚）";
+ $("soSt").className="st2"+(ok?" ok":"");$("soSt").textContent=ok?"内容を確かめて「見積に追加」を押してください。":"オーダー内容が入力されていません";
+ $("soAdd").disabled=!ok}
+$("sws").addEventListener("click",function(e){var b=e.target.closest(".sw");if(!b)return;S.color=b.dataset.c;fixStyle();renderItem();renderSum();save()});
+$("styles").addEventListener("click",function(e){var b=e.target.closest(".st");if(!b||b.disabled)return;S.style=b.dataset.s;if(!avail(S.style,S.lined))S.lined=!S.lined&&avail(S.style,true);fixStyle();
+ if(S.style==="eye"&&EYEW.indexOf(S.eyeW)<0)S.eyeW=100;renderItem();renderSum();save()});
+$("lined").addEventListener("change",function(){S.lined=this.checked;renderItem();renderSum();save()});
+$("soOpen").onclick=function(){openSheet()};
+$("soAdd").onclick=function(){addLine()};
 
-/* --- 3 サイズ・4 吊り方 --- */
+/* 注意事項（ネットストアの商品ページと同じ項目） */
+function renderAcc(){var f=M.fab(S.fab),I=M.info[f.id]||{},fx=[],eye=S.style==="eye",lace=f.cat==="lace";
+ if(f.fr)fx.push("防炎");if(grade())fx.push(GR[grade()]);(I.fx||[]).forEach(function(x){fx.push(x)});
+ var j=curJan(),hook=S.style==="ga"?"ギャザー用フック":"アジャスターフック";
+ var it=function(t,body,open){return'<details'+(open?" open":"")+'><summary>'+t+'</summary><div class="in">'+body+'</div></details>'};
+ $("acc").innerHTML=
+ it("商品説明",'<p style="margin:0 0 10px">'+esc(I.d||"")+'</p><dl><dt>素材</dt><dd>'+esc(I.mat||"商品ページで確認")+'</dd><dt>お手入れ</dt><dd>'+esc(I.care||"商品ページで確認")+'</dd>'+
+  (fx.length?'<dt>機能</dt><dd>'+fx.map(function(x){return'<span class="tag fx" style="margin-right:4px">'+esc(x)+'</span>'}).join("")+'</dd>':"")+
+  '<dt>雰囲気</dt><dd>'+M.moodsOf(f,S.color).map(function(k){return esc(moodName(k))}).join("・")+'</dd></dl>'+
+  (j?'<p style="margin:10px 0 0"><a href="https://www.muji.com/jp/ja/store/cmdty/detail/'+j+'" target="_blank" rel="noopener" style="color:var(--acc)">ネットストアの商品ページを開く</a></p>':"")+'<p class="hint">価格は1枚のものです。店舗受け取り・コンビニ受け取りはできません。</p>',true)+
+ it("サイズ",'<ul><li>ご注文は1cm単位で承ります。</li>'+
+  (eye?'<li>幅は100・140・180・220cmの4サイズ、丈は1cm単位です。</li><li>注文サイズに対し仕上がり製品の総丈は、約2.5cm長くなります。</li>':'<li>注文サイズに対し仕上がり製品の総丈は、正面付けで4cm、天井付けで1cm長くなります。</li>')+
+  '<li>仕上がりサイズには±1cm程度の誤差が生じます。</li><li>湿度の高い時期には丈が伸びることがあります。</li>'+
+  '<li>注文サイズ（仕上がり幅）は、一番端のフックから一番端のフックまでの長さです。丈は、アジャスターフックの位置から生地の一番下までの長さです。</li></ul>')+
+ it("サイズの測り方",'<dl><dt>取り付け方法</dt><dd>カーテンレールが隠れるように上にかぶせるなら<b>正面付け</b>、レールが見えるなら<b>天井付け</b>。一般的なレールの厚地は正面付け、レースと2重吊りのときのレース、出窓やカーテンボックスは天井付け。</dd>'+
+  '<dt>幅</dt><dd>レールの端の固定ランナーから、もう一方の固定ランナーまでを測り、1〜2cm足します。両開きはその半分が1枚の幅です。</dd>'+
+  '<dt>丈</dt><dd>ランナーのフックをかける穴の下から測ります。掃き出し窓は床まで、出窓は窓台までを測って1〜2cm短く、腰窓は窓枠の下までを測って15〜20cm長くします。レースは厚地より1〜2cm短くします。</dd>'+
+  '<dt>ハトメ</dt><dd>ポールの上から測ります。</dd></dl><p class="hint">シートの「採寸から計算」に測った長さを入れると、この目安でおすすめの注文サイズを出します。</p>')+
+ it("生地のハギ合わせ、フックの数",'<ul><li>生地幅の都合上、生地を複数枚ハギ合わせて縫製する場合があります。サイズによって、ハギ合わせの位置や数が異なります。</li><li>位置とフックの数は、ネットストアの「<a href="https://www.muji.com/jp/ja/special-feature/interior/curtain-seam-position/" target="_blank" rel="noopener" style="color:var(--acc)">ハギ合わせの位置、フックの数</a>」で、生地とスタイルを選ぶと確認できます。</li></ul>')+
+ it("付属品",'<ul>'+(lace?'':'<li>タッセル</li>')+(eye?'<li>ハトメ（内径40mm）。太さ28mm・35mmのポールに通せます。</li>':'<li>'+hook+'（正面付けと天井付けでは、フックの位置が異なります）</li>')+'</ul>'+
+  (eye||S.style==="ga"?'':'<figure>'+hookFig()+'<figcaption class="hint">上下に約5.5cm調整できます。正面付けはフックを下方向に、天井付けはフックを上方向に調整した状態でお届けします。</figcaption></figure>'))+
+ it("その他",'<ul><li>ご注文から約10〜14日の目安でお届けします。混雑時は14日以上かかる場合があります。</li><li>受注生産商品のため、ご注文後のサイズ変更およびキャンセル・返品はお受けできません。</li><li>洗濯により、若干の風合い変化、縮みが生じます。洗濯時の収縮の度合いは均一にはできません。</li><li>天然素材のカーテンは、湿度・温度や結露などで伸び縮みすることがあります。</li></ul>')}
+function hookFig(){return'<svg viewBox="0 0 260 120" width="100%" style="max-width:320px" role="img" aria-label="アジャスターフック：正面付けは下方向、天井付けは上方向">'+
+ [["正面付け",30,26],["天井付け",150,6]].map(function(a){var x=a[1],y=a[2];return'<g transform="translate('+x+',0)"><text x="40" y="112" text-anchor="middle" font-size="12" fill="#333">'+a[0]+'</text>'+
+  '<rect x="10" y="30" width="60" height="64" fill="#efe7e8" stroke="#c9bfc0"/><rect x="34" y="'+(y+8)+'" width="12" height="30" rx="2" fill="#fff" stroke="#9f2a37" stroke-width="2"/>'+
+  '<path d="M40 '+(y+8)+' v-6 a5 5 0 0 1 10 0" fill="none" stroke="#9f2a37" stroke-width="2"/><path d="M56 34 v28 M52 38 l4 -4 4 4 M52 58 l4 4 4 -4" stroke="#6f696a" stroke-width="1.5" fill="none"/></g>'}).join("")+'</svg>'}
+
+/* ---------- オーダー内容の入力シート ---------- */
+var BK=null;
 function cur(){var w=S.style==="eye"?S.eyeW:S.w;return{fab:S.fab,color:S.color,style:S.style,lined:S.lined,w:w,h:S.h,hang:S.hang,qty:S.qty,room:S.room}}
-function renderSize(){
- var eye=S.style==="eye";$("wbox").hidden=eye;$("eyebox").hidden=!eye;
- var r=M.quote(cur()),t=r.key&&M.tables[r.key];
- if(eye){$("eyeseg").innerHTML=[100,140,180,220].map(function(w){return'<button data-w="'+w+'" class="'+(w===S.eyeW?"on":"")+'">'+w+'</button>'}).join("");
-  var pi=[100,140,180,220].indexOf(S.eyeW),pp=M.eyePole[pi];$("eyeh").textContent=pp?"ポールの長さ "+pp[0]+"〜"+pp[1]+"cm の窓向け（片開き1枚の目安）":""}
- else $("wh").textContent=(t&&!t.eye?t.c[0][0]:51)+"〜300cm";
+function curOut(){var o=cur();o.w=S.style==="eye"?S.eyeW:Math.round(S.w);o.h=Math.round(S.h);return o}
+function openSheet(){BK=JSON.stringify({hang:S.hang,w:S.w,h:S.h,eyeW:S.eyeW,qty:S.qty,open:S.open,room:S.room,szmode:S.szmode,win:S.win,rail:S.rail,mh:S.mh});
+ $("sheet").hidden=false;document.documentElement.style.overflow="hidden";$("sb").scrollTop=0;renderSheet();$("room").value=S.room||"";setTimeout(function(){$("shX").focus()},30)}
+function closeSheet(keep){if(!keep&&BK){var b=JSON.parse(BK);Object.keys(b).forEach(function(k){S[k]=b[k]})}BK=null;$("sheet").hidden=true;document.documentElement.style.overflow="";renderItem();renderSum();save();$("soOpen").focus()}
+$("shX").onclick=function(){closeSheet(false)};
+$("sheet").addEventListener("click",function(e){if(e.target===$("sheet"))closeSheet(false)});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("sheet").hidden)closeSheet(false)});
+function hangSvg(k){var front=k==="front";
+ return'<svg viewBox="0 0 150 96" aria-hidden="true">'+(front?'<rect x="0" y="0" width="150" height="8" fill="#e8e3e3"/><rect x="0" y="8" width="8" height="88" fill="#e8e3e3"/><rect x="8" y="22" width="10" height="4" fill="#b9b2b3"/><rect x="18" y="20" width="118" height="8" rx="2" fill="#6f696a"/>'+
+  '<path d="M16 14 h124 v76 h-124 z" fill="#d9b6bb" opacity=".95"/><path d="M36 14v76M56 14v76M76 14v76M96 14v76M116 14v76" stroke="#c4979d" stroke-width="1.5"/><text x="78" y="10" text-anchor="middle" font-size="9" fill="#9f2a37">レールが隠れる</text>'
+  :'<rect x="0" y="0" width="150" height="10" fill="#e8e3e3"/><rect x="14" y="10" width="122" height="8" rx="2" fill="#6f696a"/>'+
+  '<path d="M16 22 h120 v70 h-120 z" fill="#d9b6bb" opacity=".95"/><path d="M36 22v70M56 22v70M76 22v70M96 22v70M116 22v70" stroke="#c4979d" stroke-width="1.5"/><text x="76" y="31" text-anchor="middle" font-size="9" fill="#9f2a37">レールが見える</text>')+'</svg>'}
+function renderSheet(){var f=M.fab(S.fab),eye=S.style==="eye",t=table();
+ $("shProd").innerHTML='<i class="weave" style="background-color:'+swatch(S.color)+'"></i><span>'+esc(title({fab:S.fab,color:S.color,style:S.style,lined:S.lined}))+'</span>';
+ /* 1 取り付け方法 */
+ if(eye){$("hang").innerHTML='<button type="button" class="hc on" style="grid-column:1/-1" disabled>'+icon("eye")+'<b>ポールに通す（ハトメ）</b><small>ハトメ内径40mm。太さ28mm・35mmのポール向け</small></button>';$("hangh").textContent="仕上がり総丈は、注文丈より約2.5cm長くなります。"}
+ else{$("hang").innerHTML=["front","ceil"].map(function(k){return'<button type="button" class="hc'+(S.hang===k?" on":"")+'" data-g="'+k+'" aria-pressed="'+(S.hang===k)+'">'+hangSvg(k)+'<b>'+HANG[k]+'</b><small>'+(k==="front"?"レールが隠れるように、カーテンが上にかぶさる":"レールが見える。レース・出窓・カーテンボックスに")+'</small></button>'}).join("");
+  $("hangh").textContent=S.hang==="front"?"仕上がり総丈は、注文丈より4cm長くなります。":"仕上がり総丈は、注文丈より1cm長くなります。"}
+ /* 2 サイズ */
+ [].forEach.call($("szmode").children,function(b){b.classList.toggle("on",b.dataset.m===S.szmode)});
+ $("calcBox").hidden=S.szmode!=="calc";$("directBox").hidden=S.szmode!=="direct";
+ if(S.szmode==="calc")renderCalc();else renderDirect();
+ renderCheck();
+ /* 3 枚数 */
+ [].forEach.call($("openseg").children,function(b){b.classList.toggle("on",+b.dataset.q===S.open)});$("qty").textContent=S.qty}
+function rec(){var f=M.fab(S.fab),lace=f.cat==="lace",eye=S.style==="eye",rail=Math.round(+S.rail||0),mh=Math.round(+S.mh||0),o={};
+ if(eye){var share=S.open===2?rail/2:rail,ix=-1;M.eyePole.forEach(function(r,i){if(share>=r[0]&&share<=r[1])ix=i});
+  o.warn=ix<0?(share<M.eyePole[0][0]?"ポールが短いため、いちばん小さい幅100cmにしています。":"ポールが長いため、いちばん大きい幅220cmにしています。片開き・両開きや枚数を見直してください。"):"";
+  if(ix<0)ix=share<M.eyePole[0][0]?0:3;o.w=EYEW[ix];o.wtxt="ポールの長さ"+(S.open===2?"の半分（"+Math.round(share)+"cm）":"（"+rail+"cm）")+"に合うサイズ（"+M.eyePole[ix][0]+"〜"+M.eyePole[ix][1]+"cm向け）"}
+ else{var tot=rail+2;o.w=S.open===2?Math.ceil(tot/2):tot;o.wtxt="レールの長さ "+rail+"cm＋2cm"+(S.open===2?"＝"+tot+"cm を2枚に分けて":"")}
+ var d=S.win==="koshi"?15:-1;if(lace)d-=1;o.h=mh+d;o.htxt="測った長さ "+mh+"cm"+(d>=0?"＋":"−")+Math.abs(d)+"cm（"+WIN[S.win][0]+(S.win==="koshi"?"は窓枠より長く":"は床・窓台に付かないよう短く")+(lace?"、レースは厚地より1cm短く":"")+"）";
+ return o}
+function renderCalc(){var eye=S.style==="eye",r=rec();
+ $("calcBox").innerHTML='<div style="margin-top:12px"><label class="lb">窓の種類</label><div class="seg" id="winseg">'+Object.keys(WIN).map(function(k){return'<button type="button" data-w="'+k+'" class="'+(S.win===k?"on":"")+'">'+WIN[k][0]+'</button>'}).join("")+'</div></div>'+
+ '<div class="nf2" style="margin-top:12px"><div><label class="lb" for="rail">'+(eye?"ポールの長さ（cm）":"レールの長さ（cm）")+'</label><input type="number" id="rail" inputmode="numeric" value="'+(S.rail||"")+'"><div class="hint">'+(eye?"ポールの端から端まで":"端の固定ランナーから、もう一方の固定ランナーまで")+'</div></div>'+
+ '<div><label class="lb" for="mh">丈を測った長さ（cm）</label><input type="number" id="mh" inputmode="numeric" value="'+(S.mh||"")+'"><div class="hint">'+(eye?"ポールの上":"ランナーのフックをかける穴の下")+'から'+WIN[S.win][1]+'まで</div></div></div>'+
+ '<div class="calc"><div style="font-size:.8rem;font-weight:700">おすすめの注文サイズ（1枚）</div><div class="r"><span>幅</span><b class="num">'+(S.rail?r.w+"cm":"—")+'</b></div><div class="hint" style="margin:2px 0 0">'+(S.rail?esc(r.wtxt):"")+'</div>'+
+ '<div class="r"><span>丈</span><b class="num">'+(S.mh?r.h+"cm":"—")+'</b></div><div class="hint" style="margin:2px 0 0">'+(S.mh?esc(r.htxt):"")+'</div>'+(r.warn&&S.rail?'<div class="err">'+esc(r.warn)+'</div>':"")+
+ '<button type="button" class="pri" id="useRec" style="width:100%;margin-top:12px"'+(S.rail&&S.mh?"":" disabled")+'>このサイズにする</button><p class="hint">目安です。「サイズを直接入力」で1cm単位で直せます。</p></div>'}
+function renderDirect(){var eye=S.style==="eye",t=table(),lo=t&&!t.eye?t.c[0][0]:51;
+ $("directBox").innerHTML=(eye?'<div style="margin-top:12px"><label class="lb">幅（ハトメは4サイズから）</label><div class="seg" id="eyeseg">'+EYEW.map(function(w,i){return'<button type="button" data-w="'+w+'" class="'+(S.eyeW===w?"on":"")+'">'+w+'cm</button>'}).join("")+'</div><div class="hint">'+(function(){var i=EYEW.indexOf(S.eyeW),p=M.eyePole[i];return p?"ポールの長さ "+p[0]+"〜"+p[1]+"cm の窓向け（1枚の目安）":""})()+'</div></div>':
+ '<div style="margin-top:12px"><label class="lb" for="w">幅（cm）</label><div class="nf"><button type="button" data-d="w:-1" aria-label="幅を1cm減らす">−</button><input type="number" id="w" inputmode="numeric" value="'+Math.round(S.w)+'"><button type="button" data-d="w:1" aria-label="幅を1cm増やす">＋</button></div><div class="hint">'+lo+'〜300cm（1cm単位）</div></div>')+
+ '<div style="margin-top:12px"><label class="lb" for="h">丈（cm）</label><div class="nf"><button type="button" data-d="h:-1" aria-label="丈を1cm減らす">−</button><input type="number" id="h" inputmode="numeric" value="'+Math.round(S.h)+'"><button type="button" data-d="h:1" aria-label="丈を1cm増やす">＋</button></div><div class="hint">20〜300cm（1cm単位）</div></div>'}
+function renderCheck(){var r=M.quote(cur()),eye=S.style==="eye",add=eye?2.5:S.hang==="ceil"?1:4,h=Math.round(S.h);
  $("szerr").hidden=!r.err;$("szerr").textContent=r.err||"";
- [].forEach.call($("openseg").children,function(b){b.classList.toggle("on",+b.dataset.q===S.qty)});
- $("qty").textContent=S.qty;
- /* 価格表 */
- if(t){var head=t.eye?t.c.map(function(w){return"幅"+w}):t.c.map(function(c){return"幅"+c[0]+"–"+c[1]});
-  $("ptab").innerHTML='<table><tr><th>cm</th>'+head.map(function(h){return"<th>"+h+"</th>"}).join("")+'</tr>'+t.r.map(function(rw,ri){return'<tr><th>丈'+rw[0]+"–"+rw[1]+'</th>'+t.v[ri].map(function(v,ci){return'<td class="'+(!r.err&&ri===r.ri&&ci===r.ci?"hit":"")+'">'+yen(v)+'</td>'}).join("")+'</tr>'}).join("")+'</table>'}
- /* 吊り方 */
- var hs=$("hangseg");
- if(eye){hs.innerHTML='<button class="on" disabled>ポールに通す（ハトメ）</button>';$("hangh").textContent="仕上がり丈は注文より約2.5cm長くなります（"+(S.h+2.5)+"cm 前後）。ハトメ内径40mm、太さ28・35mmのポール向け。"}
- else{hs.innerHTML='<button data-g="front" class="'+(S.hang==="front"?"on":"")+'">正面付け</button><button data-g="ceil" class="'+(S.hang==="ceil"?"on":"")+'">天井付け</button>';
-  var add=S.hang==="ceil"?1:4;$("hangh").textContent=(S.hang==="ceil"?"天井や窓枠の内側にレールを付ける場合。":"窓枠の上の壁にレールを付ける場合。")+"仕上がり総丈は注文＋"+add+"cm（"+(Math.round(S.h)+add)+"cm 前後）。"+(S.style==="ga"?"ギャザー用フックが付きます。":"アジャスターフックで上下に調整できます。")}
-}
-$("w").addEventListener("input",function(){S.w=+this.value;renderSum();renderSize()});
-$("h").addEventListener("input",function(){S.h=+this.value;renderSum();renderSize()});
-["w","h"].forEach(function(id){$(id).addEventListener("change",save)});
-$("eyeseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.eyeW=+b.dataset.w;renderAll()});
-$("openseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.qty=+b.dataset.q;renderAll()});
-$("qm").onclick=function(){S.qty=Math.max(1,S.qty-1);renderAll()};
-$("qp").onclick=function(){S.qty=Math.min(20,S.qty+1);renderAll()};
-$("hangseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b||!b.dataset.g)return;S.hang=b.dataset.g;renderAll()});
-$("room").addEventListener("input",function(){S.room=this.value;save()});
+ var show=S.szmode==="direct"||S.ordered;
+ $("fin").innerHTML=r.err?"":'<div class="fin"><svg viewBox="0 0 110 150" aria-hidden="true"><rect x="10" y="'+(S.hang==="ceil"&&!eye?2:10)+'" width="90" height="6" rx="2" fill="#6f696a"/>'+
+  '<path d="M18 '+(S.hang==="front"&&!eye?6:20)+' h74 v118 h-74z" fill="#e6d2d5"/><path d="M33 20v118M48 20v118M63 20v118M78 20v118" stroke="#d4b7bb"/>'+
+  '<path d="M104 20 v118 M100 24 l4-4 4 4 M100 134 l4 4 4-4" stroke="#9f2a37" stroke-width="1.6" fill="none"/><path d="M6 '+(S.hang==="front"&&!eye?6:20)+' v132 M2 '+((S.hang==="front"&&!eye?6:20)+4)+' l4-4 4 4 M2 134 l4 4 4-4" stroke="#6f696a" stroke-width="1.2" fill="none"/></svg>'+
+  '<dl><dt>注文サイズ</dt><dd>幅'+(eye?S.eyeW:Math.round(S.w))+'×丈'+h+'cm</dd><dt>仕上がり総丈</dt><dd>約'+(h+add)+'cm（'+(eye?"ハトメ":HANG[S.hang])+'）</dd>'+
+  (eye||S.style==="ga"?"":'<dt>丈の調整</dt><dd style="font-weight:400">アジャスターフックで上下に約5.5cm</dd>')+'<dt>価格</dt><dd>'+yen(r.price)+'（1枚）</dd></dl></div>';
+ if(!show)$("fin").innerHTML="";
+ $("shPrice").textContent=r.err?"—":yen(r.price*S.qty);$("shEach").textContent=r.err?(r.err):yen(r.price)+" × "+S.qty+"枚";$("shOk").disabled=!!r.err}
+$("hang").addEventListener("click",function(e){var b=e.target.closest("[data-g]");if(!b)return;S.hang=b.dataset.g;renderSheet()});
+$("szmode").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.szmode=b.dataset.m;renderSheet()});
+$("calcBox").addEventListener("click",function(e){var b=e.target.closest("[data-w]");if(b){S.win=b.dataset.w;renderSheet();return}
+ if(e.target.closest("#useRec")){var r=rec();if(S.style==="eye")S.eyeW=r.w;else S.w=r.w;S.h=r.h;S.szmode="direct";renderSheet();toast("おすすめのサイズを入れました")}});
+$("calcBox").addEventListener("input",function(e){var t=e.target;if(t.id!=="rail"&&t.id!=="mh")return;S[t.id]=+t.value||0;var pos=t.selectionStart;renderCalc();var n=$(t.id);n.focus();try{n.setSelectionRange(pos,pos)}catch(x){}renderCheck()});
+$("directBox").addEventListener("click",function(e){var b=e.target.closest("[data-d]");if(b){var a=b.dataset.d.split(":"),k=a[0];S[k]=Math.max(0,Math.round(+S[k]||0)+ +a[1]);$(k).value=S[k];renderCheck();return}
+ var y=e.target.closest("#eyeseg [data-w]");if(y){S.eyeW=+y.dataset.w;renderDirect();renderCheck()}});
+$("directBox").addEventListener("input",function(e){var t=e.target;if(t.id==="w"||t.id==="h"){S[t.id]=+t.value||0;renderCheck()}});
+$("openseg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.open=+b.dataset.q;S.qty=S.open;renderSheet()});
+$("qm").onclick=function(){S.qty=Math.max(1,S.qty-1);renderSheet()};
+$("qp").onclick=function(){S.qty=Math.min(20,S.qty+1);renderSheet()};
+$("room").addEventListener("input",function(){S.room=this.value});
+$("shOk").onclick=function(){if(M.quote(cur()).err)return;S.ordered=true;closeSheet(true);toast("オーダー内容を入れました")};
 
-/* --- 合計バー --- */
+/* ---------- 合計バー ---------- */
 function desc(o){var f=M.fab(o.fab);return f.n+"／"+o.color+"・"+M.styles.filter(function(s){return s.k===o.style})[0].n+(o.lined?"・遮光裏地付":"")}
-function renderSum(){
- if(S.tab!=="make"){var tot=S.lines.reduce(function(a,l){var r=M.quote(l);return a+(r.price||0)*l.qty},0);
-  $("sumsub").textContent="見積合計（"+S.lines.length+"件・税込）";$("sumv").innerHTML=yen(tot);$("add").textContent="カーテンを追加";$("add").disabled=false;return}
- var r=M.quote(cur());$("add").textContent="見積に追加";
- if(r.err){$("sumsub").textContent=r.err;$("sumv").textContent="—";$("add").disabled=true;return}
- $("sumsub").textContent=desc(cur())+"・幅"+(S.style==="eye"?S.eyeW:Math.round(S.w))+"×丈"+Math.round(S.h)+"cm";
- $("sumv").innerHTML=yen(r.price*S.qty)+'<span>'+yen(r.price)+" × "+S.qty+"枚</span>";$("add").disabled=false;
-}
-$("add").onclick=function(){
- if(S.tab!=="make"){go("make");return}
- var o=cur();if(M.quote(o).err)return;o.w=S.style==="eye"?S.eyeW:Math.round(S.w);o.h=Math.round(S.h);
- if(!o.room)o.room="窓"+(S.lines.length+1);
- S.lines.push(o);S.room="";$("room").value="";save();renderQuote();toast("見積に追加しました（"+S.lines.length+"件）")};
+function quoteTotal(){return S.lines.reduce(function(a,l){var r=M.quote(l);return a+(r.price||0)*l.qty},0)}
+function renderSum(){var b=$("add");$("sum").hidden=S.tab==="memo"||(S.tab==="make"&&S.view==="list"&&!S.lines.length);
+ if(S.tab!=="make"||S.view==="list"){$("sumsub").textContent="見積合計（"+S.lines.length+"件・税込）";$("sumv").textContent=yen(quoteTotal());b.textContent=S.tab==="quote"?"カーテンを追加":"見積を見る";b.disabled=false;return}
+ var r=M.quote(cur());
+ if(!S.ordered||r.err){$("sumsub").textContent=title({fab:S.fab,color:S.color,style:S.style,lined:S.lined});$("sumv").textContent="—";b.textContent="オーダー内容を入力する";b.disabled=false;return}
+ $("sumsub").textContent=orderText(curOut());$("sumv").innerHTML=yen(r.price*S.qty)+'<span>'+yen(r.price)+" × "+S.qty+"枚</span>";b.textContent="見積に追加";b.disabled=false}
+$("add").onclick=function(){if(S.tab==="quote"){go("make");showList();return}if(S.tab==="make"&&S.view==="list"){go("quote");return}
+ if(!S.ordered||M.quote(cur()).err){openSheet();return}addLine()};
+function addLine(){var o=curOut();if(M.quote(o).err)return;if(!o.room)o.room="窓"+(S.lines.length+1);
+ S.lines.push(o);S.room="";S.ordered=false;save();renderQuote();renderItem();renderSum();toast("見積に追加しました（"+S.lines.length+"件）")}
 
-/* --- 見積 --- */
+/* ---------- 見積 ---------- */
 function hangText(l){return l.style==="eye"?"ポール":HANG[l.hang]}
 function renderQuote(){
- var tot=0,rows=S.lines.map(function(l,i){var r=M.quote(l),f=M.fab(l.fab),sub=(r.price||0)*l.qty;tot+=sub;
-  return'<div class="qi"><span class="cs" style="background:'+(M.swatch[l.color]||"#ccc")+'"></span><span class="nm">'+esc(l.room)+'</span><span class="pr yen">'+(r.err?"—":yen(sub))+'<small>'+(r.err?"":yen(r.price)+"×"+l.qty+"枚")+'</small></span>'+
-  '<span class="sp">'+esc(desc(l))+'</span><span class="sp">幅'+l.w+'×丈'+l.h+'cm・'+hangText(l)+'・JAN '+(r.jan||"")+(r.err?'　<b style="color:var(--warn)">'+esc(r.err)+'</b>':"")+'</span>'+
-  '<span class="ac"><a href="'+(r.url||"#")+'" target="_blank" rel="noopener">商品ページ</a><button class="lnk" data-e="'+i+'">選び直す</button><button class="lnk rm" data-d="'+i+'">削除</button></span></div>'}).join("");
- $("qlist").innerHTML=rows||'<div class="empty">まだ明細がありません。「つくる」で生地とサイズを選んで「見積に追加」を押してください。</div>';
+ var tot=0,rows=S.lines.map(function(l,i){var r=M.quote(l),sub=(r.price||0)*l.qty;tot+=sub;
+  return'<div class="qi"><span class="cs weave" style="background-color:'+swatch(l.color)+'"></span><span class="nm">'+esc(l.room)+'</span><span class="pr yen">'+(r.err?"—":yen(sub))+'<small>'+(r.err?"":yen(r.price)+"×"+l.qty+"枚")+'</small></span>'+
+  '<span class="sp">'+esc(title(l))+'</span><span class="sp">幅'+l.w+'×丈'+l.h+'cm・'+hangText(l)+'・JAN '+(r.jan||"")+(r.err?'　<b style="color:#b3261e">'+esc(r.err)+'</b>':"")+'</span>'+
+  '<span class="ac"><a href="'+(r.url||"#")+'" target="_blank" rel="noopener">商品ページ</a><button type="button" class="lnk" data-e="'+i+'">選び直す</button><button type="button" class="lnk rm" data-d="'+i+'">削除</button></span></div>'}).join("");
+ $("qlist").innerHTML=rows||'<div class="empty">まだ明細がありません。「つくる」で生地を選び、オーダー内容を入れて「見積に追加」を押してください。</div>';
  $("qsum").textContent=yen(tot);$("qcount").textContent=S.lines.length+"件";
  $("bdg").hidden=!S.lines.length;$("bdg").textContent=S.lines.length;
- renderDoc(tot);renderSum();
-}
+ renderDoc(tot);renderSum()}
 $("qlist").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
  if(b.dataset.d!=null){S.lines.splice(+b.dataset.d,1);save();renderQuote();toast("削除しました")}
  if(b.dataset.e!=null){var l=S.lines.splice(+b.dataset.e,1)[0];S.fab=l.fab;S.color=l.color;S.style=l.style;S.lined=l.lined;S.cat=M.fab(l.fab).cat;S.qty=l.qty;S.hang=l.hang;S.room=l.room;
-  if(l.style==="eye")S.eyeW=l.w;else S.w=l.w;S.h=l.h;$("w").value=S.w;$("h").value=S.h;$("room").value=S.room;save();go("make");renderAll();toast("明細を戻しました。直して追加し直してください")}});
+  if(l.style==="eye")S.eyeW=l.w;else S.w=l.w;S.h=l.h;S.szmode="direct";S.ordered=true;save();go("make");showItem();renderQuote();toast("明細を戻しました。直して見積に追加し直してください")}});
 function today(){var d=new Date();return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"}
 function renderDoc(tot){
  $("doc").innerHTML='<div class="dh"><h3>御見積書</h3><div style="text-align:right;font-size:.72rem;color:var(--sub)">'+today()+'<br>'+esc(S.shop||"無印良品")+(S.staff?'<br>担当：'+esc(S.staff):"")+'</div></div>'+
  '<div class="to">'+esc(S.cust||"　　　　")+' 様</div><div style="font-size:.76rem;color:var(--sub)">オーダーカーテンのお見積りです。</div>'+
  '<div class="big"><span>お見積金額（税込）</span><b class="yen">'+yen(tot)+'</b></div>'+
  '<div class="tw"><table><tr><th>設置場所</th><th>商品</th><th>サイズ</th><th>単価</th><th>枚</th><th>金額</th></tr>'+
- S.lines.map(function(l){var r=M.quote(l);return'<tr><td>'+esc(l.room)+'</td><td>'+esc(desc(l))+'<br><span style="color:var(--sub)">JAN '+(r.jan||"")+'</span></td><td>幅'+l.w+'×丈'+l.h+'<br>'+hangText(l)+'</td><td>'+(r.err?"—":yen(r.price))+'</td><td>'+l.qty+'</td><td>'+(r.err?"—":yen(r.price*l.qty))+'</td></tr>'}).join("")+
- '</table></div><div class="nt">・価格は無印良品ネットストアの2026年10月7日時点の価格（税込）です。お届け前に変わることがあります。<br>・受注生産のため、ご注文後のサイズ変更・キャンセル・返品はできません。<br>・お届けまで約10〜14日。サイズにより生地のハギ合わせが入ります。</div>';
-}
-["cust","staff","shop"].forEach(function(k){$(k).value=S[k]||"";$(k).addEventListener("input",function(){S[k]=this.value;save();renderDoc(S.lines.reduce(function(a,l){return a+(M.quote(l).price||0)*l.qty},0))})});
+ S.lines.map(function(l){var r=M.quote(l);return'<tr><td>'+esc(l.room)+'</td><td>'+esc(title(l))+'<br><span style="color:var(--sub)">JAN '+(r.jan||"")+'</span></td><td>幅'+l.w+'×丈'+l.h+'<br>'+hangText(l)+'</td><td>'+(r.err?"—":yen(r.price))+'</td><td>'+l.qty+'</td><td>'+(r.err?"—":yen(r.price*l.qty))+'</td></tr>'}).join("")+
+ '</table></div><div class="nt">・価格は無印良品ネットストアの2026年10月7日時点の価格（税込）です。お届け前に変わることがあります。<br>・受注生産のため、ご注文後のサイズ変更・キャンセル・返品はできません。<br>・お届けまで約10〜14日。サイズにより生地のハギ合わせが入ります。<br>・仕上がり総丈は、正面付けで注文丈＋4cm、天井付けで＋1cm、ハトメで約＋2.5cmです。</div>'}
+["cust","staff","shop"].forEach(function(k){$(k).value=S[k]||"";$(k).addEventListener("input",function(){S[k]=this.value;save();renderDoc(quoteTotal())})});
 function qText(){var tot=0,t="【御見積書】"+today()+"\n"+(S.cust?S.cust+" 様\n":"")+(S.shop?S.shop+(S.staff?"　担当："+S.staff:"")+"\n":"")+"\n";
- S.lines.forEach(function(l,i){var r=M.quote(l);tot+=(r.price||0)*l.qty;t+=(i+1)+". "+l.room+"\n   "+desc(l)+"\n   幅"+l.w+"×丈"+l.h+"cm・"+hangText(l)+"\n   "+yen(r.price||0)+" × "+l.qty+"枚 = "+yen((r.price||0)*l.qty)+"（JAN "+r.jan+"）\n"});
+ S.lines.forEach(function(l,i){var r=M.quote(l);tot+=(r.price||0)*l.qty;t+=(i+1)+". "+l.room+"\n   "+title(l)+"\n   幅"+l.w+"×丈"+l.h+"cm・"+hangText(l)+"\n   "+yen(r.price||0)+" × "+l.qty+"枚 = "+yen((r.price||0)*l.qty)+"（JAN "+r.jan+"）\n"});
  return t+"\n合計（税込） "+yen(tot)+"\n※ネットストア 2026/10/7時点の価格"}
 $("cpy").onclick=function(){var t=qText(),ta=$("qtxt");
  try{navigator.clipboard.writeText(t).then(function(){toast("コピーしました")},function(){ta.hidden=false;ta.value=t;ta.select();toast("下の文章を選択してコピーしてください")})}
  catch(e){ta.hidden=false;ta.value=t;ta.select();toast("下の文章を選択してコピーしてください")}};
-function clrBtn(){$("clrwrap").innerHTML='<button class="sec" id="clr">明細をすべて消す</button>';$("clr").onclick=function(){
- $("clrwrap").innerHTML='<span class="confirm">消しますか？ <button class="sec" id="cy">消す</button><button class="sec" id="cn">やめる</button></span>';
+function clrBtn(){$("clrwrap").innerHTML='<button type="button" class="sec" id="clr">明細をすべて消す</button>';$("clr").onclick=function(){
+ $("clrwrap").innerHTML='<span class="confirm">消しますか？ <button type="button" class="sec" id="cy">消す</button><button type="button" class="sec" id="cn">やめる</button></span>';
  $("cy").onclick=function(){S.lines=[];save();renderQuote();clrBtn();toast("明細を消しました")};$("cn").onclick=clrBtn}}
 clrBtn();
 
-/* --- タブ --- */
+/* ---------- タブ ---------- */
 function go(t){S.tab=t;["make","quote","memo"].forEach(function(k){$("pg-"+k).hidden=k!==t});
  [].forEach.call(document.querySelectorAll(".tabs button"),function(b){b.classList.toggle("on",b.dataset.t===t)});
- $("sum").hidden=t==="memo";renderSum();save();window.scrollTo(0,0)}
+ renderSum();save();window.scrollTo(0,0)}
 document.querySelector(".tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(b)go(b.dataset.t)});
 
-function renderAll(){renderFab();renderAbout();renderStyle();renderSize();renderSum();save()}
-$("mcount").textContent=M.count();$("w").value=S.w;$("h").value=S.h;$("room").value=S.room||"";
-fixStyle();renderAll();renderQuote();
+$("mcount").textContent=M.count();
+fixStyle();renderList();renderQuote();
+if(S.view==="item"){$("v-list").hidden=true;$("v-item").hidden=false;renderItem()}
 var hs=(location.hash||"").slice(1);go(["make","quote","memo"].indexOf(hs)>=0?hs:(S.tab||"make"));
 window.MUJI_CURTAIN.lines=function(){return S.lines.slice()};
-})();
-
-/* ===== オープニング：カーテンが閉じ、タッセルで留められて真ん中に I が現れる ===== */
-(function(){
-var op=document.getElementById("op");if(!op)return;
-var NS="http://www.w3.org/2000/svg",L=document.getElementById("opL"),R=document.getElementById("opR"),sill=document.getElementById("opSill"),
- rail=document.getElementById("opRail"),c1=document.getElementById("opC1"),c2=document.getElementById("opC2"),BG=getComputedStyle(document.documentElement).getPropertyValue("--acc").trim()||"#9f2a37";
-var CX=619,Y0=470,YW=630,YB=706,N=4,G=3;
-/* 左カーテンの形（外側の端=552）：[上の左右, 留め位置の左右, 裾の左右] */
-/* 内側の端はまっすぐ（x=597）に保ち、左右のカーテンの間にできる空間を「I」の形にする */
-var BUNCH=[[546,554],[546,554],[546,554]],CLOSE=[[546,619],[546,619],[546,619]],TIE=[[546,597],[572,597],[550,597]];
-var mix=function(a,b,t){return a+(b-a)*t},ease=function(t){t=Math.max(0,Math.min(1,t));return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
-function shape(a,b,t){return a.map(function(r,i){return[mix(r[0],b[i][0],t),mix(r[1],b[i][1],t)]})}
-function mk(g){var ps=[];for(var i=0;i<N;i++){var p=document.createElementNS(NS,"path");g.appendChild(p);ps.push(p)}
- var tb=document.createElementNS(NS,"rect");tb.setAttribute("height","13");tb.setAttribute("rx","3");tb.setAttribute("stroke",BG);tb.setAttribute("stroke-width","3");g.appendChild(tb);return{ps:ps,tb:tb}}
-var LP=mk(L),RP=mk(R);
-function edge(sh,u,mir){var x=[0,1,2].map(function(k){return mix(sh[k][0],sh[k][1],u)});return mir?x.map(function(v){return 2*CX-v}):x}
-function strip(a,b){var y0=Y0,yw=YW,yb=YB;
- return"M"+a[0]+" "+y0+"C"+a[0]+" "+(y0+(yw-y0)*.55)+" "+a[1]+" "+(yw-(yw-y0)*.3)+" "+a[1]+" "+yw+"C"+a[1]+" "+(yw+(yb-yw)*.35)+" "+a[2]+" "+(yb-(yb-yw)*.45)+" "+a[2]+" "+yb+
-  "L"+b[2]+" "+yb+"C"+b[2]+" "+(yb-(yb-yw)*.45)+" "+b[1]+" "+(yw+(yb-yw)*.35)+" "+b[1]+" "+yw+"C"+b[1]+" "+(yw-(yw-y0)*.3)+" "+b[0]+" "+(y0+(yw-y0)*.55)+" "+b[0]+" "+y0+"Z"}
-function draw(P,sh,mir,tie){for(var i=0;i<N;i++){var u0=i/N,u1=(i+1)/N,a=edge(sh,u0,mir),b=edge(sh,u1,mir),h=G/2;
-  var ia=i?h:0,ib=i<N-1?h:0;a=a.map(function(v){return v+(mir?-ia:ia)});b=b.map(function(v){return v-(mir?-ib:ib)});P.ps[i].setAttribute("d",strip(a,b))}
- var w=edge(sh,0,mir)[1],e=edge(sh,1,mir)[1],x0=Math.min(w,e)-3,x1=Math.max(w,e)+3,hh=13*tie;
- P.tb.setAttribute("x",x0);P.tb.setAttribute("width",x1-x0);P.tb.setAttribute("y",YW-6.5*tie);P.tb.setAttribute("height",hh);P.tb.setAttribute("opacity",tie>0?1:0)}
-function frame(ms){var s=ms/1000,sh;
- var r=ease(s/0.5);rail.setAttribute("transform","scale("+r+" 1)");sill.setAttribute("transform","scale("+ease((s-.15)/.5)+" 1)");c1.setAttribute("opacity",ease((s-.35)/.2));c2.setAttribute("opacity",ease((s-.35)/.2));
- if(s<1.2)sh=shape(BUNCH,CLOSE,ease((s-.4)/.8));else sh=shape(CLOSE,TIE,ease((s-1.35)/.8));
- var tie=ease((s-1.95)/.25);draw(LP,sh,false,tie);draw(RP,sh,true,tie);
- if(s>1.7)op.classList.add("ltr");if(s>2.3)op.classList.add("subon")}
-var done=false;function close(){if(done)return;done=true;op.classList.add("out");setTimeout(function(){op.hidden=true},500)}
-op.addEventListener("click",close);
-var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-if(reduce){frame(4000);setTimeout(close,1400);return}
-var t0=null;function loop(ts){if(done)return;if(t0==null)t0=ts;var e=ts-t0;frame(e);if(e<3700)requestAnimationFrame(loop);else close()}
-frame(0);requestAnimationFrame(loop);
 })();
 </script>

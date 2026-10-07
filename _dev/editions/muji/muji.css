@@ -68,3 +68,8 @@
 #ideahome .nwy{font-size:.84rem;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 #ideahome .nwm2{display:block;width:100%;margin-top:8px;min-height:40px;border:1px solid var(--line);background:#fff;color:var(--acc);border-radius:10px;font:inherit;font-size:.82rem;font-weight:700}
 #ideahome .nwn{font-size:.68rem;color:var(--sub);margin:8px 0 0;line-height:1.6}
+
+#ideahome .phq{display:flex;align-items:center;justify-content:center;gap:10px;position:relative;min-height:40px}
+#ideahome .phback{position:absolute;left:0;display:flex;align-items:center;gap:2px;border:1px solid var(--line);background:#fff;color:var(--acc);border-radius:999px;min-height:40px;padding:0 14px 0 8px;font:inherit;font-size:.85rem;font-weight:700;cursor:pointer}
+#ideahome .phc{grid-template-columns:64px minmax(0,1fr) auto}
+#ideahome .phgo{color:var(--sub)}
