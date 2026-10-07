@@ -1,0 +1,214 @@
+<title>H&amp;B</title>
+<style>
+/* Layout: 素材知識と同じ骨格（白地・エンジ）。上に4つのタブ、「おすすめ」は3つの質問 → 結果カード */
+:root{
+  --bg:#ffffff;--card:#ffffff;--ink:#333333;--sub:#6f696a;--line:#e3dfdf;--fill:#ffffff;
+  --acc:#9f2a37;--accink:#ffffff;--accbg:#f9eef0;--ok:#4f6b45;--soft:#faf7f7;--shadow:rgba(60,30,35,.05);
+  --rc:12px;color-scheme:light;
+  --f-body:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+main{max-width:720px;margin:0 auto;padding:0 16px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+header.hd{position:sticky;top:0;z-index:5;background:var(--bg);margin:0 -16px;padding:10px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;min-height:58px}
+.back{display:flex;align-items:center;gap:2px;border:1px solid var(--line);background:var(--card);color:var(--acc);border-radius:999px;min-height:40px;padding:0 14px 0 8px;font-weight:700;font-size:.85rem}
+.hdt{margin-left:auto;text-align:right;line-height:1.25}
+.hdt b{display:block;font-size:.95rem}
+.hdt small{color:var(--sub);font-size:.7rem}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:14px}
+.seg button{border:0;background:var(--card);color:var(--sub);min-height:44px;font-size:.84rem;padding:0 2px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--acc);color:var(--accink);font-weight:700}
+h2{font-size:1rem;margin:22px 0 10px;border-left:3px solid var(--acc);padding-left:8px}
+.lead{font-size:.82rem;color:var(--sub);margin:10px 0 0}
+/* 質問 */
+.q{margin-top:16px}
+.q>b{display:block;font-size:.92rem;margin-bottom:8px}
+.q>b small{font-weight:400;color:var(--sub);font-size:.74rem;margin-left:6px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:999px;min-height:42px;padding:0 14px;font-size:.86rem}
+.opt.on{border-color:var(--acc);background:var(--accbg);color:var(--acc);font-weight:700}
+.who{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:10px -16px 0;padding:0 16px 2px}
+.who::-webkit-scrollbar{display:none}
+.who button{flex:none;border:1px dashed var(--acc);background:#fff;color:var(--acc);border-radius:10px;min-height:44px;padding:6px 12px;font-size:.8rem;text-align:left;line-height:1.35;max-width:200px}
+/* 結果 */
+.res{margin-top:20px;border:1.5px solid var(--acc);border-radius:16px;overflow:hidden}
+.res .rh{background:var(--accbg);padding:14px 16px}
+.res .rh small{display:block;font-size:.72rem;color:var(--acc);font-weight:700;letter-spacing:.06em}
+.res .rh b{display:block;font-size:1.15rem;margin-top:2px}
+.res .rh p{margin:6px 0 0;font-size:.84rem;line-height:1.65}
+.res .rb{padding:12px 16px 16px;display:flex;flex-direction:column;gap:12px}
+.step{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+.step>i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.step .t{font-size:.72rem;color:var(--sub)}
+.prod{display:flex;justify-content:space-between;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);padding:2px 0}
+.prod b{font-size:.88rem;font-weight:600}
+.prod span{font-size:.86rem;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.prod:hover b{color:var(--acc);text-decoration:underline}
+.say{padding:10px 12px;border-left:3px solid var(--acc);background:var(--soft);font-size:.84rem;border-radius:0 8px 8px 0}
+.say::before{content:"接客のひとこと";display:block;font-size:.68rem;color:var(--acc);font-weight:700;letter-spacing:.04em}
+.tot{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;font-size:.86rem}
+.tot b{font-size:1.05rem;font-variant-numeric:tabular-nums}
+.care{font-size:.72rem;color:var(--sub);line-height:1.7;margin-top:14px}
+/* カード一覧 */
+.list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.k{border:1px solid var(--line);border-radius:var(--rc);background:var(--card);box-shadow:0 1px 3px var(--shadow)}
+.k>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px}
+.k>summary::-webkit-details-marker{display:none}
+.k>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin-right:4px}
+.k[open]>summary::after{transform:rotate(-135deg)}
+.k .t b{display:block;font-size:.95rem}
+.k .t span{display:block;font-size:.78rem;color:var(--sub);line-height:1.45}
+.k .bd{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
+.k dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:0;font-size:.84rem}
+.k dt{color:var(--sub);white-space:nowrap}
+.k dd{margin:0}
+.tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:.68rem;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--sub);background:#fff}
+.tag.fx{border-color:var(--acc);color:var(--acc)}
+.flow{display:flex;flex-direction:column;gap:0;margin-top:12px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.flow div{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;padding:10px 14px;align-items:start}
+.flow div+div{border-top:1px solid var(--line)}
+.flow i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--accbg);color:var(--acc);font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.flow b{display:block;font-size:.9rem}
+.flow span{display:block;font-size:.8rem;color:var(--sub)}
+.note{font-size:.72rem;color:var(--sub);margin-top:18px;line-height:1.7}
+</style>
+
+<main>
+<header class="hd">
+  <button class="back" id="hb-back" type="button" aria-label="idea のメニューに戻る"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button>
+  <span class="hdt"><b>H&amp;B（ヘルス&amp;ビューティー）</b><small>idea</small></span>
+</header>
+<div class="seg" id="seg" role="tablist">
+  <button data-t="rec" class="on">おすすめ</button><button data-t="series">シリーズ</button><button data-t="purpose">目的別</button><button data-t="basics">使い方</button>
+</div>
+
+<section id="t-rec">
+  <p class="lead">お客さまに3つ聞いて、合うスキンケアを出します。下の「よくあるお客さま」から選ぶこともできます。</p>
+  <div class="who" id="who"></div>
+  <div class="q"><b>1. いちばん気になること</b><div class="opts" id="q1"></div></div>
+  <div class="q"><b>2. 肌の感じ・好きな使い心地</b><div class="opts" id="q2"></div></div>
+  <div class="q"><b>3. お手入れの手間</b><div class="opts" id="q3"></div></div>
+  <div id="res"></div>
+  <p class="care">肌に合わないときは使うのをやめるよう伝えてください。赤み・かゆみが続く、ニキビがひどいなど肌トラブルが続くときは、皮膚科への相談をすすめてください。効果の言い方は、商品ページや表示の範囲にとどめます。</p>
+</section>
+<section id="t-series" hidden>
+  <p class="lead">基礎化粧品の5つのシリーズと、組み合わせて使う美容液です。どのシリーズもジェンダーレス・エイジレスで、組み合わせて使えます。</p>
+  <div class="list" id="slist"></div>
+</section>
+<section id="t-purpose" hidden>
+  <p class="lead">クレンジング・洗顔・日焼け止め・オイル・ヘアケアを、目的から選びます。</p>
+  <div class="list" id="plist"></div>
+</section>
+<section id="t-basics" hidden>
+  <h2>使う順番</h2>
+  <div class="flow">
+    <div><i>1</i><p style="margin:0"><b>クレンジング</b><span>メイクや日焼け止めを落とす（夜）</span></p></div>
+    <div><i>2</i><p style="margin:0"><b>洗顔</b><span>汗や皮脂、汚れを落とす</span></p></div>
+    <div><i>3</i><p style="margin:0"><b>導入美容液</b><span>使う場合は、洗顔のあと・化粧水の前に</span></p></div>
+    <div><i>4</i><p style="margin:0"><b>化粧水</b><span>うるおいを与える</span></p></div>
+    <div><i>5</i><p style="margin:0"><b>美容液</b><span>気になることに合わせて足す</span></p></div>
+    <div><i>6</i><p style="margin:0"><b>乳液・クリーム</b><span>うるおいを保つ。オールインワンなら、4〜6がこれ1つ</span></p></div>
+    <div><i>7</i><p style="margin:0"><b>日焼け止め</b><span>朝の最後に。UV乳液のシリーズは、乳液と日焼け止めを兼ねられる</span></p></div>
+  </div>
+  <h2>サイズの選び方</h2>
+  <div class="list" id="sizes"></div>
+  <h2>よく聞かれる言葉</h2>
+  <div class="list" id="terms"></div>
+</section>
+<p class="note">商品名・価格・SPF/PAは無印良品ネットストアの2026年10月7日時点の情報です。シリーズの説明は、ネットストアの商品説明と無印良品のスタッフ記事をもとに書き直したものです。オイルの特長と言葉の説明は、一般的な内容をまとめたものです。</p>
+</main>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var yen=function(n){return"¥"+Number(n).toLocaleString("ja-JP")};
+/* 商品：[名前, JAN, 価格] */
+var P={
+ sen_lo_s:["敏感肌用化粧水 さっぱり 300mL","4550583434939",790],sen_lo_m:["敏感肌用化粧水 しっとり 300mL","4550583434960",790],sen_lo_h:["敏感肌用化粧水 高保湿 300mL","4550583434991",990],
+ sen_em_s:["敏感肌用乳液 さっぱり 200mL","4550584935305",790],sen_em_m:["敏感肌用乳液 しっとり 200mL","4550584935336",790],sen_em_h:["敏感肌用乳液 高保湿 200mL","4550584935367",990],
+ sen_aio:["敏感肌用オールインワンジェル 150g","4550584935404",1490],sen_cr:["敏感肌用クリーム 50g","4550584935381",1590],sen_ser:["敏感肌用薬用美容液 50mL","4550584464829",1490],
+ sen_tr_s:["敏感肌用お試しセット さっぱり 20mL×3","4550584935268",990],sen_tr_m:["敏感肌用お試しセット しっとり 20mL×3","4550584935275",990],sen_tr_h:["敏感肌用お試しセット 高保湿 20mL×3","4550584935282",990],
+ clr_lo:["薬用クリアケア化粧水 300mL","4550583924430",1690],clr_em:["薬用クリアケア乳液 200mL","4550583924461",1690],clr_aio:["薬用クリアケアオールインワンジェル 200g","4550583924508",2290],
+ clr_spot:["薬用クリアケアスポットエッセンス 10g","4550583924515",990],clr_wipe:["薬用クリアケアふき取りローション 300mL","4550583924393",1690],clr_tr:["薬用クリアケアお試しセット 20mL×3","4550583924416",1190],
+ brt_lo:["薬用ブライトニング化粧水 300mL","4550583926663",1990],brt_uv:["薬用ブライトニングUV乳液 200mL（SPF41 PA+++）","4550583926700",2290],brt_ser:["薬用ブライトニング美容液 50mL","4550583926687",1990],brt_tr:["薬用ブライトニングお試しセット 20mL×3","4550583926649",1490],
+ wrk_lo:["薬用リンクルブライト化粧水 300mL","4550583991562",2990],wrk_uv:["薬用リンクルブライトUV乳液 200mL（SPF35 PA+++）","4550583991623",3290],wrk_aio:["薬用リンクルブライトオールインワンクリーム 150g","4550583991685",2690],wrk_ser:["薬用リンクルブライト美容液 50mL","4550583991647",2990],wrk_cr:["薬用リンクルブライトクリーム 45g","4550583991654",2490],
+ age_lo:["エイジングケア化粧水 300mL","4550583451141",2290],age_em:["エイジングケア乳液 200mL","4548076029076",2290],age_aio:["エイジングケアオールインワンクリーム 150g","4548076029113",2290],age_cr:["エイジングケアクリーム 45g","4550583451165",2290],age_tr:["エイジングケアお試しセット 20mL×3","4548076029090",1290],
+ fer:["発酵導入美容液 50mL","",1990],
+ hc_c:["高濃度美容液 セラミド配合 30mL","",2490],
+ uv_milk:["日焼け止めミルク 150g（SPF50+ PA++++）","",1290],uv_gel:["日焼け止めジェル 150mL（SPF50+ PA++++）","",1290],
+ cl_oil:["マイルドオイルクレンジング 300mL","4550583941208",990],cl_gel:["マイルドジェルクレンジング 150g","4550583941178",690],cl_milk:["マイルドミルククレンジング 200mL","4550583941239",990],cl_sen:["敏感肌用オイルクレンジング 300mL","4550584464843",1290],
+ fw_sen:["敏感肌用薬用泡洗顔フォーム 200mL","4550584935947",850],fw_acne:["マイルド薬用アクネ泡洗顔フォーム 200mL","4550583941147",890],fw_moist:["マイルド保湿洗顔フォーム 150g","4550583941116",790],fw_mild:["マイルド泡洗顔フォーム 200mL","4550583941123",750]
+};
+/* JAN を確かめられなかった商品（""）は、スキンケアの一覧ページへリンクする */
+function link(k){var p=P[k];var u=p[1]?"https://www.muji.com/jp/ja/store/cmdty/detail/"+p[1]:"https://www.muji.com/jp/ja/store/cmdty/section/T20201";
+ return'<a class="prod" href="'+u+'" target="_blank" rel="noopener"><b>'+esc(p[0])+'</b><span>'+yen(p[2])+'</span></a>'}
+/* シリーズ */
+var S={
+ sen:{n:"敏感肌用シリーズ",who:"はじめてそろえる方、肌がゆらぎやすい・刺激が気になる方",d:"天然由来成分100％にこだわった、いちばんシンプルな処方の低刺激シリーズ。セラミドと5種のアミノ酸を配合。化粧水と乳液は「さっぱり・しっとり・高保湿」の3つから肌に合わせて選べます。",
+  set:function(a){var t=a.q2==="oily"?"s":a.q2==="dry"?"h":"m";return a.q3==="quick"?["sen_aio"]:["sen_lo_"+t,"sen_em_"+t]},trial:function(a){return"sen_tr_"+(a.q2==="oily"?"s":a.q2==="dry"?"h":"m")},
+  add:["sen_ser","sen_cr"],say:"いちばんシンプルな処方なので、はじめての方や肌がゆらぎやすい時期にも使いやすいです。使い心地は3つから選べます。",
+  line:["sen_lo_s","sen_lo_m","sen_lo_h","sen_em_m","sen_aio","sen_cr","sen_ser"]},
+ clr:{n:"薬用クリアケアシリーズ",who:"ニキビや肌荒れを防ぎたい方、テカリやベタつきが気になる方",d:"ニキビや肌荒れを防ぐ有効成分を配合した、医薬部外品のシリーズ。さっぱりした使い心地で、シトラスの香り。シリーズの商品はすべて同じ有効成分です。",
+  set:function(a){return a.q3==="quick"?["clr_aio"]:["clr_lo","clr_em"]},trial:function(){return"clr_tr"},add:["clr_spot","clr_wipe"],say:"ニキビや肌荒れを防ぐ薬用のシリーズです。さっぱりしているので、汗をかく季節やベタつきが気になる方に。",
+  line:["clr_lo","clr_em","clr_aio","clr_spot","clr_wipe"]},
+ brt:{n:"薬用ブライトニングシリーズ",who:"シミ・そばかすを防ぎたい方、外で過ごすことが多い方",d:"メラニンの生成を抑えて、シミ・そばかすを防ぐ医薬部外品のシリーズ。みずみずしい使い心地で、夏にも使いやすい。UV乳液（SPF41 PA+++）は、朝の乳液と日焼け止めを兼ねられます。",
+  set:function(a){return["brt_lo","brt_uv"]},trial:function(){return"brt_tr"},add:["brt_ser"],say:"シミ・そばかすを防ぐ薬用のシリーズです。朝はUV乳液を最後に塗れば、日焼け止めも兼ねられます。",
+  line:["brt_lo","brt_uv","brt_ser"]},
+ wrk:{n:"薬用リンクルブライトシリーズ",who:"シワとシミを一緒にケアしたい方、乾燥が気になる方",d:"シワを改善し、メラニンの生成を抑えてシミ・そばかすを防ぐ医薬部外品のシリーズ。保湿感が高く、乾燥する季節にも。UV乳液（SPF35 PA+++）もあります。",
+  set:function(a){return a.q3==="quick"?["wrk_aio"]:["wrk_lo","wrk_uv"]},trial:null,add:["wrk_ser","wrk_cr"],say:"シワの改善と、シミ・そばかすの予防をひとつのシリーズでできます。しっとりした使い心地です。",
+  line:["wrk_lo","wrk_uv","wrk_aio","wrk_ser","wrk_cr"]},
+ age:{n:"エイジングケアシリーズ",who:"乾燥やハリ不足など、年齢による変化が気になり始めた方",d:"天然由来成分100％。11種の植物エキスに、ビタミンC誘導体・レチノール誘導体・米ぬか発酵液などを配合したうるおいケア。合成香料・鉱物油・着色料・パラベン・アルコール・フェノキシエタノール不使用、弱酸性。",
+  set:function(a){return a.q3==="quick"?["age_aio"]:["age_lo","age_em"]},trial:function(){return"age_tr"},add:["age_cr"],say:"乾燥やハリが気になり始めた方に。まずはお試しセットで使い心地を確かめるのもおすすめです。",
+  line:["age_lo","age_em","age_aio","age_cr"]}
+};
+var Q1=[["first","はじめて・刺激が気になる","sen"],["acne","ニキビ・肌荒れ・テカリ","clr"],["spot","シミ・そばかす","brt"],["wrinkle","シワ","wrk"],["dry","乾燥・ハリ・年齢肌","age"]],
+ Q2=[["oily","さっぱりが好き・ベタつく"],["normal","しっとり"],["dry","とても乾燥する"]],Q3=[["full","しっかり（化粧水＋乳液）"],["quick","手早く（オールインワン）"]];
+var WHO=[["はじめてスキンケアをそろえる方",{q1:"first",q2:"normal",q3:"full"}],["季節の変わり目に肌がゆらぐ方",{q1:"first",q2:"dry",q3:"full"}],["汗やマスクで肌荒れしやすい方",{q1:"acne",q2:"oily",q3:"full"}],["外にいることが多い方",{q1:"spot",q2:"normal",q3:"full"}],["忙しくて手早く済ませたい方",{q1:"first",q2:"normal",q3:"quick"}],["乾燥やハリが気になり始めた方",{q1:"dry",q2:"dry",q3:"full"}],["目もとのシワも気になる方",{q1:"wrinkle",q2:"dry",q3:"full"}]];
+var A={q1:"first",q2:"normal",q3:"full"};
+function opts(id,L,k){$(id).innerHTML=L.map(function(o){return'<button type="button" class="opt'+(A[k]===o[0]?" on":"")+'" data-k="'+k+'" data-v="'+o[0]+'">'+esc(o[1])+'</button>'}).join("")}
+function render(){
+ opts("q1",Q1,"q1");opts("q2",Q2,"q2");opts("q3",Q3,"q3");
+ var sk=Q1.filter(function(o){return o[0]===A.q1})[0][2],s=S[sk],set=s.set(A),tot=0;set.forEach(function(k){tot+=P[k][2]});
+ var cl=A.q1==="first"?"cl_sen":A.q2==="oily"?"cl_oil":"cl_milk",fw=A.q1==="first"?"fw_sen":A.q1==="acne"?"fw_acne":A.q2==="dry"?"fw_moist":"fw_mild";
+ var uv=(sk==="brt"||sk==="wrk")&&A.q3!=="quick"?null:(A.q2==="oily"?"uv_gel":"uv_milk");
+ var extra=A.q2==="dry"?["fer","hc_c"]:["fer"];
+ var h='<div class="res"><div class="rh"><small>おすすめのシリーズ</small><b>'+esc(s.n)+'</b><p>'+esc(s.who)+'向け。'+esc(s.d)+'</p></div><div class="rb">'+
+  '<div class="step"><i>1</i><div><div class="t">基本のセット</div>'+set.map(link).join("")+'<div class="tot"><span>セットの合計</span><b>'+yen(tot)+'</b></div></div></div>'+
+  (s.trial?'<div class="step"><i>2</i><div><div class="t">迷ったら、まずは使い心地を</div>'+link(s.trial(A))+'</div></div>':"")+
+  '<div class="step"><i>'+(s.trial?3:2)+'</i><div><div class="t">さらに足すなら</div>'+s.add.concat(extra).map(link).join("")+'</div></div>'+
+  '<div class="step"><i>'+(s.trial?4:3)+'</i><div><div class="t">落とす・守る</div>'+link(cl)+link(fw)+(uv?link(uv):'<div class="t" style="margin-top:4px">朝はシリーズのUV乳液で、日焼け止めも兼ねられます。</div>')+'</div></div>'+
+  '<div class="say">'+esc(s.say)+'</div></div></div>';
+ $("res").innerHTML=h}
+$("who").innerHTML=WHO.map(function(w,i){return'<button type="button" data-w="'+i+'">'+esc(w[0])+'</button>'}).join("");
+$("who").addEventListener("click",function(e){var b=e.target.closest("[data-w]");if(!b)return;var w=WHO[+b.dataset.w][1];A={q1:w.q1,q2:w.q2,q3:w.q3};render();$("res").scrollIntoView({behavior:"smooth",block:"start"})});
+document.querySelector("#t-rec").addEventListener("click",function(e){var b=e.target.closest(".opt");if(!b)return;A[b.dataset.k]=b.dataset.v;render()});
+/* シリーズ一覧 */
+$("slist").innerHTML=["sen","clr","brt","wrk","age"].map(function(k){var s=S[k];return'<details class="k"><summary><span class="t"><b>'+esc(s.n)+'</b><span>'+esc(s.who)+'</span></span></summary><div class="bd"><div style="font-size:.84rem;line-height:1.7">'+esc(s.d)+'</div><div>'+s.line.map(link).join("")+'</div><div class="say">'+esc(s.say)+'</div></div></details>'}).join("")+
+ '<details class="k"><summary><span class="t"><b>発酵導入美容液</b><span>どのシリーズとも合わせられる、化粧水の前の美容液</span></span></summary><div class="bd"><div style="font-size:.84rem;line-height:1.7">洗顔のあと・化粧水の前に使う導入美容液。成分の65％以上が米ぬか発酵液で、濃厚なうるおいが特長。50mLと100mL（大容量）、使いやすいパッドタイプもあります。</div><div>'+link("fer")+'</div><div class="say">いつものお手入れの最初に1つ足すだけで使えます。</div></div></details>'+
+ '<details class="k"><summary><span class="t"><b>高濃度美容液</b><span>成分で選ぶ美容液（各30mL ¥2,490）</span></span></summary><div class="bd"><dl><dt>ビタミンC誘導体</dt><dd>透明感やキメを整える目的で使われることが多い成分</dd><dt>ナイアシンアミド</dt><dd>ハリやつやを目的に使われることが多い成分</dd><dt>レチノール誘導体</dt><dd>ハリや年齢による変化のケアに使われることが多い成分</dd><dt>セラミド</dt><dd>肌のうるおいを保つ成分。乾燥が気になる方に</dd></dl><div class="say">気になることに合わせて、成分で1本選べます。いつものシリーズに足して使えます。</div></div></details>';
+/* 目的別 */
+var PUR=[
+ {n:"クレンジング",one:"メイクの濃さと肌の感じで選ぶ",d:[["オイル","しっかりメイクも落としやすい。マイルドオイル（¥990）、敏感肌用オイル（¥1,290）"],["ジェル","肌あたりがやさしく、ナチュラルメイクに。マイルドジェル（¥690）"],["ミルク","乾燥しやすい方に。マイルドミルク（¥990）"],["バーム","とろけてなじむ。マイルドクレンジングバーム（¥1,290）"],["シート","旅行やすぐ落としたいときに。12枚（¥390）"]],say:"メイクをしっかりする日はオイル、ナチュラルな日はジェルやミルクと使い分けるのもおすすめです。"},
+ {n:"洗顔",one:"肌の悩みと使い心地で選ぶ",d:[["泡で出る","泡立て不要。マイルド泡（¥750）、敏感肌用薬用泡（¥850）、ニキビを防ぐマイルド薬用アクネ泡（¥890）"],["チューブ","マイルド（¥490）、うるおいを残すマイルド保湿（¥790）、スクラブ（¥590）"],["クレイ","パックとしても使えるマイルドクレイ洗顔フォーム（¥990）"],["石けん","精油の香りのうるおい洗顔石けん（¥690）"]],say:"朝は泡で出るタイプ、夜はしっかり泡立てるタイプなど、時間帯で分ける方も多いです。"},
+ {n:"日焼け止め",one:"使う場面と、SPF・PAで選ぶ",d:[["ミルク・ジェル","SPF50+ PA++++。顔にも体にも。本体 ¥1,290、携帯用 ¥590"],["ミスト","SPF50+ PA++++。塗り直しや髪・背中に。70mL（¥890）"],["トーンアップ","SPF40 PA+++。肌を明るく見せる下地がわりに。50g（¥990）"],["パウダー","SPF50+ PA++++。メイクの上から塗り直せる皮脂吸着タイプ（¥990）"],["UV乳液","ブライトニング（SPF41）、リンクルブライト（SPF35）は、乳液と日焼け止めを兼ねる"]],say:"日常の通勤ならUV乳液でも十分なことが多く、レジャーにはSPF50+のミルクやジェルが安心です。"},
+ {n:"オイル",one:"顔・体・髪に使える、1種類の植物オイル",d:[["ホホバ","さらっとしてなじみやすく、顔にも髪にも使いやすい（200mL ¥2,490）"],["スウィートアーモンド","のびがよく、マッサージに向く（200mL ¥1,890）"],["オリーブ","しっとりした保湿感（200mL ¥1,690）"],["マカデミアナッツ","なじみがよく、なめらか（200mL ¥2,790）"],["アルガン","髪や乾燥が気になるところに（携帯用50mL ¥2,990）"],["スクワラン","軽い使い心地でべたつきにくい（携帯用50mL ¥990）"]],say:"はじめての方には、さらっとして顔にも髪にも使えるホホバがおすすめです。"},
+ {n:"ヘアケア",one:"髪の悩みで選ぶ",d:[["植物発酵液 シャンプー","「うるおい」と「さらさら」の2つ（400mL ¥1,290）。コンディショナー、ヘアマスクもある"],["薬用スカルプ","頭皮が気になる方に。シャンプー（¥1,490）、スカルプローション（¥1,390）"],["ダメージリペア","傷んだ髪に。ヘアオイル（¥1,190）、ヘアミルク（¥1,090）"],["スタイリング","ヘアクリーム（¥690）、ヘアバーム（¥790）"]],say:"広がりやすい髪には「うるおい」、ペタッとしやすい髪には「さらさら」がおすすめです。"}
+];
+$("plist").innerHTML=PUR.map(function(o){return'<details class="k"><summary><span class="t"><b>'+esc(o.n)+'</b><span>'+esc(o.one)+'</span></span></summary><div class="bd"><dl>'+o.d.map(function(r){return'<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>'}).join("")+'</dl><div class="say">'+esc(o.say)+'</div></div></details>'}).join("");
+/* 使い方：サイズ・言葉 */
+function kd(L){return L.map(function(o){return'<details class="k"><summary><span class="t"><b>'+esc(o[0])+'</b><span>'+esc(o[1])+'</span></span></summary><div class="bd"><div style="font-size:.84rem;line-height:1.7">'+esc(o[2])+'</div></div></details>'}).join("")}
+$("sizes").innerHTML=kd([["お試しセット","化粧水・乳液などが20mLずつ","はじめてのシリーズを試すときに。肌に合うか、使い心地が好みかを確かめられます。"],["携帯用","30〜50mL","旅行やジム、職場に置くときに。"],["本体","化粧水300mL・乳液200mL など","毎日使うなら本体が基本。"],["詰替用","本体より少し少なく、割安","2本目からは詰替用で。ゴミも減らせます。"]]);
+$("terms").innerHTML=kd([["医薬部外品（薬用）","効果が認められた有効成分を一定量配合したもの","ニキビ・肌荒れを防ぐ、シミ・そばかすを防ぐ、シワを改善するなど、決められた範囲の効果を表示できます。無印良品では「薬用」と付いた商品です。"],["SPF と PA","日焼け止めの強さの目安","SPFは主にシミや赤みの原因になる紫外線（UVB）を防ぐ力、PAは肌の奥まで届く紫外線（UVA）を防ぐ力の目安。PAは＋が多いほど高い。"],["導入美容液","化粧水の前に使う美容液","洗顔後の肌をやわらかく整え、次に使う化粧水などをなじみやすくします。"],["オールインワン","化粧水・美容液・乳液などを1つで","手早く済ませたい方や、朝の忙しい時間に。"],["天然由来成分100％","無印良品の基礎化粧品シリーズの考え方","敏感肌用・エイジングケア・薬用シリーズなどは、天然由来成分100％にこだわってつくられています。詳しい成分は商品ページで確認します。"]]);
+/* タブ */
+$("seg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;[].forEach.call($("seg").children,function(x){x.classList.toggle("on",x===b)});["rec","series","purpose","basics"].forEach(function(t){$("t-"+t).hidden=t!==b.dataset.t});window.scrollTo(0,0)});
+render();
+function tell(m){try{parent.postMessage({mj:m},"*")}catch(e){}}
+$("hb-back").addEventListener("click",function(){tell("sub-close")});tell("sub-ready");
+})();
+</script>

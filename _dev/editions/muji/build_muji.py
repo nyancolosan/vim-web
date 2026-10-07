@@ -13,7 +13,7 @@ s = open(tmp, encoding="utf-8").read()
 s = s.replace('<title>VIM Beta</title>', '<title>idea</title>', 1)
 s = s.replace('<div class="betatag" aria-hidden="true">BETA</div>', '', 1)
 s = s.replace('<meta name="apple-mobile-web-app-title" content="VIM"><meta name="application-name" content="VIM">', '<meta name="apple-mobile-web-app-title" content="idea"><meta name="application-name" content="idea">', 1)
-s = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="idea：無印良品の店舗スタッフ向け。部屋に家具を置く・オーダーカーテンの見積り・素材知識">', s, count=1)
+s = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="idea：無印良品の店舗スタッフ向け。部屋に家具を置く・オーダーカーテンの見積り・H&B・素材知識">', s, count=1)
 s = s.replace('aria-label="VIM visual × interior × modeling"', 'aria-label="idea"')
 # 2) ロゴを idea に（画面・見積書・PDF で使う VIM_W を差し替え、下の英字 VIM_T はなし。枠は VIM と同じ）
 s, n = re.subn(r"VIM_W='[^']*'", lambda m: "VIM_W='%s'" % L["WORD"], s, count=1); assert n == 1
@@ -65,5 +65,9 @@ open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "curtain.html")
 sys.path.insert(0, os.path.join(E, "knowledge"))
 from build_knowledge import build as build_knowledge
 open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "knowledge.html"), "w", encoding="utf-8").write(build_knowledge())
+# H&B（同じフォルダの hb.html として一緒に公開する）
+sys.path.insert(0, os.path.join(E, "hb"))
+from build_hb import build as build_hb
+open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "hb.html"), "w", encoding="utf-8").write(build_hb())
 # アイコンは idea/make_idea.py が idea/idea-icon.svg に書き出す
 print("ok", len(s.encode()) // 1024, "KB,", len(cat), "items")
