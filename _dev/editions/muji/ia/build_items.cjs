@@ -10,8 +10,8 @@ JSON.parse(fs.readFileSync(path.join(M, "catalog.json"), "utf8")).forEach(p => p
 // 新商品（news.json）
 const N = JSON.parse(fs.readFileSync(path.join(M, "news", "news.json"), "utf8")), NC = Object.fromEntries(N.cats.map(c => [c[0], c[1]]));
 N.items.forEach(i => put(i.jan, i.name, i.cat === "furniture" ? "家具" : NC[i.cat] || "生活雑貨", i.price));
-// 売れ筋（trend.json）
-JSON.parse(fs.readFileSync(path.join(__dirname, "trend.json"), "utf8")).cats.forEach(c => c.items.forEach(i => put(i.jan, i.name, "生活雑貨", i.price)));
+// 売れ筋（trend.json：家具・収納・家電）
+JSON.parse(fs.readFileSync(path.join(__dirname, "trend.json"), "utf8")).cats.forEach(c => c.items.forEach(i => put(i.jan, i.name, ({furniture: "家具", storage: "収納", appliance: "照明・家電"})[c.key] || "生活雑貨", i.price)));
 // オーダーカーテン（curtain.src.html の価格データを読み込む）
 { const s = fs.readFileSync(path.join(M, "curtain", "curtain.src.html"), "utf8");
   const a = s.indexOf("/* ===== 価格データ"), b = s.indexOf("/* ===== 画面 ===== */");

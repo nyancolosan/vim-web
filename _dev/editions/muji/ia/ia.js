@@ -4,7 +4,7 @@
  *   ia_<ユーザー名>                 … アカウント（パスワードは PBKDF2 のハッシュだけ）と、使っている期
  *   ia_<ユーザー名>/periods/<開始日> … 半期の予算と26週の予算
  *   ia_<ユーザー名>/days/<日付>      … その日の会計の一覧 entries（合計・消費税・配送料・付帯作業料・その他・売上・メモ）と、その日の合計 total・net
- * 売れ筋：window.IDEA_TREND（build_muji.py が ia/trend.json を埋め込む） */
+ * 売れ筋（家具・収納・家電）：window.IDEA_TREND（build_muji.py が ia/trend.json を埋め込む） */
 (function(){
 var $=function(i){return document.getElementById(i)};
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
@@ -238,7 +238,7 @@ function itemSection(p,ci){var S=itemStats(p,ci),tq=S.cats.reduce(function(t,c){
  var bar='<div style="display:flex;height:14px;border-radius:999px;overflow:hidden;margin:6px 0 8px">'+S.cats.map(function(c,i){return'<span style="width:'+(c[1]/tq*100)+'%;background:'+COL[i%COL.length]+'" title="'+esc(c[0])+'"></span>'}).join("")+'</div>'+
   '<div style="display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.76rem">'+S.cats.map(function(c,i){return'<span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;background:'+COL[i%COL.length]+'"></i>'+esc(c[0])+' '+c[1]+'点（'+Math.round(c[1]/tq*100)+'%）</span>'}).join("")+'</div>';
  var net="";if(T&&T.top){var hit=T.top.filter(function(x){return S.M[x.jan]}),miss=T.top.filter(function(x){return!S.M[x.jan]}).slice(0,3);
-  net='<p class="ia-note">ネットの売れ筋（生活雑貨）上位10件のうち、この期間に店で売れたのは '+hit.length+'件です。'+(miss.length?'まだ店で売れていない上位：'+miss.map(function(x){return esc(x.name)}).join("、")+'。売場やおすすめで目に入るようにすると伸びしろがあります。':'')+'</p>'}
+  net='<p class="ia-note">ネットの売れ筋（'+esc(T.label||"家具・収納・家電")+'）上位10件のうち、この期間に店で売れたのは '+hit.length+'件です。'+(miss.length?'まだ店で売れていない上位：'+miss.map(function(x){return esc(x.name)}).join("、")+'。売場やおすすめで目に入るようにすると伸びしろがあります。':'')+'</p>'}
  return seg+'<div class="ia-card"><div style="font-size:.78rem;color:#7d7778">'+md(S.a)+'〜'+md(S.b)+'・商品を選んだ会計 '+S.nI+'件／全'+S.nE+'件</div>'+
   '<div style="font-weight:700;font-size:.86rem;margin-top:10px">分類ごとの点数</div>'+bar+
   '<div style="font-weight:700;font-size:.86rem;margin-top:14px">よく売れた商品</div><div class="ia-rk" style="margin-top:6px">'+S.top.map(function(x,i){return'<a href="'+(x.jan?'https://www.muji.com/jp/ja/store/cmdty/detail/'+esc(x.jan):'#')+'" target="_blank" rel="noopener"><i>'+(i+1)+'</i><span style="white-space:normal"><b>'+esc(x.name)+'</b><small>'+esc(x.cat)+'・'+x.n+'件の会計</small></span><span>'+x.qty+'点</span></a>'}).join("")+'</div>'+net+'</div>'}
@@ -258,8 +258,8 @@ function svgWd(p,v){var W=380,H=160,pad=16,bw=(W-pad*2)/7,mx=1;v.forEach(functio
 function rRank(){var T=window.IDEA_TREND;if(!T){$("iab").innerHTML='<p class="ia-note" style="margin-top:16px">売れ筋のデータがまだありません。</p>';return}
  var at=pd(T.at),lab=(at.getMonth()+1)+"月"+at.getDate()+"日時点";
  var item=function(it,k,extra){return'<a href="https://www.muji.com/jp/ja/store/cmdty/detail/'+esc(it.jan)+'" target="_blank" rel="noopener"><i>'+k+'</i><span style="white-space:normal"><b>'+esc(it.name)+'</b><small>'+esc(extra||"")+'</small></span><span>'+yen(it.price)+(it.from?"〜":"")+'</span></a>'};
- $("iab").innerHTML='<h3>今週の売れ筋（生活雑貨）<small>'+lab+'・ネットストア</small></h3><div class="ia-rk">'+T.top.map(function(it,i){return item(it,i+1,it.cats.join("・"))}).join("")+'</div>'+
- '<p class="ia-note">'+esc(T.method)+'。もとのデータは、ネットストアの生活雑貨6カテゴリの「人気順」です。毎週水曜に更新します。</p>'+
+ $("iab").innerHTML='<h3>今週の売れ筋（'+esc(T.label||"家具・収納・家電")+'）<small>'+lab+'・ネットストア</small></h3><div class="ia-rk">'+T.top.map(function(it,i){return item(it,i+1,it.cats.join("・"))}).join("")+'</div>'+
+ '<p class="ia-note">'+esc(T.method)+'。もとのデータは、ネットストアの家具・収納・家電照明の「人気順」です。毎週水曜に更新します。</p>'+
  T.cats.map(function(c){return'<h3>'+esc(c.name)+'<small>人気順</small></h3><div class="ia-rk">'+c.items.map(function(it){return item(it,it.rank,"")}).join("")+'</div>'}).join("")}
 
 /* ---------- 操作 ---------- */
