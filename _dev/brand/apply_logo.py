@@ -27,21 +27,30 @@ open(ad, 'w', encoding='utf-8').write(s)
 nums = [float(x) for x in re.findall(r'-?\d+\.?\d*', L)]; xs, ys = nums[0::2], nums[1::2]
 top = min(ys); bot = max(ys); cx = round((min(xs) + max(xs)) / 2, 1); x0 = min(xs); x1 = max(xs)
 PV = "%s %s" % (cx, top)
-rot = ';'.join(a + ' ' + PV for a in ['0', '-52', '44', '-32', '21', '-11', '5', '0'])
-kt = '0;.15;.32;.48;.63;.77;.9;1'; ks = ';'.join(['.4 0 .6 1'] * 7)
-swing = '<animateTransform attributeName="transform" type="rotate" values="%s" keyTimes="%s" calcMode="spline" keySplines="%s" begin="0.75s" dur="2.1s" fill="freeze"/>' % (rot, kt, ks)
-drop = '<animateTransform attributeName="transform" type="translate" values="0 -560;0 18;0 0" keyTimes="0;.75;1" calcMode="spline" keySplines=".3 0 .6 1;.4 0 .6 1" dur="0.75s" fill="freeze"/>'
-on = '<animate attributeName="opacity" values="0;1;.6;1" keyTimes="0;.4;.6;1" begin="0.72s" dur="0.3s" fill="freeze"/>'
+# 動き：①ライトだけが上から降りてくる（ほかは何も見えない）→②灯りがついて大きく揺れる。光の円錐が当たった所だけロゴが見える
+# （見える範囲＝光の形そのもの）→③揺れが収まると光が部屋いっぱいに広がり、ロゴ全体が見える→④1秒止まる
+SW0, SWD = 0.95, 2.4
+rot = ';'.join(a + ' ' + PV for a in ['0', '-68', '58', '-44', '30', '-16', '6', '0'])
+swing = '<animateTransform attributeName="transform" type="rotate" values="%s" keyTimes="0;.14;.31;.47;.62;.76;.89;1" calcMode="spline" keySplines="%s" begin="%ss" dur="%ss" fill="freeze"/>' % (rot, ';'.join(['.45 0 .55 1'] * 7), SW0, SWD)
+drop = '<animateTransform attributeName="transform" type="translate" values="0 -560;0 14;0 0" keyTimes="0;.78;1" calcMode="spline" keySplines=".3 0 .6 1;.4 0 .6 1" dur="0.8s" fill="freeze"/>'
+on = '<animate attributeName="opacity" values="0;1;.6;1" keyTimes="0;.3;.5;1" begin="0.8s" dur="0.3s" fill="freeze"/>'
+FILL0 = SW0 + SWD - 0.35   # 揺れが収まる少し前から、光が広がる
+grow = '<animate attributeName="r" values="0;720" calcMode="spline" keySplines=".35 0 .3 1" begin="%ss" dur="1.0s" fill="freeze"/>' % FILL0
+glow = '<animate attributeName="r" values="0;620" calcMode="spline" keySplines=".35 0 .3 1" begin="%ss" dur="1.0s" fill="freeze"/>' % FILL0
 CONE = 'M%s %s L%s %s L%s 1700 L%s 1700 Z' % (x0 + 6, bot - 8, x1 - 6, bot - 8, cx + 1420, cx - 1420)
 svg = ('<svg viewBox="195 380 880 480" aria-hidden="true"><defs>'
- '<radialGradient id="opbm" gradientUnits="userSpaceOnUse" cx="%s" cy="%s" r="760"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
- '<radialGradient id="opbg" gradientUnits="userSpaceOnUse" cx="%s" cy="%s" r="620"><stop offset="0" stop-color="#fff1cf" stop-opacity=".42"/><stop offset="1" stop-color="#fff1cf" stop-opacity="0"/></radialGradient>'
- '<mask id="opmask" maskUnits="userSpaceOnUse" x="-2000" y="-2000" width="6000" height="6000"><g>%s<g>%s<path d="%s" fill="url(#opbm)" opacity="0">%s</path></g></g></mask></defs>'
- '<g class="op-dim" fill="#1b1b1b"><path d="%s"/><path d="%s"/></g>'
- '<g class="op-lit" fill="#fff" mask="url(#opmask)"><path d="%s"/><path d="%s"/></g>'
- '<g class="op-full" fill="#fff"><path d="%s"/><path d="%s"/></g>'
+ '<radialGradient id="opbm" gradientUnits="userSpaceOnUse" cx="%s" cy="%s" r="900"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
+ '<radialGradient id="oprv"><stop offset="0" stop-color="#fff"/><stop offset=".72" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
+ '<radialGradient id="opbg" gradientUnits="userSpaceOnUse" cx="%s" cy="%s" r="620"><stop offset="0" stop-color="#fff1cf" stop-opacity=".5"/><stop offset="1" stop-color="#fff1cf" stop-opacity="0"/></radialGradient>'
+ '<radialGradient id="opgl"><stop offset="0" stop-color="#fff1cf" stop-opacity=".22"/><stop offset="1" stop-color="#fff1cf" stop-opacity="0"/></radialGradient>'
+ '<mask id="opmask" maskUnits="userSpaceOnUse" x="-2000" y="-2000" width="6000" height="6000">'
+ '<g>%s<g>%s<path d="%s" fill="url(#opbm)" opacity="0">%s</path></g></g>'
+ '<circle cx="%s" cy="%s" r="0" fill="url(#oprv)">%s</circle></mask></defs>'
+ '<circle cx="%s" cy="%s" r="0" fill="url(#opgl)">%s</circle>'
+ '<g class="op-lit" fill="#fff" mask="url(#opmask)"><path d="%s"/><path d="%s"/><path fill-rule="evenodd" d="%s"/></g>'
+ '<g class="op-full" fill="#fff"><path d="%s"/><path d="%s"/><path fill-rule="evenodd" d="%s"/></g>'
  '<g>%s<g>%s<g class="op-beam"><path d="%s" fill="url(#opbg)" opacity="0">%s</path></g><path d="%s" fill="#fff"/></g></g>'
- '<path class="op-t" fill-rule="evenodd" d="%s" fill="#fff"/></svg>') % (cx, bot - 8, cx, bot - 8, drop, swing, CONE, on, V, M, V, M, V, M, drop, swing, CONE, on, L, T)
+ '</svg>') % (cx, bot - 8, cx, bot - 8, drop, swing, CONE, on, cx, bot - 8, grow, cx, bot - 8, glow, V, M, T, V, M, T, drop, swing, CONE, on, L)
 cat = os.path.join(D, 'furniture-catalog.html'); s = open(cat, encoding='utf-8').read()
 a = s.index('<div id="opening" translate="no" aria-hidden="true">') + len('<div id="opening" translate="no" aria-hidden="true">'); b = s.index('</div>', a)
 s = s[:a] + svg + s[b:]
