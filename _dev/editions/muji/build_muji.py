@@ -22,7 +22,7 @@ s, n = re.subn(r"VIM_T='<path fill-rule=\"evenodd\" d=\"[^\"]*\"/>'", "VIM_T=''"
 a = s.index('<div id="opening"'); b = s.index('<script>(function(){var o=document.getElementById("opening")', a)
 cx, ity = L["ITOP"]; ry = L["RAYTOP"]; base = L["BASE"]
 OP = ('<style>#opening{background:%(B)s!important}'
-      '#opening .id-svg{width:min(78vw,440px);height:auto;overflow:visible}'
+      '#opening .id-svg{width:min(62vw,340px);height:auto;overflow:visible}'
       '#opening .id-sup{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom,0px));text-align:center;color:#fff;font:600 11px/1 Poppins,"Hiragino Sans",system-ui,sans-serif;letter-spacing:.18em;animation:idFade .6s ease 2.1s both}'
       '#opening .id-i{animation:idRise .7s cubic-bezier(.2,.8,.2,1) .1s both,idClick .22s ease-in-out .95s both;transform-box:view-box;transform-origin:%(cx).1fpx %(base).1fpx}'
       '#opening .id-r{transform-box:view-box;transform-origin:%(cx).1fpx %(ity).1fpx;animation:idRay .45s cubic-bezier(.2,1.4,.4,1) both,idPulse .5s ease-in-out 1.85s}'
