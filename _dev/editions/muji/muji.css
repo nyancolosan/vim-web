@@ -23,16 +23,26 @@
 /* ===== 接客・売場づくりに必要なものだけ残す ===== */
 #pjnew,#syncf,#v4 .fold.mj-cmp,#shpb,#shest,#sht,#v5 .fold.mj-ai,#tuban,.setg.mj-guide,#hhelp,#t6{display:none!important}
 
-/* ===== カーテン見積（MUJI Store Assistant の中で開く） ===== */
-#mjcur{position:fixed;inset:0;z-index:9000;background:#ffffff;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-#mjcur iframe{flex:1;width:100%;border:0;display:block;background:#ffffff}
-#mjcurf{position:absolute;left:16px;right:16px;top:calc(40% + env(safe-area-inset-top,0px));text-align:center;font-size:.86rem;color:var(--sub);line-height:1.7}
-#mjcurf a{color:var(--acc);font-weight:700}
-#mjcurf button{margin-top:10px}
-.mjcurb{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 4px;padding:12px 14px;border:1.5px solid var(--acc);border-radius:12px;background:var(--accbg);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
-.mjcurb svg{width:40px;height:30px;flex:none;color:var(--acc)}
-.mjcurb b{display:block;font-size:.95rem;color:var(--acc)}
-.mjcurb small{display:block;font-size:.74rem;color:var(--sub);font-weight:400}
-/* ヘッダーに「カーテン」が増えたので、狭い画面ではボタンを詰める */
-@media (max-width:440px){h1 .hbt{gap:0}h1 .hbt button,h1>button{min-width:38px!important;padding-left:1px!important;padding-right:1px!important}h1 #undo,h1 #redo{min-width:32px!important}.mjhd{font-size:.54rem;margin-left:2px}h1 .vlogo{margin-right:0}}
-#mjcurh{white-space:nowrap;letter-spacing:-.02em}
+/* ===== POAD：オーダーカーテン見積・素材知識を全画面で重ねる ===== */
+.mjsub-ov{position:fixed;inset:0;z-index:9000;background:#ffffff;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.mjsub-ov iframe{flex:1;width:100%;border:0;display:block;background:#ffffff}
+.mjsubf{position:absolute;left:16px;right:16px;top:calc(40% + env(safe-area-inset-top,0px));text-align:center;font-size:.86rem;color:var(--sub);line-height:1.7}
+.mjsubf a{color:var(--acc);font-weight:700}.mjsubf button{margin-top:10px}
+/* ===== POAD：はじめの選択画面 ===== */
+#poadhome{position:fixed;inset:0;z-index:8000;background:#ffffff;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(20px + env(safe-area-inset-bottom,0px))}
+#poadhome .phin{max-width:480px;min-height:100%;margin:0 auto;display:flex;flex-direction:column;align-items:stretch;gap:14px}
+#poadhome .phlogo{color:var(--acc);display:flex;justify-content:center;margin:clamp(8px,6vh,48px) 0 0}
+#poadhome .phlogo svg{width:min(70vw,300px);height:auto}
+#poadhome .phq{margin:6px 0 0;text-align:center;font-weight:700;font-size:1.02rem;color:var(--ink)}
+#poadhome .phgrid{display:flex;flex-direction:column;gap:12px}
+#poadhome .phc{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;align-items:center;text-align:left;width:100%;padding:14px;border:1.5px solid var(--line);border-radius:16px;background:#ffffff;color:var(--ink);font:inherit;min-height:92px;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
+#poadhome .phc:active{transform:scale(.985)}
+#poadhome .phc:hover,#poadhome .phc:focus-visible{border-color:var(--acc);background:var(--accbg)}
+#poadhome .phi{width:64px;height:64px;border-radius:14px;background:var(--accbg);color:var(--acc);display:flex;align-items:center;justify-content:center}
+#poadhome .phi svg{width:40px;height:40px}
+#poadhome .phc b{display:block;font-size:1.02rem;color:var(--ink)}
+#poadhome .phc small{display:block;font-size:.76rem;color:var(--sub);line-height:1.45;margin-top:2px}
+#poadhome .phsup{margin:auto 0 0;padding-top:16px;text-align:center;font-family:"Poppins","Hiragino Sans",system-ui,sans-serif;font-size:.7rem;letter-spacing:.14em;color:var(--sub)}
+#poadmenu{white-space:nowrap}
+/* ヘッダーにボタンが5つ並ぶので、狭い画面ではボタンを詰める */
+@media (max-width:440px){h1 .hbt{gap:0}h1 .hbt button,h1>button{min-width:38px!important;padding-left:1px!important;padding-right:1px!important}h1 #undo,h1 #redo{min-width:32px!important}h1 .vlogo{margin-right:0}}

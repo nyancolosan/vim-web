@@ -1,0 +1,135 @@
+<title>素材知識</title>
+<style>
+/* Layout: カーテン見積と同じ骨格（白地・エンジ）。上に種類の切り替えと検索、下にカードの一覧 */
+:root{
+  --bg:#ffffff;--card:#ffffff;--ink:#333333;--sub:#7d7778;--line:#e3dfdf;--fill:#ffffff;
+  --acc:#9f2a37;--accink:#ffffff;--accbg:#f9eef0;--ok:#4f6b45;--shadow:rgba(60,30,35,.05);
+  --rc:8px;color-scheme:light;
+  --f-body:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+main{max-width:720px;margin:0 auto;padding:0 16px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+header.hd{position:sticky;top:0;z-index:5;background:var(--bg);margin:0 -16px;padding:10px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;min-height:58px}
+.back{display:flex;align-items:center;gap:2px;border:1px solid var(--line);background:var(--card);color:var(--acc);border-radius:999px;min-height:40px;padding:0 14px 0 8px;font-weight:700;font-size:.85rem}
+.hdt{margin-left:auto;text-align:right;line-height:1.25}
+.hdt b{display:block;font-size:.95rem}
+.hdt small{color:var(--sub);font-size:.7rem}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:14px}
+.seg button{border:0;background:var(--card);color:var(--sub);min-height:44px;font-size:.84rem;padding:0 2px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--acc);color:var(--accink);font-weight:700}
+input[type=search]{width:100%;margin-top:10px;font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--fill);color:var(--ink)}
+.lead{font-size:.8rem;color:var(--sub);margin:10px 0 0}
+.list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.k{border:1px solid var(--line);border-radius:var(--rc);background:var(--card);box-shadow:0 1px 3px var(--shadow)}
+.k>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px}
+.k>summary::-webkit-details-marker{display:none}
+.k>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin-right:4px}
+.k[open]>summary::after{transform:rotate(-135deg)}
+.chip{width:40px;height:40px;border-radius:8px;border:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;color:var(--acc)}
+.chip svg{width:24px;height:24px}
+.k .t b{display:block;font-size:.95rem}
+.k .t span{display:block;font-size:.78rem;color:var(--sub);line-height:1.45}
+.k .bd{padding:0 14px 14px 66px}
+.k dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:0;font-size:.84rem}
+.k dt{color:var(--sub);white-space:nowrap}
+.k dd{margin:0;max-width:60ch}
+.say{margin-top:10px;padding:8px 12px;border-left:3px solid var(--acc);background:var(--accbg);font-size:.84rem;border-radius:0 6px 6px 0}
+.say::before{content:"接客のひとこと";display:block;font-size:.68rem;color:var(--acc);font-weight:700;letter-spacing:.04em}
+.tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:.68rem;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--sub);background:var(--card)}
+.tag.fx{border-color:var(--ok);color:var(--ok)}
+.empty{padding:24px;color:var(--sub);text-align:center;font-size:.86rem}
+.note{font-size:.72rem;color:var(--sub);margin-top:18px;line-height:1.7}
+table{border-collapse:collapse;width:100%;font-size:.8rem;margin-top:4px;font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:var(--accbg);font-weight:600;white-space:nowrap}
+@media (max-width:420px){.k .bd{padding-left:14px}}
+</style>
+
+<main>
+<header class="hd">
+  <button class="back" id="kb-back" type="button" aria-label="POAD のメニューに戻る"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button>
+  <span class="hdt"><b>素材知識</b><small>POAD</small></span>
+</header>
+<div class="seg" id="seg" role="tablist">
+  <button data-c="wood" class="on">木材</button><button data-c="fiber">繊維</button><button data-c="curtain">生地</button><button data-c="func">機能・用語</button>
+</div>
+<input type="search" id="q" placeholder="素材名で探す（例：オーク、麻、遮光）" aria-label="素材名で探す">
+<p class="lead" id="lead"></p>
+<div class="list" id="list"></div>
+<p class="note">木材・繊維・機能の説明は、一般的な性質をまとめたものです。個々の商品の素材や仕上げは、ネットストアの商品ページで確認してください。カーテン生地の説明は、ネットストアの商品説明をもとに書き直したものです。</p>
+</main>
+
+<script>
+/* %%CURTAIN_DATA%% */
+(function(){
+var $=function(i){return document.getElementById(i)},esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var IC={
+ wood:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><ellipse cx="12" cy="12" rx="9" ry="9"/><ellipse cx="12" cy="12" rx="5.5" ry="5"/><ellipse cx="12" cy="12" rx="2" ry="1.7"/></svg>',
+ fiber:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7c4-3 12 3 16 0M4 12c4-3 12 3 16 0M4 17c4-3 12 3 16 0"/></svg>',
+ func:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>'};
+var WOOD=[
+ {n:"オーク",a:"ナラ",col:"#c9a777",one:"硬くて丈夫。はっきりした木目",d:[["色","明るい黄褐色。時間とともに飴色に深まります。"],["特長","硬く重く、傷やへこみに強い木です。はっきりした木目に加え、柾目には「虎斑（とらふ）」と呼ばれる斑模様が出ることがあります。"],["向く使い方","テーブル、チェア、収納など、毎日使う家具。"],["お手入れ","乾いた布で拭きます。濡れたコップや熱い器を直に置くと輪じみになるので、コースターや鍋敷きを使います。"]],say:"丈夫で長く使えます。使うほど色が深まっていくのも楽しみのひとつです。"},
+ {n:"ウォールナット",a:"クルミ",col:"#6b4a35",one:"濃い茶色で、落ち着いた重厚感",d:[["色","紫がかった濃い茶色。年月とともに少し明るく、やわらかな色合いに変わります。"],["特長","狂い（反りや割れ）が少なく、なめらかな手ざわり。色が濃いので部屋を引き締めます。"],["向く使い方","リビングの主役になる家具や、書斎など落ち着かせたい部屋。"],["お手入れ","乾いた布で拭きます。直射日光が当たり続けると色の変わり方に差が出るので、置き場所に気をつけます。"]],say:"濃い色で、お部屋がぐっと落ち着いた印象になります。"},
+ {n:"タモ",a:"アッシュ",col:"#d8c29b",one:"明るい色と、くっきりした木目",d:[["色","白っぽい明るい色。"],["特長","木目がはっきりしていて、粘り強くしなる性質があります。曲げ加工にも向き、野球のバットにも使われます。"],["向く使い方","明るく軽やかに見せたい部屋の家具。"],["お手入れ","乾いた布で拭きます。"]],say:"明るい色で木目もきれいなので、お部屋が軽やかに見えます。"},
+ {n:"パイン",a:"マツ",col:"#e3c792",one:"やわらかく、節のある素朴な表情",d:[["色","淡い黄白色。年月とともに飴色に変わります。"],["特長","軽くてやわらかい木です。節が多く、素朴でカジュアルな表情になります。へこみ傷がつきやすいかわりに、それも味わいになります。"],["向く使い方","カジュアルな部屋や、こども部屋の家具・収納。"],["お手入れ","乾いた布で拭きます。硬いものを落とすと跡が残りやすいので気をつけます。"]],say:"やわらかい木なので傷はつきやすいですが、そのぶん味わいが出てきます。"},
+ {n:"ラバーウッド",a:"ゴムの木",col:"#d9bb8f",one:"木目がおだやかで、価格も手ごろ",d:[["色","淡い黄褐色。"],["特長","ゴム（ラテックス）を採り終えた木を家具に活かしたものです。木目がおだやかでそろっていて、ほどよい硬さがあります。"],["向く使い方","テーブルやチェアなど、価格を抑えたい家具。"],["お手入れ","乾いた布で拭きます。"]],say:"樹液を採り終えた木を使っているので、資源を無駄にしない素材です。"},
+ {n:"チーク",a:"",col:"#9c6b3f",one:"油分を含み、水や湿気に強い",d:[["色","黄褐色から、年月とともに深い褐色に。"],["特長","木そのものに油分を含み、水や湿気に強い木です。船の甲板や屋外の家具にも使われてきました。"],["向く使い方","水まわりの近くや、長く使う家具。"],["お手入れ","乾いた布で拭きます。"]],say:"水や湿気に強く、昔から船にも使われてきた木です。"},
+ {n:"メープル",a:"カエデ",col:"#ead7b4",one:"硬く緻密で、白っぽくやさしい色",d:[["色","白っぽい淡い色。年月とともに黄みを帯びます。"],["特長","硬く、きめが細かい木です。木目がおだやかで、やさしい印象になります。"],["向く使い方","明るい部屋の家具や、すっきり見せたいところ。"],["お手入れ","乾いた布で拭きます。色が明るいので、色の濃い飲みものはすぐに拭き取ります。"]],say:"明るくやさしい色なので、どんなお部屋にもなじみます。"},
+ {n:"ブナ",a:"",col:"#dcc09a",one:"粘り強く、曲げ木に向く",d:[["色","淡いピンクがかった白っぽい色。"],["特長","硬く粘り強い木で、蒸して曲げる「曲げ木」の椅子にも使われます。木目はおだやかです。"],["向く使い方","チェアなど、しなやかな曲線をもつ家具。"],["お手入れ","乾いた布で拭きます。"]],say:"粘りがあって曲げられる木なので、椅子のやわらかな曲線に使われます。"},
+ {n:"チェリー",a:"ブラックチェリー",col:"#b07a5a",one:"使うほど赤みが深まる",d:[["色","淡いピンクがかった色から、年月とともに濃い赤褐色に。色の変わり方が大きい木です。"],["特長","きめが細かく、なめらかな手ざわり。"],["向く使い方","経年の変化を楽しみたい方の家具。"],["お手入れ","乾いた布で拭きます。置きものの跡が色の差として残ることがあるので、ときどき位置を変えます。"]],say:"年月とともに色がぐっと深まっていく木です。育てる楽しみがあります。"}
+];
+var FIBER=[
+ {n:"綿",a:"コットン",one:"やわらかく、肌ざわりがよい",d:[["特長","吸湿性がよく、やわらかな肌ざわり。天然素材らしい風合いがあります。"],["気をつけること","洗うと縮みやしわが出やすい素材です。"],["お手入れ","表示に合わせて洗えます。カーテンは洗濯ネットを使います。"]],say:"天然素材らしいやわらかさが魅力です。洗うと少し縮むことがあります。"},
+ {n:"麻",a:"リネン",one:"シャリ感と光沢、さらりとした手ざわり",d:[["特長","シャリ感と光沢があり、吸湿・速乾にすぐれた丈夫な素材です。"],["気をつけること","しわが出やすく、湿度で伸び縮みします。カーテンは吊ると伸び、洗うと縮むので、アジャスターフックで丈を調整します。"],["お手入れ","カーテンはドライクリーニングが勧められている商品があります。商品ごとの表示を確認します。"]],say:"さらっとした風合いが気持ちいい素材です。伸び縮みするので、丈はフックで調整できます。"},
+ {n:"ウール",a:"羊毛",one:"あたたかく、弾力がある",d:[["特長","保温性と吸湿性にすぐれ、弾力があります。比較的燃えにくい性質もあります。"],["気をつけること","虫食いや、もみ洗いによる縮み（フェルト化）に気をつけます。"],["お手入れ","表示に合わせて、やさしく扱います。"]],say:"あたたかく弾力のある素材です。ラグなどで足もとがやわらかくなります。"},
+ {n:"ポリエステル",a:"",one:"丈夫で、手入れがかんたん",d:[["特長","丈夫で、しわや縮みが出にくく、乾きやすい素材です。防炎や遮光などの機能も持たせやすいです。"],["気をつけること","静電気が起きやすく、毛玉ができることがあります。"],["お手入れ","多くは家庭で洗えます。カーテンは洗濯ネットを使います。"]],say:"お手入れがかんたんで、洗ってもしわになりにくい素材です。"},
+ {n:"再生ポリエステル",a:"",one:"使い終えた資源から生まれた繊維",d:[["特長","使用済みのペットボトルなどを原料に、もう一度繊維にしたポリエステルです。性質はふつうのポリエステルとほぼ同じです。"],["お手入れ","ポリエステルと同じように扱えます。"]],say:"使い終えたペットボトルなどから生まれた繊維を使っています。"}
+];
+var FUNC=[
+ {n:"遮光の等級",one:"1級・2級・3級で、光をさえぎる度合いが違う",html:'<table><tr><th>等級</th><th>遮光率</th><th>暗さの目安</th></tr><tr><td>1級</td><td>99.99%以上</td><td>人の顔の表情がわからない</td></tr><tr><td>2級</td><td>99.80%以上〜99.99%未満</td><td>顔や表情はわかる</td></tr><tr><td>3級</td><td>99.40%以上〜99.80%未満</td><td>表情はわかるが、作業には暗い</td></tr></table>',say:"寝室でしっかり暗くしたいなら1級、ほどよく暗くしたいなら2級がおすすめです。"},
+ {n:"防炎",one:"燃え広がりにくくした生地",d:[["内容","火がついても燃え広がりにくい性能をもつ生地です。防炎ラベルが目印です。"],["必要な場所","消防法で、高さ31mを超える建物（高層マンションなど）や、劇場・旅館・病院など多くの人が出入りする施設では、防炎のカーテンを使うことが決められています。"]],say:"高層マンションでは防炎のカーテンが必要です。お住まいの階数を確認させてください。"},
+ {n:"ヒダの倍率",one:"ノンプリーツ・1.5倍・2倍で、生地の量と見え方が変わる",html:'<table><tr><th>スタイル</th><th>見え方</th></tr><tr><td>ノンプリーツ</td><td>ヒダを取らず、平らな一枚布で吊る。すっきり見え、生地も少なくてすむ。</td></tr><tr><td>プリーツ（1.5倍）</td><td>仕上がり幅の約1.5倍の生地でヒダを取る。標準的なドレープ。</td></tr><tr><td>2倍ヒダ</td><td>約2倍の生地でたっぷりヒダを取る。ドレープが深く、上質な印象。価格は高め。</td></tr></table>',say:"すっきり見せたいならノンプリーツ、ドレープを楽しみたいなら2倍ヒダです。"},
+ {n:"正面付けと天井付け",one:"レールの付け方で、フックの位置と丈が変わる",d:[["正面付け","窓枠の上の壁にレールを付ける方法。カーテンがレールを隠し、上からの光もれを抑えます。"],["天井付け","天井や窓枠の内側にレールを付ける方法。すっきり収まります。"],["丈の決め方","注文の丈と仕上がりの総丈は、吊り方で変わります。オーダーカーテン見積で確認できます。"]],say:"レールが壁に付いているか、天井に付いているかを教えてください。"},
+ {n:"遮熱・UVカット",one:"日ざしの熱や紫外線を通しにくくする",d:[["遮熱","特殊な糸などで、日ざしの熱を室内に通しにくくします。冷暖房の効きを助けます。"],["UVカット","紫外線を通しにくくし、家具や床の日焼けを抑えます。"]],say:"日当たりのよい窓には、熱や紫外線を通しにくいレースが向いています。"},
+ {n:"ミラー（見えにくい）レース",one:"日中、外から室内が見えにくい",d:[["しくみ","光を反射する糸を使い、日中は外から室内が見えにくくなります。"],["気をつけること","夜に室内の照明をつけると、外から見えやすくなります。夜は厚地のカーテンを閉めます。"]],say:"昼間は外から見えにくいレースです。夜は厚地のカーテンと合わせてお使いください。"},
+ {n:"ハギ合わせ",one:"幅の広いカーテンは、生地を縫い合わせて作る",d:[["内容","生地の幅には限りがあるため、幅の広いカーテンは複数の生地を縫い合わせて作ります。サイズによって縫い目の位置や数が変わります。"]],say:"幅が広いので、生地を縫い合わせてお作りします。"}
+];
+var S={c:"wood",q:""};
+function norm(s){return String(s||"").replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)}).toLowerCase()}
+function dl(rows){return'<dl>'+rows.map(function(r){return'<dt>'+esc(r[0])+'</dt><dd>'+r[1]+'</dd>'}).join("")+'</dl>'}
+function card(o,chip){return'<details class="k"><summary>'+chip+'<span class="t"><b>'+esc(o.n)+(o.a?' <small style="font-weight:400;color:var(--sub);font-size:.74rem">'+esc(o.a)+'</small>':"")+'</b><span>'+esc(o.one)+'</span></span></summary><div class="bd">'+(o.html||"")+(o.d?dl(o.d.map(function(r){return[r[0],esc(r[1])]})):"")+(o.say?'<div class="say">'+esc(o.say)+'</div>':"")+'</div></details>'}
+function curtainList(){var C=window.CU||{};var F=C.F||[],I=C.INFO||{},M={},SW=C.SW||{};(C.MOODS||[]).forEach(function(m){M[m[0]]=m[1]});
+ var CAT={shade:"遮光",thick:"厚地",lace:"レース"};
+ return F.map(function(f){var i=I[f.id]||{},fx=[];if(f.fr)fx.push("防炎");var g={};f.col.forEach(function(c){if(c[1])g[c[1]]=1});Object.keys(g).sort().forEach(function(k){fx.push("遮光"+k+"級")});if(f.lt)fx.push("遮光裏地付あり");(i.fx||[]).forEach(function(x){fx.push(x)});
+  return{n:f.n,a:CAT[f.cat],one:(i.d||"").split("。")[0]+"。",key:f.n+" "+(i.d||"")+" "+(i.mat||"")+" "+CAT[f.cat]+" "+fx.join(" "),
+   d:[["特長",i.d||""],["素材",i.mat||"商品ページで確認"],["お手入れ",i.care||"商品ページで確認"]],
+   extra:'<dl style="margin-top:6px"><dt>色</dt><dd class="tags">'+f.col.map(function(c){return'<span class="tag"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px;border:1px solid var(--line);background:'+(SW[c[0]]||"#ccc")+'"></i>'+esc(c[0])+'</span>'}).join("")+'</dd>'+
+    (fx.length?'<dt>機能</dt><dd class="tags">'+fx.map(function(x){return'<span class="tag fx">'+esc(x)+'</span>'}).join("")+'</dd>':"")+
+    ((i.m||[]).length?'<dt>雰囲気</dt><dd class="tags">'+i.m.map(function(k){return'<span class="tag">'+esc(M[k]||k)+'</span>'}).join("")+'</dd>':"")+'</dl>',sw:SW[f.col[0][0]]||"#ccc"}})}
+var LEAD={wood:"家具に使われる主な木材の性質です。",fiber:"カーテンや布製品に使われる主な繊維の性質です。",curtain:"オーダーカーテンの生地（ネットストア掲載）の特長です。",func:"カーテンを選ぶときによく出てくる機能と用語です。"};
+function render(){
+ [].forEach.call($("seg").children,function(b){b.classList.toggle("on",b.dataset.c===S.c)});
+ var q=norm(S.q).trim(),html="",n=0;
+ function hit(o){return!q||norm(o.key||(o.n+" "+(o.a||"")+" "+o.one+" "+JSON.stringify(o.d||"")+" "+(o.html||"")+" "+(o.say||""))).indexOf(q)>=0}
+ var sets=q?["wood","fiber","curtain","func"]:[S.c];
+ sets.forEach(function(c){var L=c==="wood"?WOOD:c==="fiber"?FIBER:c==="func"?FUNC:curtainList();
+  L.filter(hit).forEach(function(o){n++;
+   var chip=c==="wood"?'<span class="chip" style="background:'+o.col+'"></span>':c==="curtain"?'<span class="chip" style="background:'+o.sw+'"></span>':'<span class="chip">'+IC[c]+'</span>';
+   var h=card(o,chip);if(o.extra)h=h.replace('</div></details>',o.extra+'</div></details>');html+=h})});
+ $("lead").textContent=q?"すべての種類から「"+S.q+"」に合うもの："+n+"件":LEAD[S.c];
+ $("list").innerHTML=html||'<div class="empty">「'+esc(S.q)+'」に合う素材はありません。言葉を短くしてみてください。</div>';
+}
+$("seg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.c=b.dataset.c;S.q="";$("q").value="";render();window.scrollTo(0,0)});
+$("q").addEventListener("input",function(){S.q=this.value;render()});
+render();
+function tell(m){try{parent.postMessage({mj:m},"*")}catch(e){}}
+$("kb-back").addEventListener("click",function(){tell("sub-close")});tell("sub-ready");
+})();
+</script>
