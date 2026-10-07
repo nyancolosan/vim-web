@@ -126,8 +126,29 @@ home.innerHTML='<div class="phin"><div class="phlogo" role="img" aria-label="ide
  '<button type="button" class="phc" data-go="room"><span class="phi">'+IC.room+'</span><span><b>部屋に家具を置く</b><small>間取りに無印良品の家具を実寸で置いて、3Dで確かめる</small></span></button>'+
  '<button type="button" class="phc" data-go="curtain"><span class="phi">'+IC.curtain+'</span><span><b>オーダーカーテンの見積り</b><small>生地・スタイル・サイズ・吊り方から金額と見積書をつくる</small></span></button>'+
  '<button type="button" class="phc" data-go="know"><span class="phi">'+IC.know+'</span><span><b>素材知識</b><small>木材・繊維・カーテン生地の特長と、接客のひとこと</small></span></button>'+
- '</div><p class="phsup">supported by VIM</p></div>';
+ '</div><section class="nw" id="nw" aria-labelledby="nwt"></section><p class="phsup">supported by VIM</p></div>';
 document.body.appendChild(home);
+/* --- 新商品（ネットストアの各カテゴリで NEW 表記のもの。build_muji.py が news/news.json を埋め込む） --- */
+(function(){var N=window.IDEA_NEWS,box=home.querySelector("#nw");if(!N||!box||!N.items||!N.items.length){if(box)box.hidden=true;return}
+ var CI={furniture:'<path d="M7 11V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v5"/><path d="M5 11h14v4H5z"/><path d="M6 15v5M18 15v5"/>',
+  storage:'<rect x="4" y="6" width="16" height="13" rx="1.5"/><path d="M4 11h16M10 8.5h4M10 14h4"/>',
+  bedding:'<path d="M3 18v-6h18v6M3 15h18M3 18v2M21 18v2"/><rect x="5" y="8" width="6" height="4" rx="1.5"/>',
+  interior:'<rect x="5" y="5" width="14" height="14" rx="4"/><path d="M5 12c3 2 11 2 14 0"/>',
+  light:'<path d="M9 3h6l3 7H6z"/><path d="M12 10v8M8 20h8"/>',
+  kitchen:'<path d="M4 10h16v3a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M2 10h20M9 7c0-1 1-1 1-2M14 7c0-1 1-1 1-2"/>'};
+ function ic(c){return'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(CI[c]||CI.interior)+'</svg>'}
+ var cn={};N.cats.forEach(function(c){cn[c[0]]=c[1]});var S={c:"all",more:false};
+ var d=new Date(N.at+"T00:00:00");var at=(d.getMonth()+1)+"月"+d.getDate()+"日";
+ /* 「すべて」はカテゴリを順番に混ぜて並べる（はじめの6件に色々なカテゴリが出るように） */
+ var MIX=(function(){var G=N.cats.map(function(c){return N.items.filter(function(it){return it.cat===c[0]})}),o=[],i=0,more=true;while(more){more=false;G.forEach(function(g){if(g[i]){o.push(g[i]);more=true}});i++}return o})();
+ function draw(){var L=S.c==="all"?MIX:N.items.filter(function(it){return it.cat===S.c}),M=S.more?L:L.slice(0,6);
+  box.innerHTML='<div class="nwh"><b id="nwt">新商品</b><small>'+at+'時点・ネットストア</small></div>'+
+   '<div class="nwc">'+[["all","すべて",N.items.length]].concat(N.cats.map(function(c){return[c[0],c[1],N.items.filter(function(it){return it.cat===c[0]}).length]})).filter(function(c){return c[2]>0}).map(function(c){return'<button type="button" data-c="'+c[0]+'" class="'+(S.c===c[0]?"on":"")+'">'+esc2(c[1])+'<i>'+c[2]+'</i></button>'}).join("")+'</div>'+
+   '<div class="nwl">'+M.map(function(it){return'<a class="nwi" href="https://www.muji.com/jp/ja/store/cmdty/detail/'+esc2(it.jan)+'" target="_blank" rel="noopener"><span class="nwp">'+ic(it.cat)+'</span><span class="nwm"><b>'+esc2(it.name)+'</b><small>'+esc2(cn[it.cat]||"")+'</small></span><span class="nwy">¥'+Number(it.price).toLocaleString("ja-JP")+(it.from?"〜":"")+'</span></a>'}).join("")+'</div>'+
+   (L.length>6?'<button type="button" class="nwm2">'+(S.more?"少なく表示":"すべて見る（"+L.length+"件）")+'</button>':"")+
+   '<p class="nwn">商品をタップするとネットストアの商品ページが開き、写真・在庫・最新の価格を確認できます。</p>'}
+ box.addEventListener("click",function(e){var b=e.target.closest(".nwc button");if(b){S.c=b.getAttribute("data-c");S.more=false;draw();return}if(e.target.closest(".nwm2")){S.more=!S.more;draw()}});
+ draw()})();
 try{home.querySelector(".phlogo").innerHTML=vimWord()}catch(e){}
 function showHome(){home.hidden=false;document.documentElement.style.overflow="hidden"}
 function hideHome(){home.hidden=true;document.documentElement.style.overflow=""}

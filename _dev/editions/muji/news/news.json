@@ -1,0 +1,626 @@
+{
+ "at": "2026-10-07",
+ "source": "無印良品ネットストア 各カテゴリの新着順で「NEW」表記の商品",
+ "cats": [
+  [
+   "furniture",
+   "家具",
+   "D00019"
+  ],
+  [
+   "storage",
+   "収納",
+   "D00016"
+  ],
+  [
+   "bedding",
+   "寝具",
+   "D00041"
+  ],
+  [
+   "interior",
+   "インテリア用品",
+   "D00020"
+  ],
+  [
+   "light",
+   "照明・家電",
+   "D00021"
+  ],
+  [
+   "kitchen",
+   "キッチン",
+   "D00005"
+  ]
+ ],
+ "items": [
+  {
+   "cat": "furniture",
+   "jan": "4550723278508",
+   "name": "ゆったり座れるパーソナルソファ用カバー",
+   "price": 7000,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278492",
+   "name": "ゆったり座れるパーソナルソファ 本体",
+   "price": 17900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278102",
+   "name": "オーク材回転チェア",
+   "price": 27900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723114271",
+   "name": "テーブル 幅150cm オーク材/ウォールナット材",
+   "price": 69900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723114264",
+   "name": "テーブル 幅130cm オーク材/ウォールナット材",
+   "price": 59900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723114257",
+   "name": "テーブル 幅80cm オーク材/ウォールナット材",
+   "price": 49900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723114196",
+   "name": "テーブル 直径110cm オーク材/ウォールナット材",
+   "price": 69900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723114189",
+   "name": "テーブル 幅180cm オーク材/ウォールナット材",
+   "price": 79900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278478",
+   "name": "体にフィットするソファ用コーデュロイカバー",
+   "price": 4990,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278454",
+   "name": "手軽に組み立てられる木製サイドテーブル アッシュ材突板",
+   "price": 9990,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278447",
+   "name": "手軽に組み立てられる木製ローテーブル 幅120cm アッシュ材突板",
+   "price": 19900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278430",
+   "name": "手軽に組み立てられる木製ローテーブル 幅90cm アッシュ材突板",
+   "price": 14900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278423",
+   "name": "手軽に組み立てられる木製ローテーブル 直径60cm アッシュ材突板",
+   "price": 9990,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278300",
+   "name": "木製ハイスツール アッシュ材突板",
+   "price": 9990,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278348",
+   "name": "木製ハイスツール用クッション",
+   "price": 1300,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278171",
+   "name": "木製スツール アッシュ材突板",
+   "price": 7490,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278232",
+   "name": "木製スツール用クッション",
+   "price": 1500,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550723278164",
+   "name": "手軽に組み立てられる木製カフェテーブル 直径56cm アッシュ材突板",
+   "price": 14900,
+   "from": false
+  },
+  {
+   "cat": "furniture",
+   "jan": "4550584903311",
+   "name": "ウレタンマットレス薄型 スモール",
+   "price": 7990,
+   "from": false
+  },
+  {
+   "cat": "storage",
+   "jan": "4550723728423",
+   "name": "吊るしても使える 薄型収納ケース 約幅26×奥行11×高さ8cm",
+   "price": 390,
+   "from": false
+  },
+  {
+   "cat": "storage",
+   "jan": "4550723728416",
+   "name": "吊るしても使える 薄型収納ケース 約幅26×奥行15×高さ8cm",
+   "price": 490,
+   "from": false
+  },
+  {
+   "cat": "storage",
+   "jan": "4550723651882",
+   "name": "ステンレス 吊るしても使える 薄型収納ケース用フック",
+   "price": 390,
+   "from": false
+  },
+  {
+   "cat": "storage",
+   "jan": "4550584424847",
+   "name": "折って高さが変えられる ターポリン収納ケース 大 約幅30×奥行15×高さ34cm",
+   "price": 990,
+   "from": false
+  },
+  {
+   "cat": "storage",
+   "jan": "4550584424830",
+   "name": "折って高さが変えられる ターポリン収納ケース 小 約幅21×奥行10×高さ21.5cm",
+   "price": 790,
+   "from": false
+  },
+  {
+   "cat": "storage",
+   "jan": "4550723245937",
+   "name": "【L】再生ポリエステル仕分けケース圧縮タイプ 約35×47×10cm",
+   "price": 1890,
+   "from": false
+  },
+  {
+   "cat": "storage",
+   "jan": "4550723245975",
+   "name": "【M】再生ポリエステル仕分けケース圧縮タイプ 約26×40×10cm",
+   "price": 1690,
+   "from": false
+  },
+  {
+   "cat": "storage",
+   "jan": "4550723245951",
+   "name": "【S】再生ポリエステル仕分けケース圧縮タイプ 約20×26×10cm",
+   "price": 1490,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723470377",
+   "name": "シルク ニット 紐タイプまくらカバー 43×63cm用",
+   "price": 2990,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723470346",
+   "name": "シルク 綿 まくらカバー 43×63cm用",
+   "price": 3990,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723470292",
+   "name": "抗菌防臭機能付 のびのび まくらカバー 43×63cm用",
+   "price": 1990,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723306126",
+   "name": "再生ポリエステル あたたかファイバー厚手敷パッド・SS～D",
+   "price": 4490,
+   "from": true
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723516150",
+   "name": "綿フランネル 敷パッド ゴム付/S～D",
+   "price": 4990,
+   "from": true
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723516129",
+   "name": "綿フランネル そのまま使える 掛ふとん/S・D",
+   "price": 7990,
+   "from": true
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723388900",
+   "name": "綿フランネルボックスシーツ・SS～Q",
+   "price": 3490,
+   "from": true
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723388832",
+   "name": "綿フランネルまくらカバー 50×70cm用",
+   "price": 1490,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723388733",
+   "name": "綿フランネルまくらカバー 43×63cm用",
+   "price": 990,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723388641",
+   "name": "綿フランネル敷ふとんシーツ・S 兼浅型ボックスシーツ",
+   "price": 3990,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723388276",
+   "name": "綿フランネル掛ふとんカバー・S～Q",
+   "price": 4990,
+   "from": true
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723297738",
+   "name": "防ダニ 羽毛掛ふとん・二層式/Q",
+   "price": 64900,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723517379",
+   "name": "両面使い ベロア ガーゼ まくらパッド 43×63cm用",
+   "price": 2990,
+   "from": false
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723517263",
+   "name": "両面使い ベロア ガーゼ 敷パッド ボックスシーツ型/S～D",
+   "price": 6990,
+   "from": true
+  },
+  {
+   "cat": "bedding",
+   "jan": "4550723305600",
+   "name": "再生ポリエステル あたたかファイバー薄手毛布・S・D",
+   "price": 2990,
+   "from": true
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723728867",
+   "name": "綿ウール太番手インドの手織りラグ 140×200cm",
+   "price": 24900,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723728812",
+   "name": "綿ウール太番手インドの手織りラグ 120×160cm",
+   "price": 18900,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723728782",
+   "name": "綿太番手インドの手織りラグ 140×200cm",
+   "price": 14900,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723728768",
+   "name": "綿太番手インドの手織りラグ 120×160cm",
+   "price": 9900,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723352048",
+   "name": "あたたかファイバーふんわりキルティングラグ こたつ下敷兼用 205×245cm",
+   "price": 9490,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723352031",
+   "name": "あたたかファイバーふんわりキルティングラグ 140×195cm",
+   "price": 5490,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723352321",
+   "name": "コットンベルベット多用布 180×210cm",
+   "price": 12900,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723326001",
+   "name": "綿 フランネル 大判クッション 75×75cm",
+   "price": 4990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723325974",
+   "name": "コットンベルベット 大判クッション 75×75cm",
+   "price": 4990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723325998",
+   "name": "綿 フランネル シートクッションロングタイプ 50×150cm",
+   "price": 3990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723325943",
+   "name": "コットンベルベット シートクッションロングタイプ 50×150cm",
+   "price": 3990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723352093",
+   "name": "ウールクッションカバー 43×63cm用",
+   "price": 2990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723352307",
+   "name": "コットンベルベットクッションカバー 43×43cm用",
+   "price": 1990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723352147",
+   "name": "綿フランネルクッションカバー 43×43cm用",
+   "price": 1290,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723352161",
+   "name": "綿フランネルブランケット 80×130cm",
+   "price": 3990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723305754",
+   "name": "収納ポケット付き3WAYブランケット 80×130cm",
+   "price": 2490,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723647908",
+   "name": "両面使いブランケット 80×130cm",
+   "price": 1990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723325196",
+   "name": "なめらかファーかかとにフィットするルームシューズ M～XL",
+   "price": 1690,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723325288",
+   "name": "コットンベルベットかかとにフィットするルームシューズ M～XL",
+   "price": 1490,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723325783",
+   "name": "綿ラインキルトルームブーツ M～L",
+   "price": 1990,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723325103",
+   "name": "再生ポリエステルボア 履き心地しっかりスリッパ M～XL",
+   "price": 1690,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723324717",
+   "name": "コットンツイル 履き心地しっかりスリッパ M～XL",
+   "price": 1490,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723325400",
+   "name": "綿シェニール 履き心地やわらか足なりスリッパ M～XL",
+   "price": 1490,
+   "from": false
+  },
+  {
+   "cat": "interior",
+   "jan": "4550723324922",
+   "name": "ウール混ネップ入り 履き心地しっかりスリッパ M～XL",
+   "price": 1990,
+   "from": false
+  },
+  {
+   "cat": "light",
+   "jan": "4550584929441",
+   "name": "調光機能付 インテリアライト ガラス",
+   "price": 3990,
+   "from": false
+  },
+  {
+   "cat": "light",
+   "jan": "4550584929427",
+   "name": "調光機能付 インテリアライト 紙風船",
+   "price": 5990,
+   "from": false
+  },
+  {
+   "cat": "light",
+   "jan": "4550584929410",
+   "name": "調光機能付 インテリアライト 台形",
+   "price": 6990,
+   "from": false
+  },
+  {
+   "cat": "light",
+   "jan": "4550584929403",
+   "name": "調光機能付 インテリアライト ディスク",
+   "price": 5990,
+   "from": false
+  },
+  {
+   "cat": "light",
+   "jan": "4550584929397",
+   "name": "調光機能付 インテリアライト コーン",
+   "price": 4990,
+   "from": false
+  },
+  {
+   "cat": "light",
+   "jan": "4550723652643",
+   "name": "スタンドライト ミニ 人感センサー付",
+   "price": 2990,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723274500",
+   "name": "レンジで焼き料理 グリルプレート 内蓋付き 1-2人用",
+   "price": 6990,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723677448",
+   "name": "竹材 蒸篭（せいろ）セット 特小",
+   "price": 1090,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723677455",
+   "name": "竹材 混ぜ棒 約長さ15cm",
+   "price": 490,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4548076022886",
+   "name": "すす竹 お玉 約長さ25cm",
+   "price": 990,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4548076022879",
+   "name": "すす竹 れんげ 約長さ16.5cm",
+   "price": 490,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723619103",
+   "name": "真空断熱構造 保温保冷ボトル ワンタッチタイプ 750mL",
+   "price": 2990,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723619141",
+   "name": "真空断熱構造 保温保冷ボトル ワンタッチタイプ 500mL",
+   "price": 2790,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723619080",
+   "name": "真空断熱構造 保温保冷ボトル ハンドルタイプ 750mL",
+   "price": 2490,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723619127",
+   "name": "真空断熱構造 保温保冷ボトル ハンドルタイプ 500mL",
+   "price": 2290,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723619066",
+   "name": "真空断熱構造 保温保冷ボトル ハンドルタイプ 350mL",
+   "price": 1990,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723061810",
+   "name": "高さが変えられる ランチバッグ保冷機能付き",
+   "price": 1990,
+   "from": false
+  },
+  {
+   "cat": "kitchen",
+   "jan": "4550723061780",
+   "name": "ナイロン カトラリーカバー 約幅5.5×高さ13cm",
+   "price": 490,
+   "from": false
+  }
+ ]
+}
