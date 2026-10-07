@@ -38,15 +38,30 @@ FILL0 = SW0 + SWD - 0.35   # 揺れが収まる少し前から、光が広がる
 grow = '<animate attributeName="r" values="0;720" calcMode="spline" keySplines=".35 0 .3 1" begin="%ss" dur="1.0s" fill="freeze"/>' % FILL0
 glow = '<animate attributeName="r" values="0;620" calcMode="spline" keySplines=".35 0 .3 1" begin="%ss" dur="1.0s" fill="freeze"/>' % FILL0
 CONE = 'M%s %s L%s %s L%s 1700 L%s 1700 Z' % (x0 + 6, bot - 8, x1 - 6, bot - 8, cx + 1420, cx - 1420)
+def _bez(p, x1=.45, y1=0, x2=.55, y2=1):
+    lo, hi = 0.0, 1.0
+    for _ in range(40):
+        m = (lo + hi) / 2; x = 3*(1-m)**2*m*x1 + 3*(1-m)*m*m*x2 + m**3
+        lo, hi = (m, hi) if x < p else (lo, m)
+    m = (lo + hi) / 2; return 3*(1-m)**2*m*y1 + 3*(1-m)*m*m*y2 + m**3
+_A = [0, -68, 58, -44, 30, -16, 6, 0]; _K = [0, .14, .31, .47, .62, .76, .89, 1]
+def _ang(t):
+    u = min(1, max(0, (t - SW0) / SWD))
+    for i in range(7):
+        if u <= _K[i + 1]:
+            return _A[i] + (_A[i + 1] - _A[i]) * _bez((u - _K[i]) / (_K[i + 1] - _K[i]))
+    return 0
+TRAIL = ''.join('<path d="%s" transform="rotate(%.1f %s)" fill="url(#opbm)" opacity="0"><set attributeName="opacity" to="1" begin="%.2fs" fill="freeze"/></path>' % (CONE, _ang(t), PV, t) for t in [0.86 + k * 0.05 for k in range(int((SW0 + SWD - 0.86) / 0.05) + 1)])
 svg = ('<svg viewBox="195 380 880 480" aria-hidden="true"><defs>'
  '<radialGradient id="opbm" gradientUnits="userSpaceOnUse" cx="%s" cy="%s" r="900"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
  '<radialGradient id="oprv"><stop offset="0" stop-color="#fff"/><stop offset=".72" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
  '<radialGradient id="opbg" gradientUnits="userSpaceOnUse" cx="%s" cy="%s" r="620"><stop offset="0" stop-color="#fff1cf" stop-opacity=".5"/><stop offset="1" stop-color="#fff1cf" stop-opacity="0"/></radialGradient>'
  '<radialGradient id="opgl"><stop offset="0" stop-color="#fff1cf" stop-opacity=".22"/><stop offset="1" stop-color="#fff1cf" stop-opacity="0"/></radialGradient>'
  '<mask id="opmask" maskUnits="userSpaceOnUse" x="-2000" y="-2000" width="6000" height="6000">'
- '<g>%s<g>%s<path d="%s" fill="url(#opbm)" opacity="0">%s</path></g></g>'
+ '<g>%s<g>%s<path d="%s" fill="url(#opbm)" opacity="0">%s</path></g></g>' + TRAIL +
  '<circle cx="%s" cy="%s" r="0" fill="url(#oprv)">%s</circle></mask></defs>'
  '<circle cx="%s" cy="%s" r="0" fill="url(#opgl)">%s</circle>'
+ '<rect x="-2000" y="-2000" width="6000" height="6000" fill="#fff1cf" opacity=".12" mask="url(#opmask)"/>'
  '<g class="op-lit" fill="#fff" mask="url(#opmask)"><path d="%s"/><path d="%s"/><path fill-rule="evenodd" d="%s"/></g>'
  '<g class="op-full" fill="#fff"><path d="%s"/><path d="%s"/><path fill-rule="evenodd" d="%s"/></g>'
  '<g>%s<g>%s<g class="op-beam"><path d="%s" fill="url(#opbg)" opacity="0">%s</path></g><path d="%s" fill="#fff"/></g></g>'
