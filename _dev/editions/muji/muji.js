@@ -22,13 +22,14 @@ if(rb)rb.innerHTML='接客<small>お客さまのお部屋</small>';if(vb)vb.inne
 var st=q("stmt");if(st)st.textContent="今日はどちらに使いますか？";
 
 /* 5) 無印良品の商品をさがす */
-var CATS=[["all","すべて"],["sofa","ソファ"],["table","テーブル"],["lt","ローテーブル"],["desk","デスク"],["chair","チェア"],["bench","スツール・ベンチ"],["bed","ベッド"],["shelf","収納"],["rug","ラグ"]];
+var CATS=[["all","すべて"],["sofa","ソファ"],["table","テーブル"],["lt","ローテーブル"],["desk","デスク"],["chair","チェア"],["bench","スツール・ベンチ"],["bed","ベッド"],["shelf","収納"],["rug","ラグ"],["plant","観葉植物"]];
 var S={cat:"all",q:"",w:"",d:"",sort:"rec",place:true};
 function norm(s){return String(s||"").replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)}).replace(/　/g," ").toLowerCase()}
 MC.forEach(function(p,i){p._i=i;p._k=norm(p.name+" "+(p.sub||"")+" "+(p.note||"")+" "+p.jan)});
 function wood(n){return/ウォールナット/.test(n)?"walnut":/オーク/.test(n)?"oak":/タモ|アッシュ/.test(n)?"ash":/パイン/.test(n)?"pine":/ラバーウッド/.test(n)?"rubber":/チーク/.test(n)?"teak":/メープル/.test(n)?"maple":/ブナ/.test(n)?"beech":/チェリー/.test(n)?"cherry":/スチール|ステンレス/.test(n)?"":"oak"}
 /* 商品 → VIM の家具（形は近いものを選び、寸法は商品のまま） */
-function toItem(p){var n=p.name,w=wood(n),o={name:n,w:p.w,d:p.d,h:p.h,price:p.price||"",jan:p.jan,url:p.url};if(w)o.wtex=w;
+function toItem(p){if(p.cat==="plant"){var pl={name:p.name,w:p.w,d:p.d,h:p.h,kind:"p",fs:"g"};if(p.sp){pl.sp=p.sp;pl.pot=p.pot}else pl.shape=p.shape||"r";return pl}
+ var n=p.name,w=wood(n),o={name:n,w:p.w,d:p.d,h:p.h,price:p.price||"",jan:p.jan,url:p.url};if(w)o.wtex=w;
  var m=window.mjShape?mjShape(p):null;if(m&&m.f4){o.f4=m.f4;o.fs=m.fs;o.mj=m.mj;if(m.col)o.col=m.col;if(m.wtex)o.wtex=m.wtex;o.mjv=2;if(m.f4==="round"||m.f4==="bent")o.wtex=w||"oak";if(/スチール|ステンレス/.test(n)&&!/材棚|天板|材デスク/.test(n))delete o.wtex}
  else o.fs={sofa:"sofa",table:"table",lt:"lt",desk:"desk",chair:"chair",bench:"bench",bed:"bed",shelf:"shelf",rug:"g"}[p.cat]||"shelf";
  return o}
@@ -40,8 +41,8 @@ function find(){var t=norm(S.q).split(/\s+/).filter(Boolean),mw=+S.w||0,md=+S.d|
  return r}
 function yen2(v){return v?"¥"+Math.round(v).toLocaleString("ja-JP"):"価格は商品ページで"}
 function draw(){var R=find(),L=q("mjl");q("mjn").textContent=R.length+"件";
- L.innerHTML=R.slice(0,120).map(function(p){return'<div class="mjc"><div class="mjm"><b>'+esc2(p.name)+'</b><span>W'+p.w+' × D'+p.d+' × H'+p.h+' mm'+(p.sub?'　'+esc2(p.sub):'')+'</span><span class="mjp">'+yen2(p.price)+'</span></div>'+
-  '<div class="mjb"><button type="button" class="pri" data-mp="'+p._i+'">'+(S.place?"置く":"一覧に追加")+'</button><a href="'+esc2(p.url)+'" target="_blank" rel="noopener">商品ページ</a></div></div>'}).join("")||'<p class="mje">見つかりませんでした。言葉を短くするか、幅・奥行の上限を外してください。</p>';wire()}
+ L.innerHTML=R.slice(0,120).map(function(p){return'<div class="mjc"><div class="mjm"><b>'+esc2(p.name)+'</b><span>W'+p.w+' × D'+p.d+' × H'+p.h+' mm'+(p.sub?'　'+esc2(p.sub):'')+'</span><span class="mjp">'+(p.cat==='plant'?'VIMの観葉植物':yen2(p.price))+'</span></div>'+
+  '<div class="mjb"><button type="button" class="pri" data-mp="'+p._i+'">'+(S.place?"置く":"一覧に追加")+'</button>'+(p.url?'<a href="'+esc2(p.url)+'" target="_blank" rel="noopener">商品ページ</a>':'')+'</div></div>'}).join("")||'<p class="mje">見つかりませんでした。言葉を短くするか、幅・奥行の上限を外してください。</p>';wire()}
 function open(place){S.place=place!==false;q("mjs").hidden=false;q("mjst").hidden=true;q("mjt").textContent=S.place?"無印良品の商品を置く":"無印良品の商品を一覧に追加";draw();if(!("ontouchstart" in window))setTimeout(function(){try{q("mjq").focus({preventScroll:true})}catch(e){}},60)}
 var box=document.createElement("div");box.id="mjs";box.className="mdl";box.hidden=true;box.setAttribute("role","dialog");box.setAttribute("aria-modal","true");box.setAttribute("aria-labelledby","mjt");
 box.innerHTML='<div class="dbox mjbox"><div class="m3h"><b id="mjt">無印良品の商品を置く</b><button id="mjx" class="ib" type="button">閉じる</button></div>'+
@@ -63,7 +64,7 @@ function act(b){say("押しました。配置しています…");var p=MC[+b.ge
  var k=-1;try{try{document.activeElement&&document.activeElement.blur()}catch(x){}
   if(!plan||typeof plan!=="object")plan={rw:4000,rd:3000,p:[]};["p","o","hm","cut","fl","views","cols","bms"].forEach(function(z){if(!Array.isArray(plan[z]))plan[z]=[]});if(!plan.rw)plan.rw=4000;if(!plan.rd)plan.rd=3000;if(!Array.isArray(items))items=[];
   var o=toItem(p);k=placeTpl(o);
-  if(items[k]){items[k].jan=p.jan;items[k].url=p.url;if(p.price)items[k].price=p.price;try{save()}catch(x){}}
+  if(items[k]&&p.jan){items[k].jan=p.jan;items[k].url=p.url;if(p.price)items[k].price=p.price;try{save()}catch(x){}}
  }catch(err){say("置けませんでした（配置）："+(err&&err.message||err),1);return}
  box.hidden=true;try{["stm","tpl","dlg"].forEach(function(i){var e=document.getElementById(i);if(e&&e.classList.contains("mdl"))e.hidden=true})}catch(x){}
  try{if(document.getElementById("v2").hidden)tab(2)}catch(x){}try{render()}catch(x){}try{rplan()}catch(x){}try{after3d()}catch(x){}
