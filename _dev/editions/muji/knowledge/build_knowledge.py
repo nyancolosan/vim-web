@@ -10,6 +10,7 @@ def build():
     info = c[c.index("var MOODS="):c.index("function moodsOf")]
     data = "(function(){" + sw + "\n" + info + "\n" + f + "\nwindow.CU={F:F,INFO:INFO,MOODS:MOODS,SW:SW}})();"
     s = s.replace("/* %%CURTAIN_DATA%% */", data, 1)
+    s = s.replace("/* %%MATERIALS%% */", open(os.path.join(K, "materials.js"), encoding="utf-8").read(), 1)
     return ('<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>'
             + s + '</body></html>')
 
