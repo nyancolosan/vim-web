@@ -3462,7 +3462,7 @@ function webCloud(){if(typeof billOn!=="function"||!billOn()||!EVAPI)return;var 
  t4:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/>',t5:'<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>',t6:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.2-2.5 3.9"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/>'};
  Object.keys(I).forEach(function(k){var b=document.getElementById(k);b.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">'+I[k]+'</svg><span>'+b.textContent+'</span>'})})();
 /* ===== PRO仕様 ===== */
-function betaSet(on){var ok=!!(window.claude&&window.claude.use);on=on&&ok;document.body.classList.toggle("nobeta",!on);try{localStorage.setItem("bimini-beta",on?"1":"0")}catch(e){}
+function betaSet(on){var ok=!!(window.claude&&window.claude.use)||!!(typeof WEBAI!=="undefined"&&WEBAI.on);on=on&&ok;document.body.classList.toggle("nobeta",!on);try{if(ok)localStorage.setItem("bimini-beta",on?"1":"0")}catch(e){}
  var r=document.getElementById("betarow");if(r)r.hidden=!ok;[].forEach.call(document.querySelectorAll("#betaseg [data-beta]"),function(b){b.className=(b.getAttribute("data-beta")==="1")===on?"on":""})}
 (function(){var v="1";try{v=localStorage.getItem("bimini-beta")||"1"}catch(e){}betaSet(v==="1");var sg=document.getElementById("betaseg");if(sg)sg.addEventListener("click",function(e){var b=e.target.closest("[data-beta]");if(!b)return;betaSet(b.getAttribute("data-beta")==="1");toast(b.getAttribute("data-beta")==="1"?"β版のAI機能を表示しました":"β版のAI機能を隠しました")})})();
 function isPro(){return document.body.classList.contains("pro")}
@@ -4221,6 +4221,25 @@ function iosUI(){var q=function(i){return document.getElementById(i)},on=IOS.act
  q("biosr").onclick=function(){var b=this;busy(b,function(){return PU.restorePurchases()}).then(function(r){var st=iosCI(r);iosApply(st,true);iosUI();q("billm").textContent=st.active?"購入を復元しました。":"復元できる購入が見つかりませんでした。"},function(){q("billm").textContent="復元できませんでした。通信状況を確認してください。"})};
  q("biosm").onclick=function(){var B=nP("Browser"),u="https://apps.apple.com/account/subscriptions";if(B)B.open({url:u});else location.href=u};
  document.addEventListener("visibilitychange",function(){if(!document.hidden)Promise.resolve(PU.getCustomerInfo()).then(function(r){iosApply(iosCI(r),true)}).catch(function(){})})})();
+/*@@BEGIN webai@@*/
+/* ===== Web版のAI（v4.5）：Claude 内の sample と同じ形（SMPL.json / limits）で、サーバー（/api/ai）経由の Claude を使う =====
+ * サーバーに ANTHROPIC_API_KEY が入っているときだけ有効。有料会員のみ・1日の回数上限はサーバーで管理。 */
+var WEBAI={on:false,hold:0,msg:""};
+function webaiImg(b){return new Promise(function(res,rej){var u=URL.createObjectURL(b),im=new Image();im.onload=function(){try{var M=1280,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.naturalWidth*s));c.height=Math.max(1,Math.round(im.naturalHeight*s));
+ var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res({type:"image/jpeg",data:c.toDataURL("image/jpeg",.86).split(",")[1]})}catch(e){rej({code:"image_rejected"})}};im.onerror=function(){URL.revokeObjectURL(u);rej({code:"image_rejected"})};im.src=u})}
+function webaiSay(m){WEBAI.msg=m;WEBAI.hold=Date.now()+2500;toast(m)}
+var WEBAI_S={limits:function(){return Promise.resolve({images:{maxCount:4}})},
+ json:function(input,opts){opts=opts||{};var pr=typeof input==="string"?input:JSON.stringify(input);
+  return Promise.all((opts.images||[]).slice(0,4).map(webaiImg)).then(function(imgs){return fetch(BILL.api+"/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({lid:billLid(true),prompt:pr,images:imgs,tier:opts.modelTier||""})})})
+  .then(function(r){return r.json().catch(function(){return{error:"ai_error"}}).then(function(j){if(r.ok&&j&&j.data)return j.data;var c=(j&&j.error)||"ai_error";
+   if(c==="not_paid"){webaiSay("AI機能は有料プラン（Plus・Pro）で使えます。");throw{code:"handled"}}
+   if(c==="quota"){webaiSay("今日のAIの回数（"+(j.detail||"")+"回）を使い切りました。明日また使えます。");throw{code:"handled"}}
+   if(c==="ai_disabled")throw{code:"sampling_disabled"};throw{code:c}})},function(e){if(e&&e.code)throw e;throw{code:"ai_error"}})}};
+(function(){if(typeof toast==="function"){var _t=toast;toast=function(m){if(WEBAI.hold&&Date.now()<WEBAI.hold&&m!==WEBAI.msg)return;return _t.apply(this,arguments)}}
+ if(window.claude&&window.claude.use)return;if(typeof billOn!=="function"||!billOn())return;
+ fetch(BILL.api+"/ai/status").then(function(r){return r.json()}).then(function(j){if(!j||!j.on)return;WEBAI.on=true;SMPL=WEBAI_S;SMPLIMG=true;SMPLLIM={maxCount:4};document.body.classList.add("ai");
+  var v="1";try{v=localStorage.getItem("bimini-beta")||"1"}catch(e){}betaSet(v==="1")}).catch(function(){})})();
+/*@@END webai@@*/
 /*@@BEGIN ux6@@*/
 /* ===== v4.3 はじめてでも迷わない：①部屋をつくる→②家具を置く→③3Dで見る の案内、
  * 家具の編集パネル（平面図・3D 共通：サイズ・色・素材）、3Dで壁を隠す ===== */

@@ -8,6 +8,8 @@
  * - POST /api/ev        … 匿名の利用状況（どの画面で止まったか、など）
  * - GET  /api/stats     … 利用状況の集計（STATS_KEY が必要）
  * - /api/admin/…        … 管理画面（/admin）。OWNER_LIDS の復元コードで入る。売上・利用者・利用状況・要望・公開の状態
+ * - GET  /api/ai/status … Web版でAI機能が使えるか（ANTHROPIC_API_KEY が入っているか）
+ * - POST /api/ai        … AI機能（写真から3D・AI入力・AIレイアウトなど）。有料会員のみ・1日の回数上限あり
  *
  * 必要な設定（Netlify → サイト設定 → Environment variables）※値はチャットに貼らないこと
  *   STRIPE_KEY            制限付きAPIキー（rk_…）  … 「Secret」にチェック
@@ -19,6 +21,9 @@
  *   PRICE_PRO_LEGACY      （任意）これまでの PRO 月額1,000円の価格ID。カンマ区切りで複数可。Pro として扱います
  *   OWNER_LIDS            （任意）支払いなしでProにする復元コード。カンマ区切りで複数可
  *   STATS_KEY             （任意）/api/stats を見るための合言葉（16文字以上）
+ *   ANTHROPIC_API_KEY     （任意）Web版のAI機能に使う Claude の APIキー（sk-ant-…） … 「Secret」にチェック。未設定ならWeb版のAIは出ない
+ *   AI_MODEL              （任意）使うモデル。既定 claude-sonnet-5-5
+ *   AI_DAILY_PRO / AI_DAILY_PLUS （任意）1人1日あたりのAI回数の上限。既定 Pro 15回・Plus 5回（日本時間で日付が変わると戻る）
  * 契約状態は Netlify Blobs（bimini-lic）、同期データは bimini-sync、利用状況は bimini-ev に保存します。
  * STRIPE_KEY が未設定のあいだは課金は止まり、アプリは「プラン」ボタンで自由に切り替えられます（利用状況の記録は動きます）。
  * Plus の価格に当てはまらない契約は、すべて Pro として扱います（これまでの PRO 契約者を守るため）。
@@ -46,7 +51,8 @@ export default async (req, context) => {
     STRIPE_KEY: E("STRIPE_KEY"), STRIPE_WEBHOOK_SECRET: E("STRIPE_WEBHOOK_SECRET"),
     PRICE_PLUS_M: E("PRICE_PLUS_M"), PRICE_PLUS_Y: E("PRICE_PLUS_Y"), PRICE_PLUS_PASS: E("PRICE_PLUS_PASS"),
     PRICE_PRO: E("PRICE_PRO"), PRICE_PRO_LEGACY: E("PRICE_PRO_LEGACY"),
-    OWNER_LIDS: E("OWNER_LIDS"), STATS_KEY: E("STATS_KEY"), APP_URL: E("APP_URL") || new URL(req.url).origin + "/",
+    OWNER_LIDS: E("OWNER_LIDS"), STATS_KEY: E("STATS_KEY"),
+    ANTHROPIC_API_KEY: E("ANTHROPIC_API_KEY"), AI_MODEL: E("AI_MODEL") || "claude-sonnet-5-5", AI_DAILY_PRO: E("AI_DAILY_PRO"), AI_DAILY_PLUS: E("AI_DAILY_PLUS"), APP_URL: E("APP_URL") || new URL(req.url).origin + "/",
   };
   const cors = corsHeaders(req, env);
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
@@ -62,6 +68,8 @@ export default async (req, context) => {
     if (url.pathname === "/license" && req.method === "GET") return json(await license(url.searchParams.get("lid"), env), 200, cors);
     if (url.pathname === "/portal" && req.method === "POST") return json(await portal(await req.json(), env), 200, cors);
     if (url.pathname === "/db" && req.method === "POST") return json(await db(await req.text(), env), 200, cors);
+    if (url.pathname === "/ai/status" && req.method === "GET") return json({ on: !!env.ANTHROPIC_API_KEY }, 200, cors);
+    if (url.pathname === "/ai" && req.method === "POST") return json(await ai(await req.json(), env), 200, cors);
     return json({ error: "not_found" }, 404, cors);
   } catch (e) {
     // キーや個人情報はログに出さない
@@ -130,6 +138,48 @@ async function license(lid, env) {
   // 管理者（運営者）用：環境変数 OWNER_LIDS に入れた復元コードは、支払いなしでPro扱い
   if (ids(String(env.OWNER_LIDS || "").toLowerCase()).includes(lid)) return { active: true, tier: "pro", plan: "pro", status: "owner", end: null, cancelAt: null };
   return licView(await env.LIC.get("lic:" + lid, "json"));
+}
+
+/* ---------- AI（Web版）：Claude API を呼ぶ。有料会員のみ・1日の回数上限・鍵はサーバーだけが持つ ---------- */
+const AI_IMG = /^image\/(jpeg|png|webp|gif)$/;
+function aiDay() { return new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); }
+function aiJSON(t) {
+  t = String(t || "").trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+  try { return JSON.parse(t); } catch (e) {}
+  const a = t.indexOf("{"), b = t.lastIndexOf("}");
+  if (a >= 0 && b > a) { try { return JSON.parse(t.slice(a, b + 1)); } catch (e) {} }
+  return null;
+}
+async function ai(body, env) {
+  if (!env.ANTHROPIC_API_KEY) throw fail("ai_disabled", 503);
+  const lid = String((body && body.lid) || "").toLowerCase();
+  if (!LID_RE.test(lid)) throw fail("bad_request");
+  const lic = await license(lid, env);
+  if (!lic.active) throw fail("not_paid", 402);
+  const cap = lic.status === "owner" ? 300 : lic.tier === "pro" ? (+env.AI_DAILY_PRO || 15) : (+env.AI_DAILY_PLUS || 5);
+  const key = "ai:" + lid + ":" + aiDay(), used = +(await env.LIC.get(key)) || 0;
+  if (used >= cap) { const e = fail("quota", 429); e.detail = String(cap); throw e; }
+  const prompt = String(body.prompt || "").slice(0, 80000);
+  if (!prompt) throw fail("bad_request");
+  const imgs = (Array.isArray(body.images) ? body.images : []).slice(0, 4).filter((i) => i && AI_IMG.test(i.type) && typeof i.data === "string" && i.data.length < 3000000);
+  const content = imgs.map((i) => ({ type: "image", source: { type: "base64", media_type: i.type, data: i.data } }));
+  content.push({ type: "text", text: prompt + "\n\n回答はJSONだけにしてください（前後に説明文やコードブロックの記号を付けない）。" });
+  await env.LIC.put(key, String(used + 1)); // 失敗しても1回と数える（使いすぎを防ぐ）
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+    body: JSON.stringify({ model: env.AI_MODEL, max_tokens: 6000, messages: [{ role: "user", content }] }),
+  });
+  const j = await r.json().catch(() => null);
+  if (!r.ok) {
+    const t = j && j.error && j.error.type, m = (j && j.error && j.error.message) || "";
+    console.error("ai_error", r.status, t || "");
+    throw fail(r.status === 429 || r.status === 529 || t === "overloaded_error" ? "rate_limited" : /image/i.test(m) ? "image_rejected" : "ai_error", 502);
+  }
+  const text = ((j && j.content) || []).filter((c) => c.type === "text").map((c) => c.text).join("");
+  const data = aiJSON(text);
+  if (!data || typeof data !== "object") throw fail("invalid_json", 502);
+  return { data, left: Math.max(0, cap - used - 1) };
 }
 
 async function portal(body, env) {
