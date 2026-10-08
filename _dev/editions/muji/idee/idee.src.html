@@ -1,0 +1,206 @@
+<title>IDEE</title>
+<style>
+/* 骨格は素材図鑑と同じ（白地・エンジ）。上に切り替え、下にシリーズのカード */
+:root{
+  --bg:#ffffff;--card:#ffffff;--ink:#333333;--sub:#7d7778;--line:#e3dfdf;--fill:#ffffff;
+  --acc:#9f2a37;--accink:#ffffff;--accbg:#f9eef0;--ok:#4f6b45;--shadow:rgba(60,30,35,.05);
+  --rc:8px;color-scheme:light;
+  --f-body:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+main{max-width:720px;margin:0 auto;padding:0 16px}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+header.hd{position:sticky;top:0;z-index:5;background:var(--bg);margin:0 -16px;padding:10px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;min-height:58px}
+.back{display:flex;align-items:center;gap:2px;border:1px solid var(--line);background:var(--card);color:var(--acc);border-radius:999px;min-height:40px;padding:0 14px 0 8px;font-weight:700;font-size:.85rem}
+.hdt{margin-left:auto;text-align:right;line-height:1.25}
+.hdt b{display:block;font-size:.95rem;letter-spacing:.08em}
+.hdt small{color:var(--sub);font-size:.7rem}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:14px}
+.seg button{border:0;background:var(--card);color:var(--sub);min-height:44px;font-size:.8rem;padding:0 2px;line-height:1.25}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--acc);color:var(--accink);font-weight:700}
+.chips{display:flex;gap:6px;overflow-x:auto;margin:10px -16px 0;padding:0 16px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--sub);min-height:36px;font-size:.8rem;padding:0 12px;border-radius:999px;white-space:nowrap}
+.chips button.on{background:var(--accbg);border-color:var(--acc);color:var(--acc);font-weight:700}
+input[type=search]{width:100%;margin-top:10px;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--fill)}
+.flt{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center;font-size:.8rem;color:var(--sub)}
+.flt label{display:flex;align-items:center;gap:4px}
+.flt input{width:64px;font-size:16px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;text-align:right}
+.flt select{font-size:14px;padding:5px 6px;border:1px solid var(--line);border-radius:6px;background:var(--fill)}
+.flt .clr{border:0;background:none;color:var(--acc);font-size:.78rem;text-decoration:underline;padding:4px}
+.lead{font-size:.8rem;color:var(--sub);margin:10px 0 0}
+.list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.k{border:1px solid var(--line);border-radius:var(--rc);background:var(--card);box-shadow:0 1px 3px var(--shadow);scroll-margin-top:70px}
+.k>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 14px}
+.k>summary::-webkit-details-marker{display:none}
+.k>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin-right:4px}
+.k[open]>summary::after{transform:rotate(-135deg)}
+.nm{display:block;font-size:1rem;font-weight:700;letter-spacing:.03em;line-height:1.3}
+.kn{display:block;font-size:.76rem;color:var(--acc);font-weight:600;margin-top:1px}
+.wt{display:block;font-size:.84rem;margin-top:3px}
+.mt{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.tag{font-size:.68rem;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--sub);background:var(--card)}
+.tag.ct{border-color:var(--acc);color:var(--acc)}
+.bd{padding:0 14px 14px}
+.bd h4{font-size:.74rem;color:var(--sub);margin:12px 0 4px;font-weight:600}
+.mean{padding:8px 12px;background:var(--accbg);border-radius:6px;font-size:.84rem}
+.mean small{display:block;color:var(--sub);font-size:.68rem;margin-top:2px}
+.bd ul{margin:0;padding-left:1.2em;font-size:.84rem}
+.bd li{margin:2px 0}
+.bd p{margin:0;font-size:.84rem}
+.it{border-top:1px solid var(--line);padding:8px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:.82rem}
+.it b{font-weight:600}
+.it .pr{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.it .sz{grid-column:1/-1;color:var(--sub);font-size:.76rem}
+.it a{color:var(--acc);font-size:.74rem;white-space:nowrap}
+.it .nt{display:inline-block;font-size:.66rem;border:1px solid var(--acc);color:var(--acc);border-radius:999px;padding:0 6px;margin-left:4px;vertical-align:1px;font-weight:600}
+.it.dim{opacity:.4}
+.pp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.pp button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;text-align:left;min-height:56px;font-size:.84rem;font-weight:600;line-height:1.35}
+.pp button small{display:block;font-weight:400;color:var(--sub);font-size:.72rem;margin-top:2px}
+.pp button.on{border-color:var(--acc);background:var(--accbg);color:var(--acc)}
+.mini{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.mini button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:10px 12px}
+.mini b{font-size:.92rem}
+.mini span{font-size:.78rem;color:var(--sub);grid-column:1}
+.mini i{font-style:normal;grid-row:1/3;grid-column:2;align-self:center;color:var(--acc);font-size:.78rem;font-weight:700;white-space:nowrap}
+table{border-collapse:collapse;width:100%;font-size:.82rem;margin-top:10px}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{font-weight:700;white-space:nowrap}
+td small{display:block;color:var(--acc);font-size:.72rem}
+h3{font-size:.9rem;margin:20px 0 4px}
+.ab p{font-size:.88rem;margin:8px 0}
+dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;margin:8px 0 0;font-size:.84rem}
+dt{color:var(--acc);font-weight:700;white-space:nowrap}
+dd{margin:0}
+.empty{padding:24px;color:var(--sub);text-align:center;font-size:.86rem}
+.note{font-size:.72rem;color:var(--sub);margin-top:18px;line-height:1.7}
+</style>
+
+<main>
+<header class="hd">
+  <button class="back" id="ie-back" type="button" aria-label="住空間のメニューに戻る"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button>
+  <span class="hdt"><b>IDÉE</b><small>idea・住空間</small></span>
+</header>
+<div class="seg" id="seg" role="tablist">
+  <button type="button" data-v="find" class="on">商品を<br>さがす</button><button type="button" data-v="need">目的で<br>えらぶ</button><button type="button" data-v="words">名前と<br>ことば</button><button type="button" data-v="about">IDEE<br>とは</button>
+</div>
+
+<section id="v-find">
+  <input type="search" id="q" placeholder="名前・読み方で探す（例：あーお、ラタン）" aria-label="商品を探す">
+  <div class="chips" id="cats"></div>
+  <div class="flt" id="flt">
+    <label>置ける幅 <input type="number" id="fw" inputmode="numeric" min="0" placeholder="—"> cm以内</label>
+    <label>予算 <select id="fb"><option value="">指定なし</option><option>30000</option><option>50000</option><option>80000</option><option>100000</option><option>150000</option><option>200000</option></select></label>
+    <button type="button" class="clr" id="fclr">条件を消す</button>
+  </div>
+  <p class="lead" id="lead"></p>
+  <div class="list" id="list"></div>
+</section>
+
+<section id="v-need" hidden>
+  <p class="lead">お客さまの暮らしや置き場所から選ぶと、向いているシリーズが出ます。押すと商品の説明に移ります。</p>
+  <div class="pp" id="pp"></div>
+  <div class="mini" id="needres"></div>
+  <p class="note">「こんな方に」は、無印良品・イデーの商品ページや店舗記事の説明と、サイズ・素材をもとにまとめたものです。</p>
+</section>
+
+<section id="v-words" hidden>
+  <h3>シリーズ名の読み方と意味</h3>
+  <p class="lead">イデーの家具は、フランス語・スペイン語・ハワイ語などの名前が多くあります。</p>
+  <table id="names"></table>
+  <h3>商品名に出てくることば</h3>
+  <table id="words"></table>
+</section>
+
+<section id="v-about" hidden class="ab">
+  <div id="about"></div>
+</section>
+
+<p class="note" id="foot"></p>
+</main>
+
+<script>
+var IDEE = /* %%IDEE%% */ null;
+(function(){
+var D=IDEE,$=function(i){return document.getElementById(i)},esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var CAT=[["all","すべて"],["sofa","ソファ・くつろぐ"],["table","テーブル"],["chair","チェア"],["storage","収納"],["light","照明"],["set","セット"],["zakka","雑貨"]];
+var CATN={sofa:"ソファ・くつろぐ",table:"テーブル",chair:"チェア",storage:"収納",light:"照明"};
+var NEED=[["small","一人暮らし・小さな部屋","コンパクトなサイズ"],["floor","床に座ってくつろぐ","座面が低い・床置き"],["kids","子ども・汚れが気になる","拭ける・子どもも使える"],["family","2〜3人以上でソファを使う","幅の広いソファ"],["dining2","2人のダイニング","テーブルとチェア"],["dining4","4人のダイニング","テーブルとチェア"],["desk","デスク・書斎にも","作業もできる"],["storage","片づけ・収納","棚・スタンド"],["light","照明をえらぶ","吊る・置く・壁"],["design","デザインで選ぶ","建築家・デザイナーの家具"]];
+var MS={official:"イデー・無印良品の説明より",store:"無印良品の店舗記事より",general:"一般的な語の意味（公式の由来の説明はありません）"};
+var S={v:"find",cat:"all",q:"",w:"",b:"",need:""};
+function yen(n){return"¥"+Number(n).toLocaleString("ja-JP")}
+function pr(a,b){return yen(a)+(b?"〜"+yen(b):"")}
+function norm(s){return String(s||"").replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)}).replace(/[ぁ-ゖ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)+96)}).replace(/[\s・ー]/g,"").toLowerCase()}
+function url(j){return"https://www.muji.com/jp/ja/store/cmdty/detail/"+j}
+function link(j){return'<a href="'+url(j)+'" target="_blank" rel="noopener">ネットストア↗</a>'}
+function minP(s){return Math.min.apply(null,s.items.map(function(i){return i.p}))}
+function itemOk(i){if(S.w&&i.w&&i.w>+S.w)return false;if(S.w&&!i.w)return false;if(S.b&&i.p>+S.b)return false;return true}
+function filt(){return!!(S.w||S.b)}
+function seriesText(s){return s.n+" "+s.k+" "+s.what+" "+s.mean+" "+s.des+" "+s.story+" "+s.feat.join(" ")+" "+s.suits.join(" ")+" "+(CATN[s.cat]||"")+" "+s.items.map(function(i){return i.n+" "+(i.m||"")+" "+(i.c||"")}).join(" ")}
+function card(s){var ok=s.items.filter(itemOk),mp=Math.min.apply(null,(filt()?ok:s.items).map(function(i){return i.p}));
+ var sets=D.sets.filter(function(x){return x.of.indexOf(s.id)>=0});
+ return'<details class="k" id="s-'+s.id+'"><summary><span><span class="nm">'+esc(s.n)+'</span><span class="kn">'+esc(s.k)+'</span><span class="wt">'+esc(s.what)+'</span><span class="mt"><span class="tag ct">'+esc(CATN[s.cat])+'</span><span class="tag">'+yen(mp)+'〜</span><span class="tag">'+s.items.length+'点</span>'+(s.des?'<span class="tag">デザイナー</span>':"")+'</span></span></summary><div class="bd">'+
+  (s.mean?'<div class="mean"><b>名前の意味</b>　'+esc(s.mean)+'<small>'+esc(MS[s.ms]||"")+'</small></div>':"")+
+  '<h4>どんな家具？</h4><p>'+esc(s.story)+'</p>'+
+  (s.des?'<h4>デザイン</h4><p>'+esc(s.des)+'</p>':"")+
+  '<h4>特長</h4><ul>'+s.feat.map(function(f){return'<li>'+esc(f)+'</li>'}).join("")+'</ul>'+
+  (s.suits.length?'<h4>こんな方に</h4><ul>'+s.suits.map(function(f){return'<li>'+esc(f)+'</li>'}).join("")+'</ul>':"")+
+  '<h4>商品（ネットストアの価格）</h4>'+s.items.map(function(i){return'<div class="it'+(filt()&&!itemOk(i)?" dim":"")+'"><b>'+esc(i.n)+(i.note?'<span class="nt">'+esc(i.note)+'</span>':"")+'</b><span class="pr">'+pr(i.p,i.p2)+'</span><span class="sz">'+esc(i.s)+(i.m?'／'+esc(i.m):"")+(i.c?'／'+esc(i.c):"")+'　'+link(i.j)+'</span></div>'}).join("")+
+  (sets.length?'<h4>お得なセット</h4>'+sets.map(function(x){return'<div class="it"><b>'+esc(x.n)+'</b><span class="pr">'+yen(x.p)+'</span><span class="sz">'+link(x.j)+'</span></div>'}).join(""):"")+
+  '</div></details>'}
+function render(){
+ [].forEach.call($("seg").children,function(b){b.classList.toggle("on",b.dataset.v===S.v)});
+ ["find","need","words","about"].forEach(function(v){$("v-"+v).hidden=S.v!==v});
+ if(S.v==="find")rFind();else if(S.v==="need")rNeed();
+}
+function rFind(){
+ $("cats").innerHTML=CAT.map(function(c){return'<button type="button" data-c="'+c[0]+'"'+(S.cat===c[0]?' class="on"':"")+'>'+c[1]+'</button>'}).join("");
+ var q=norm(S.q),html="",n=0,showS=S.cat!=="set"&&S.cat!=="zakka",showSet=S.cat==="all"||S.cat==="set",showZ=S.cat==="all"||S.cat==="zakka";
+ $("flt").style.display=S.cat==="zakka"?"none":"";
+ if(showS)D.series.forEach(function(s){if(S.cat!=="all"&&s.cat!==S.cat)return;if(q&&norm(seriesText(s)).indexOf(q)<0)return;if(filt()&&!s.items.some(itemOk))return;n++;html+=card(s)});
+ if(showSet){var st=D.sets.filter(function(x){return(!q||norm(x.n).indexOf(q)>=0)&&(!S.b||x.p<=+S.b)&&!S.w});
+  if(st.length){n+=st.length;html+='<details class="k"'+(S.cat==="set"?" open":"")+'><summary><span><span class="nm">お得なセット</span><span class="kn">イデーの人気セットを特別価格で</span><span class="mt"><span class="tag ct">セット</span><span class="tag">'+st.length+'点</span></span></span></summary><div class="bd">'+st.map(function(x){return'<div class="it"><b>'+esc(x.n)+'</b><span class="pr">'+yen(x.p)+'</span><span class="sz">'+link(x.j)+'</span></div>'}).join("")+'</div></details>'}}
+ if(showZ&&!filt())D.zakka.forEach(function(g){var it=g.items.filter(function(i){return!q||norm(g.g+" "+i[1]).indexOf(q)>=0});if(!it.length)return;n++;
+  html+='<details class="k"'+(S.cat==="zakka"&&q?" open":"")+'><summary><span><span class="nm">'+esc(g.g)+'</span><span class="wt">'+esc(g.what)+'</span><span class="mt"><span class="tag ct">雑貨</span><span class="tag">'+it.length+'点</span></span></span></summary><div class="bd">'+it.map(function(i){return'<div class="it"><b>'+esc(i[1])+'</b><span class="pr">'+pr(i[2],i[3])+'</span><span class="sz">'+link(i[0])+'</span></div>'}).join("")+'</div></details>'});
+ var cond=[];if(S.w)cond.push("幅"+S.w+"cm以内");if(S.b)cond.push(yen(S.b)+"まで");
+ $("lead").textContent=(q||cond.length?(cond.length?cond.join("・")+"　":"")+n+"件":"無印良品ネットストアのIDEE売場の商品を、シリーズごとにまとめています。カードを押すと説明が開きます。")+(filt()?"（条件に合わない商品は薄く表示）":"");
+ $("list").innerHTML=html||'<div class="empty">合う商品がありません。条件を変えてみてください。</div>';
+}
+function rNeed(){
+ $("pp").innerHTML=NEED.map(function(x){return'<button type="button" data-n="'+x[0]+'"'+(S.need===x[0]?' class="on"':"")+'>'+esc(x[1])+'<small>'+esc(x[2])+'</small></button>'}).join("");
+ if(!S.need){$("needres").innerHTML="";return}
+ var L=D.series.filter(function(s){return s.tags.indexOf(S.need)>=0});
+ $("needres").innerHTML=L.map(function(s){return'<button type="button" data-s="'+s.id+'"><b>'+esc(s.n)+' <small style="color:var(--acc);font-weight:600">'+esc(s.k)+'</small></b><span>'+esc(s.what)+(s.suits[0]?'｜'+esc(s.suits[0]):"")+'</span><i>'+yen(minP(s))+'〜</i></button>'}).join("")||'<div class="empty">該当なし</div>';
+}
+function goSeries(id){S.v="find";S.cat="all";S.q="";S.w="";S.b="";$("q").value="";$("fw").value="";$("fb").value="";render();var el=$("s-"+id);if(el){el.open=true;el.scrollIntoView({block:"start"})}}
+function staticParts(){
+ $("names").innerHTML='<tr><th>名前</th><th>読み方・意味</th></tr>'+D.series.map(function(s){return'<tr><td><b>'+esc(s.n)+'</b><small>'+esc(CATN[s.cat])+'</small></td><td><b style="color:var(--acc)">'+esc(s.k)+'</b><br>'+(s.mean?esc(s.mean)+(s.ms==="general"?'<small style="color:var(--sub)">一般的な語の意味</small>':""):'<span style="color:var(--sub)">由来の説明はありません</span>')+'</td></tr>'}).join("");
+ $("words").innerHTML='<tr><th>ことば</th><th>意味</th></tr>'+D.words.map(function(w){return'<tr><td><b>'+esc(w[0])+'</b>'+(w[1]?'<small>'+esc(w[1])+'</small>':"")+'</td><td>'+esc(w[2])+'</td></tr>'}).join("");
+ var B=D.brand;
+ $("about").innerHTML='<h3>IDÉE（イデー）とは</h3>'+B.about.map(function(p){return'<p>'+esc(p)+'</p>'}).join("")+
+  '<h3>お客さまに伝えたいこと</h3><dl>'+B.facts.map(function(f){return'<dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd>'}).join("")+'</dl>'+
+  '<h3>イデーショップのサービス</h3><dl>'+B.services.map(function(f){return'<dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd>'}).join("")+'</dl>'+
+  '<p class="note">サービスの内容・期間はイデーショップの店舗記事（2021〜2022年ごろ）をもとにしています。いまの受付状況は店舗で確認してください。</p>';
+ $("foot").textContent="価格は "+D.at+" 時点の無印良品ネットストアの表示（税込）です。価格・在庫・仕様は変わることがあるので、接客の前に「ネットストア↗」で確認してください。出典："+D.source+"。";
+}
+$("seg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.v=b.dataset.v;render();window.scrollTo(0,0)});
+$("cats").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.cat=b.dataset.c;rFind();b.scrollIntoView({inline:"center",block:"nearest"})});
+$("q").addEventListener("input",function(){S.q=this.value;rFind()});
+$("fw").addEventListener("input",function(){S.w=this.value.replace(/\D/g,"");rFind()});
+$("fb").addEventListener("change",function(){S.b=this.value;rFind()});
+$("fclr").addEventListener("click",function(){S.w="";S.b="";$("fw").value="";$("fb").value="";rFind()});
+$("fb").innerHTML='<option value="">指定なし</option>'+[30000,50000,80000,100000,150000,200000,300000].map(function(v){return'<option value="'+v+'">'+yen(v)+'まで</option>'}).join("");
+$("pp").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S.need=S.need===b.dataset.n?"":b.dataset.n;rNeed()});
+$("needres").addEventListener("click",function(e){var b=e.target.closest("button[data-s]");if(b)goSeries(b.dataset.s)});
+staticParts();render();
+function tell(m){try{parent.postMessage({mj:m},"*")}catch(e){}}
+$("ie-back").addEventListener("click",function(){tell("sub-close")});tell("sub-ready");
+})();
+</script>

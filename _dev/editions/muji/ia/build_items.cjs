@@ -1,5 +1,5 @@
 // IA モードの「売った商品」検索に使う商品一覧をつくる：node build_items.cjs > items.json
-// アプリに入っているネットストアの商品（家具・新商品・売れ筋・オーダーカーテン・H&B）を JAN でまとめる。
+// アプリに入っているネットストアの商品（家具・新商品・売れ筋・オーダーカーテン・H&B・IDEE）を JAN でまとめる。
 // 1件 = [JAN, 商品名, 分類, 価格（いちばん安い価格）]
 const fs = require("fs"), path = require("path");
 const M = path.join(__dirname, "..");
@@ -27,4 +27,9 @@ JSON.parse(fs.readFileSync(path.join(__dirname, "trend.json"), "utf8")).cats.for
   const a = s.indexOf("var P={"), b = s.indexOf("};", a) + 1;
   const P = new Function("return " + s.slice(a + 6, b))();
   Object.values(P).forEach(p => put(p[1], p[0], "H&B", p[2])); }
+// IDEE（idee.json：家具・照明・セット・雑貨）
+{ const D = JSON.parse(fs.readFileSync(path.join(M, "idee", "idee.json"), "utf8"));
+  D.series.forEach(x => x.items.forEach(i => put(i.j, "[IDEE] " + i.n, "IDEE", i.p)));
+  D.sets.forEach(x => put(x.j, "[IDEE] セット " + x.n, "IDEE", x.p));
+  D.zakka.forEach(g => g.items.forEach(i => put(i[0], "[IDEE] " + i[1], "IDEE", i[2]))); }
 process.stdout.write(JSON.stringify([...out.values()]));

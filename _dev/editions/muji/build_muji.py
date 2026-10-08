@@ -69,5 +69,9 @@ open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "knowledge.html
 sys.path.insert(0, os.path.join(E, "hb"))
 from build_hb import build as build_hb
 open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "hb.html"), "w", encoding="utf-8").write(build_hb())
+# IDEE（同じフォルダの idee.html として一緒に公開する）
+sys.path.insert(0, os.path.join(E, "idee"))
+from build_idee import build as build_idee
+open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "idee.html"), "w", encoding="utf-8").write(build_idee())
 # アイコンは idea/make_idea.py が idea/idea-icon.svg に書き出す
 print("ok", len(s.encode()) // 1024, "KB,", len(cat), "items")
