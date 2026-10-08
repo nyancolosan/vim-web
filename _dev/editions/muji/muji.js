@@ -111,13 +111,14 @@ var IC={
  living:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="20" height="17" rx="1.5"/><path d="M17 7v17M7 15.5h20"/><path d="M5 7h24" /><path d="M9 34v-4a3 3 0 0 1 3-3h24a3 3 0 0 1 3 3v4"/><path d="M7 34h34v5H7z"/><path d="M10 39v3M38 39v3"/><path d="M33 7v14M30 21h6"/></svg>',
  know:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="11" width="20" height="28" rx="3" transform="rotate(-12 16 25)"/><rect x="20" y="8" width="21" height="30" rx="3"/><path d="M25 15h11M25 21h11M25 27h7" opacity=".55"/><circle cx="30.5" cy="33" r="1.4"/></svg>',
  idee:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 24c0-5 3-8 8-8h12c5 0 8 3 8 8v5H10z"/><path d="M6 25a3 3 0 0 1 4-1v10H6zM42 25a3 3 0 0 0-4-1v10h4z"/><path d="M6 34h36v3H6z"/><path d="M11 37l-1 5M37 37l1 5"/><circle cx="24" cy="9" r="2"/></svg>',
+ shelf:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5v38M39 5v38"/><path d="M9 13h30M9 24h30M9 35h30"/><path d="M14 13v-5h7v5M27 24v-7h6v7M15 35v-6h10v6"/></svg>',
  memo:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6h20l6 6v30H12z"/><path d="M32 6v6h6"/><path d="M18 21h14M18 28h14M18 35h8"/></svg>',
  cmp:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="14" width="16" height="26" rx="2"/><rect x="27" y="8" width="16" height="32" rx="2"/><path d="M10 22h6M32 16h6M32 24h6" opacity=".6"/></svg>',
  menu:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>'};
 /* --- 全画面で重ねるページ（curtain.html・knowledge.html）--- */
 var subs={},cur=null,timer=null;
-function closeSub(back){var was=cur;if(cur&&subs[cur])subs[cur].el.hidden=true;cur=null;document.documentElement.style.overflow="";if(back!==false)showHome(was==="curtain"||was==="idee"?"living":"top")}
-function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb.html",idee:"idee.html"}[k],title={curtain:"オーダーカーテン見積",know:"素材図鑑",hb:"H&B",idee:"IDEE"}[k];
+function closeSub(back){var was=cur;if(cur&&subs[cur])subs[cur].el.hidden=true;cur=null;document.documentElement.style.overflow="";if(back!==false)showHome(was==="curtain"||was==="idee"||was==="shelf"?"living":"top")}
+function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb.html",idee:"idee.html",shelf:"shelf.html"}[k],title={curtain:"オーダーカーテン見積",know:"素材図鑑",hb:"H&B",idee:"IDEE",shelf:"オーダー収納の見積り"}[k];
  hideHome();var st=q("stm");if(st)st.hidden=true;
  if(!subs[k]){var el=document.createElement("div");el.className="mjsub-ov";el.setAttribute("role","dialog");el.setAttribute("aria-label",title);
   el.innerHTML='<div class="mjsubf" hidden>'+title+'をここで開けませんでした。<br><a href="'+src+'" target="_blank" rel="noopener">別のタブで開く</a><br><button type="button" class="ib">メニューに戻る</button></div><iframe src="'+src+'" title="'+title+'"></iframe>';
@@ -134,13 +135,14 @@ home.innerHTML='<div class="phin"><div class="phlogo" role="img" aria-label="ide
  '<section class="nw" id="nw" aria-labelledby="nwt"></section><p class="phsup">supported by VIM</p></div>';
 /* はじめの画面：H&B・住空間・素材図鑑。住空間を押すと、家具を置く／オーダーカーテンの2つが出る */
 var MENU={top:[["hb",IC.hb,"H&amp;B（ヘルス&amp;ビューティー）","肌の悩みや好みから、おすすめのスキンケアと使い方を出す"],
-  ["living",IC.living,"住空間","部屋に家具を置く・オーダーカーテンの見積り・IDEE"],
+  ["living",IC.living,"住空間","部屋に家具を置く・カーテンや収納の見積り・IDEE"],
   ["know",IC.know,"素材図鑑","木材・繊維・樹脂・金属・焼き物など、素材の特長と接客のひとこと"],
   ["memo",IC.memo,"接客メモ","お客さまの部屋・好み・提案した商品を残して、次の来店で見返す"]],
  living:[["room",IC.room,"部屋に家具を置く","間取りに無印良品の家具を実寸で置いて、3Dで確かめる"],
   ["curtain",IC.curtain,"オーダーカーテンの見積り","生地を選んでサイズを入れると、金額と見積書をつくる"],
   ["cmp",IC.cmp,"商品を比べる","2〜3点を並べて、サイズ・価格・素材・向く人を見る"],
-  ["idee",IC.idee,"IDEE（イデー）","わかりにくい名前の家具を、読み方・サイズ・向く人でひと目で"]]};
+  ["idee",IC.idee,"IDEE（イデー）","わかりにくい名前の家具を、読み方・サイズ・向く人でひと目で"],
+  ["shelf",IC.shelf,"オーダー収納の見積り","SUSの棚板やスタッキングシェルフを、サイズを入れて金額まで"]]};
 function menu(lv){var g=home.querySelector("#phgrid"),qq=home.querySelector("#phq");
  qq.innerHTML=lv==="living"?'<button type="button" class="phback" data-go="top" aria-label="はじめの画面に戻る"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button><span>住空間</span>':"今日は何をしますか？";
  g.innerHTML=MENU[lv].map(function(m){return'<button type="button" class="phc" data-go="'+m[0]+'"><span class="phi">'+m[1]+'</span><span><b>'+m[2]+'</b><small>'+m[3]+'</small></span>'+(m[0]==="living"?'<svg class="phgo" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>':'')+'</button>'}).join("");
