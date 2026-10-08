@@ -42,14 +42,14 @@ function find(){var t=norm(S.q).split(/\s+/).filter(Boolean),mw=+S.w||0,md=+S.d|
 function yen2(v){return v?"¥"+Math.round(v).toLocaleString("ja-JP"):"価格は商品ページで"}
 function draw(){var R=find(),L=q("mjl");q("mjn").textContent=R.length+"件";
  L.innerHTML=R.slice(0,120).map(function(p){return'<div class="mjc"><div class="mjm"><b>'+esc2(p.name)+'</b><span>W'+p.w+' × D'+p.d+' × H'+p.h+' mm'+(p.sub?'　'+esc2(p.sub):'')+'</span><span class="mjp">'+(p.cat==='plant'?'VIMの観葉植物':yen2(p.price))+'</span></div>'+
-  '<div class="mjb"><button type="button" class="pri" data-mp="'+p._i+'">'+(S.place?"置く":"一覧に追加")+'</button>'+(p.url?'<a href="'+esc2(p.url)+'" target="_blank" rel="noopener">商品ページ</a>':'')+'</div></div>'}).join("")||'<p class="mje">見つかりませんでした。言葉を短くするか、幅・奥行の上限を外してください。</p>';wire()}
+  '<div class="mjb"><button type="button" class="pri" data-mp="'+p._i+'">'+(S.place?"置く":"一覧に追加")+'</button>'+'<button type="button" class="mjcmp" data-cp="'+p._i+'">比べる</button>'+(p.url?'<a href="'+esc2(p.url)+'" target="_blank" rel="noopener">商品ページ</a>':'')+'</div></div>'}).join("")||'<p class="mje">見つかりませんでした。言葉を短くするか、幅・奥行の上限を外してください。</p>';wire()}
 function open(place){S.place=place!==false;q("mjs").hidden=false;q("mjst").hidden=true;q("mjt").textContent=S.place?"無印良品の商品を置く":"無印良品の商品を一覧に追加";draw();if(!("ontouchstart" in window))setTimeout(function(){try{q("mjq").focus({preventScroll:true})}catch(e){}},60)}
 var box=document.createElement("div");box.id="mjs";box.className="mdl";box.hidden=true;box.setAttribute("role","dialog");box.setAttribute("aria-modal","true");box.setAttribute("aria-labelledby","mjt");
 box.innerHTML='<div class="dbox mjbox"><div class="m3h"><b id="mjt">無印良品の商品を置く</b><button id="mjx" class="ib" type="button">閉じる</button></div>'+
  '<input id="mjq" type="search" placeholder="商品名・素材・JANで探す（例：オーク 2シーター）" autocomplete="off">'+
  '<div class="mjcats" id="mjcats">'+CATS.map(function(c){return'<button type="button" data-c="'+c[0]+'"'+(c[0]==="all"?' class="on"':'')+'>'+c[1]+'</button>'}).join("")+'</div>'+
  '<div class="mjf"><label>幅 ≤<input id="mjw" type="number" inputmode="numeric" placeholder="mm"></label><label>奥行 ≤<input id="mjd" type="number" inputmode="numeric" placeholder="mm"></label><label>並び<select id="mjo"><option value="rec">おすすめ</option><option value="pa">価格の安い順</option><option value="pd">価格の高い順</option><option value="w">幅の小さい順</option></select></label></div>'+
- '<div id="mjst" class="mjst" hidden></div><div class="mjh"><span id="mjn"></span><button type="button" id="mjg" class="mjlink">ほかの家具（形だけ）から選ぶ</button></div><div id="mjl" class="mjlist"></div>'+
+ '<div id="mjst" class="mjst" hidden></div><div class="mjh"><span id="mjn"></span><button type="button" id="mjcmpo" class="mjlink">比較を見る</button><button type="button" id="mjg" class="mjlink">ほかの家具（形だけ）から選ぶ</button></div><div id="mjl" class="mjlist"></div>'+
  '<p class="mjnote">'+esc2(AT)+'時点の無印良品ネットストアの情報（'+MC.length+'点）。価格・在庫・仕様は変わることがあります。お客さまには商品ページで最新をご確認ください。形は近い3Dで表示し、寸法は商品のままです。</p></div>';
 document.body.appendChild(box);
 q("mjx").onclick=function(){box.hidden=true};box.addEventListener("click",function(e){if(e.target===box)box.hidden=true});
@@ -57,6 +57,7 @@ q("mjq").addEventListener("input",function(e){S.q=e.target.value;draw()});
 q("mjw").addEventListener("input",function(e){S.w=e.target.value;draw()});q("mjd").addEventListener("input",function(e){S.d=e.target.value;draw()});
 q("mjo").addEventListener("change",function(e){S.sort=e.target.value;draw()});
 q("mjcats").onclick=function(e){var b=e.target.closest("[data-c]");if(!b)return;S.cat=b.getAttribute("data-c");[].forEach.call(q("mjcats").children,function(x){x.className=x===b?"on":""});draw()};
+q("mjcmpo").onclick=function(){box.hidden=true;window.ideaCmp&&ideaCmp.open()};
 q("mjg").onclick=function(){box.hidden=true;TPLPLACE=S.place;var lb=q("tpla")&&q("tpla").querySelector(".lb");if(lb)lb.textContent=S.place?"部屋に置く":"一覧に追加";tplOpen()};
 /* 置く：スマホではキーボードが閉じて並びがずれ、タップが外れやすいので、押した時点で決める */
 function say(m,bad){var e=q("mjst");if(!e)return;e.textContent=m;e.className="mjst "+(bad?"bad":"ok");e.hidden=false}
@@ -69,6 +70,7 @@ function act(b){say("押しました。配置しています…");var p=MC[+b.ge
  box.hidden=true;try{["stm","tpl","dlg"].forEach(function(i){var e=document.getElementById(i);if(e&&e.classList.contains("mdl"))e.hidden=true})}catch(x){}
  try{if(document.getElementById("v2").hidden)tab(2)}catch(x){}try{render()}catch(x){}try{rplan()}catch(x){}try{after3d()}catch(x){}
  try{toast(p.name+" を置きました。ドラッグで動かせます。")}catch(x){}}
+q("mjl").addEventListener("click",function(e){var b=e.target.closest("[data-cp]");if(!b||!window.ideaCmp)return;if(ideaCmp.add(+b.getAttribute("data-cp")))b.textContent="比較に入れた"});
 /* ボタンごとに直接つける（親での振り分けをやめる）。touchend と click の二重実行は防ぐ */
 var lastAct=0;
 function wire(){[].forEach.call(q("mjl").querySelectorAll("[data-mp]"),function(b){
@@ -109,6 +111,8 @@ var IC={
  living:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="20" height="17" rx="1.5"/><path d="M17 7v17M7 15.5h20"/><path d="M5 7h24" /><path d="M9 34v-4a3 3 0 0 1 3-3h24a3 3 0 0 1 3 3v4"/><path d="M7 34h34v5H7z"/><path d="M10 39v3M38 39v3"/><path d="M33 7v14M30 21h6"/></svg>',
  know:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="11" width="20" height="28" rx="3" transform="rotate(-12 16 25)"/><rect x="20" y="8" width="21" height="30" rx="3"/><path d="M25 15h11M25 21h11M25 27h7" opacity=".55"/><circle cx="30.5" cy="33" r="1.4"/></svg>',
  idee:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 24c0-5 3-8 8-8h12c5 0 8 3 8 8v5H10z"/><path d="M6 25a3 3 0 0 1 4-1v10H6zM42 25a3 3 0 0 0-4-1v10h4z"/><path d="M6 34h36v3H6z"/><path d="M11 37l-1 5M37 37l1 5"/><circle cx="24" cy="9" r="2"/></svg>',
+ memo:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6h20l6 6v30H12z"/><path d="M32 6v6h6"/><path d="M18 21h14M18 28h14M18 35h8"/></svg>',
+ cmp:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="14" width="16" height="26" rx="2"/><rect x="27" y="8" width="16" height="32" rx="2"/><path d="M10 22h6M32 16h6M32 24h6" opacity=".6"/></svg>',
  menu:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>'};
 /* --- 全画面で重ねるページ（curtain.html・knowledge.html）--- */
 var subs={},cur=null,timer=null;
@@ -131,9 +135,11 @@ home.innerHTML='<div class="phin"><div class="phlogo" role="img" aria-label="ide
 /* はじめの画面：H&B・住空間・素材図鑑。住空間を押すと、家具を置く／オーダーカーテンの2つが出る */
 var MENU={top:[["hb",IC.hb,"H&amp;B（ヘルス&amp;ビューティー）","肌の悩みや好みから、おすすめのスキンケアと使い方を出す"],
   ["living",IC.living,"住空間","部屋に家具を置く・オーダーカーテンの見積り・IDEE"],
-  ["know",IC.know,"素材図鑑","木材・繊維・樹脂・金属・焼き物など、素材の特長と接客のひとこと"]],
+  ["know",IC.know,"素材図鑑","木材・繊維・樹脂・金属・焼き物など、素材の特長と接客のひとこと"],
+  ["memo",IC.memo,"接客メモ","お客さまの部屋・好み・提案した商品を残して、次の来店で見返す"]],
  living:[["room",IC.room,"部屋に家具を置く","間取りに無印良品の家具を実寸で置いて、3Dで確かめる"],
   ["curtain",IC.curtain,"オーダーカーテンの見積り","生地を選んでサイズを入れると、金額と見積書をつくる"],
+  ["cmp",IC.cmp,"商品を比べる","2〜3点を並べて、サイズ・価格・素材・向く人を見る"],
   ["idee",IC.idee,"IDEE（イデー）","わかりにくい名前の家具を、読み方・サイズ・向く人でひと目で"]]};
 function menu(lv){var g=home.querySelector("#phgrid"),qq=home.querySelector("#phq");
  qq.innerHTML=lv==="living"?'<button type="button" class="phback" data-go="top" aria-label="はじめの画面に戻る"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button><span>住空間</span>':"今日は何をしますか？";
@@ -165,7 +171,7 @@ document.body.appendChild(home);
 try{home.querySelector(".phlogo").innerHTML=vimWord()}catch(e){}
 function showHome(lv){home.hidden=false;menu(typeof lv==="string"?lv:"top");document.documentElement.style.overflow="hidden"}
 function hideHome(){home.hidden=true;document.documentElement.style.overflow=""}
-home.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(!b)return;var g=b.getAttribute("data-go");if(g==="top"||g==="living"){menu(g);home.scrollTop=0}else if(g==="room")hideHome();else openSub(g)});
+home.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(!b)return;var g=b.getAttribute("data-go");if(g==="top"||g==="living"){menu(g);home.scrollTop=0}else if(g==="room")hideHome();else if(g==="memo"){hideHome();window.ideaMemo&&ideaMemo.open()}else if(g==="cmp"){hideHome();window.ideaCmp&&ideaCmp.open()}else openSub(g)});
 /* ヘッダーに「メニュー」、ロゴを押してもメニューへ */
 var hb=document.querySelector("h1 .hbt"),th=q("thb");
 if(hb&&!q("ideamenu")){var b=document.createElement("button");b.id="ideamenu";b.className="hb";b.type="button";b.setAttribute("aria-label","メニュー");b.innerHTML=IC.menu+"メニュー";b.onclick=showHome;hb.insertBefore(b,th&&th.parentNode===hb?th:null)}
