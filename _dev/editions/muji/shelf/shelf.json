@@ -1,0 +1,2358 @@
+{
+ "version": "2026-10-08",
+ "sus": {
+  "source": "MUJIGRAM 02_15応対（生活雑貨） 02_15_07①SUSオーダー商品一覧・寸法ガイド / ②サイズマトリクス（2025/04/22更新）",
+  "product": "ステンレスユニットシェルフ（SUS）追加棚 幅オーダー（オーク材／ウォールナット材）",
+  "widthRule": "棚板実寸（④）を1cm単位で 25〜81cm から指定",
+  "dimensionOffsets": {
+   "note": "④棚板実寸を基準(cm)。①は設置スペースに収めたい時、⑤は中に物を収めたい時に確認",
+   "legOuter_1": 5.5,
+   "frameOuter_2": 3.5,
+   "shelfWithBracket_3": 1.5,
+   "shelfActual_4": 0,
+   "innerClear_5": -1
+  },
+  "widthBands": [
+   {
+    "min": 25,
+    "max": 36,
+    "oak": {
+     "jan": "4550583929138",
+     "price": 5500
+    },
+    "walnut": {
+     "jan": "4550583929060",
+     "price": 6000
+    }
+   },
+   {
+    "min": 37,
+    "max": 46,
+    "oak": {
+     "jan": "4550583929145",
+     "price": 6000
+    },
+    "walnut": {
+     "jan": "4550583929077",
+     "price": 6500
+    }
+   },
+   {
+    "min": 47,
+    "max": 56,
+    "oak": {
+     "jan": "4550583929152",
+     "price": 6500
+    },
+    "walnut": {
+     "jan": "4550583929084",
+     "price": 7000
+    }
+   },
+   {
+    "min": 57,
+    "max": 66,
+    "oak": {
+     "jan": "4550583929039",
+     "price": 7490
+    },
+    "walnut": {
+     "jan": "4550583929091",
+     "price": 7990
+    }
+   },
+   {
+    "min": 67,
+    "max": 76,
+    "oak": {
+     "jan": "4550583929046",
+     "price": 7990
+    },
+    "walnut": {
+     "jan": "4550583929107",
+     "price": 8490
+    }
+   },
+   {
+    "min": 77,
+    "max": 81,
+    "oak": {
+     "jan": "4550583929053",
+     "price": 8490
+    },
+    "walnut": {
+     "jan": "4550583929114",
+     "price": 10900
+    }
+   }
+  ],
+  "crossbars": {
+   "small": {
+    "jan": "4550583922276",
+    "name": "ステンレスユニットシェルフ用クロスバー・小",
+    "price": 1490,
+    "stock": "通常在庫品"
+   },
+   "medium": {
+    "jan": "4550583929121",
+    "name": "受ステンレスユニットシェルフ用クロスバー中",
+    "price": 2290,
+    "stock": "受注品"
+   },
+   "large": {
+    "jan": "4550583922269",
+    "name": "ステンレスユニットシェルフ用クロスバー・大",
+    "price": 1790,
+    "stock": "通常在庫品"
+   }
+  },
+  "crossbarQtyByFrame": {
+   "small": 1,
+   "medium": 1,
+   "large": 2,
+   "xlarge": 2
+  },
+  "crossbarTypeByWidth": {
+   "note": "棚板実寸(cm)→帆立サイズ別のクロスバー種類 S=小 M=中 L=大",
+   "25": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "26": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "27": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "28": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "29": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "30": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "31": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "32": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "33": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "34": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "35": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "36": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "37": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "38": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "39": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "40": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "41": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "42": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "43": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "44": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "45": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "46": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "47": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "48": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "49": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "50": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "51": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "52": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "53": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "54": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "55": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "56": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "57": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "58": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "S"
+   },
+   "59": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "L"
+   },
+   "60": {
+    "small": "S",
+    "medium": "S",
+    "large": "S",
+    "xlarge": "L"
+   },
+   "61": {
+    "small": "S",
+    "medium": "L",
+    "large": "S",
+    "xlarge": "L"
+   },
+   "62": {
+    "small": "S",
+    "medium": "L",
+    "large": "S",
+    "xlarge": "L"
+   },
+   "63": {
+    "small": "S",
+    "medium": "L",
+    "large": "S",
+    "xlarge": "L"
+   },
+   "64": {
+    "small": "M",
+    "medium": "L",
+    "large": "M",
+    "xlarge": "L"
+   },
+   "65": {
+    "small": "M",
+    "medium": "L",
+    "large": "M",
+    "xlarge": "L"
+   },
+   "66": {
+    "small": "M",
+    "medium": "L",
+    "large": "M",
+    "xlarge": "L"
+   },
+   "67": {
+    "small": "M",
+    "medium": "L",
+    "large": "M",
+    "xlarge": "L"
+   },
+   "68": {
+    "small": "M",
+    "medium": "L",
+    "large": "M",
+    "xlarge": "L"
+   },
+   "69": {
+    "small": "M",
+    "medium": "L",
+    "large": "M",
+    "xlarge": "L"
+   },
+   "70": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "71": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "72": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "73": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "74": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "75": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "76": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "77": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "78": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "79": {
+    "small": "M",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "80": {
+    "small": "L",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   },
+   "81": {
+    "small": "L",
+    "medium": "L",
+    "large": "L",
+    "xlarge": "L"
+   }
+  }
+ },
+ "stacking": {
+  "source": "MUJIGRAM 02_15応対（生活雑貨） 02_15_08①スタッキングシェルフオーダー商品一覧（更新日2019/04/22）・②組立確認シート",
+  "heightOrder": {
+   "rule": "変則6段（239.5cm）から2.0cm刻みで低くできる",
+   "maxCm": 239.5,
+   "stepCm": 2.0,
+   "minCm": null,
+   "minNote": "下限は資料に記載なし（要確認）"
+  },
+  "assembly": {
+   "note": "組立確認シートに「5列以上 税込5,250円」の記載。条件の詳細は要確認",
+   "fiveColumnsOrMore": 5250
+  },
+  "notes": [
+   "基本セットに追加セットを横につなぐ。既にお持ちの商品への追加セット取付は不可（組立確認シート）",
+   "お届け先に組立スペース（商品を寝かせた分）が必要",
+   "壁・天井への固定パーツはお客様自身で取付"
+  ],
+  "items": [
+   {
+    "order_type": "height",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337529441",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 29000
+   },
+   {
+    "order_type": "height",
+    "size": "slim",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337529540",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 27000
+   },
+   {
+    "order_type": "height",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337529557",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 32000
+   },
+   {
+    "order_type": "height",
+    "size": "slim",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337529564",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 30000
+   },
+   {
+    "order_type": "height",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337529601",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 33000
+   },
+   {
+    "order_type": "height",
+    "size": "slim",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337529618",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 31000
+   },
+   {
+    "order_type": "height",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337529625",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 35000
+   },
+   {
+    "order_type": "height",
+    "size": "slim",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337532007",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 33000
+   },
+   {
+    "order_type": "height",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337532014",
+    "width_cm": 42.0,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 30000
+   },
+   {
+    "order_type": "height",
+    "size": "regular",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337532021",
+    "width_cm": 40.0,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 28000
+   },
+   {
+    "order_type": "height",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337532601",
+    "width_cm": 42.0,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 33000
+   },
+   {
+    "order_type": "height",
+    "size": "regular",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337532649",
+    "width_cm": 40.0,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 31000
+   },
+   {
+    "order_type": "height",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337532687",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 39000
+   },
+   {
+    "order_type": "height",
+    "size": "regular",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337532939",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 37000
+   },
+   {
+    "order_type": "height",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337532977",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 41000
+   },
+   {
+    "order_type": "height",
+    "size": "regular",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337533011",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 39000
+   },
+   {
+    "order_type": "height",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337533059",
+    "width_cm": 81.5,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 36000
+   },
+   {
+    "order_type": "height",
+    "size": "wide",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337533448",
+    "width_cm": 79.5,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 33000
+   },
+   {
+    "order_type": "height",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337533486",
+    "width_cm": 81.5,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 39000
+   },
+   {
+    "order_type": "height",
+    "size": "wide",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337533493",
+    "width_cm": 79.5,
+    "depth_cm": 28.5,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 36000
+   },
+   {
+    "order_type": "height",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337533530",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 47000
+   },
+   {
+    "order_type": "height",
+    "size": "wide",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "oak",
+    "jan": "4549337533547",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 43000
+   },
+   {
+    "order_type": "height",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337533585",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 49000
+   },
+   {
+    "order_type": "height",
+    "size": "wide",
+    "set": "add",
+    "tiers": "6v",
+    "wood": "walnut",
+    "jan": "4549337533592",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": null,
+    "ship_size": 4,
+    "price": 47000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337533639",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 13000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "2",
+    "wood": "oak",
+    "jan": "4549337533646",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 16000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "3",
+    "wood": "oak",
+    "jan": "4549337533684",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 19000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337533783",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 22000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "5",
+    "wood": "oak",
+    "jan": "4549337533820",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 25000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337533837",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 29000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337533875",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 11000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "2",
+    "wood": "oak",
+    "jan": "4549337533882",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 14000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "3",
+    "wood": "oak",
+    "jan": "4549337533929",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 17000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337533936",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 20000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "5",
+    "wood": "oak",
+    "jan": "4549337533974",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 22000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337533981",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 27000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337534025",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 16000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "2",
+    "wood": "walnut",
+    "jan": "4549337539037",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 19000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "3",
+    "wood": "walnut",
+    "jan": "4549337539044",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 22000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337539051",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 25000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "5",
+    "wood": "walnut",
+    "jan": "4549337539068",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 27000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337539075",
+    "width_cm": 28.5,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337539082",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 14000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "2",
+    "wood": "walnut",
+    "jan": "4549337539129",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 17000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "3",
+    "wood": "walnut",
+    "jan": "4549337539136",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 20000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337539143",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 22000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "5",
+    "wood": "walnut",
+    "jan": "4549337539181",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 25000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337539198",
+    "width_cm": 26.5,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 30000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337539204",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 13000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "2",
+    "wood": "oak",
+    "jan": "4549337539211",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 17000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "3",
+    "wood": "oak",
+    "jan": "4549337539228",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 22000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337539235",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 26000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "5",
+    "wood": "oak",
+    "jan": "4549337549319",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 28000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337549326",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337549333",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 11000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "2",
+    "wood": "oak",
+    "jan": "4549337549340",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 15000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "3",
+    "wood": "oak",
+    "jan": "4549337549357",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 20000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337549364",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 24000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "5",
+    "wood": "oak",
+    "jan": "4549337549401",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 26000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337549418",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 30000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337549425",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 16000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "2",
+    "wood": "walnut",
+    "jan": "4549337549463",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 20000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "3",
+    "wood": "walnut",
+    "jan": "4549337549470",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 25000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337549487",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 28000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "5",
+    "wood": "walnut",
+    "jan": "4549337549494",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 30000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337549500",
+    "width_cm": 28.5,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 34000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337549517",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 14000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "2",
+    "wood": "walnut",
+    "jan": "4549337553262",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 18000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "3",
+    "wood": "walnut",
+    "jan": "4549337553279",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 21000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337553286",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 26000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "5",
+    "wood": "walnut",
+    "jan": "4549337553293",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 28000
+   },
+   {
+    "order_type": "tier",
+    "size": "slim",
+    "set": "add",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337553309",
+    "width_cm": 26.5,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337553316",
+    "width_cm": 42.0,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 14000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337553323",
+    "width_cm": 42.0,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 22000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337553330",
+    "width_cm": 42.0,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 29000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337553347",
+    "width_cm": 40.0,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 13000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337553354",
+    "width_cm": 40.0,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 20000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337553361",
+    "width_cm": 40.0,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 27000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337553378",
+    "width_cm": 42.0,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 16000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337553385",
+    "width_cm": 42.0,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 25000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337553392",
+    "width_cm": 42.0,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337553408",
+    "width_cm": 40.0,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 15000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337553415",
+    "width_cm": 40.0,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 22000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337553828",
+    "width_cm": 40.0,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 30000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337553835",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 17000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "2",
+    "wood": "oak",
+    "jan": "4549337553842",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 20000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "3",
+    "wood": "oak",
+    "jan": "4549337553859",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 28000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337553866",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "5",
+    "wood": "oak",
+    "jan": "4549337553873",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 35000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337553880",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 38000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337553897",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 15000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "2",
+    "wood": "oak",
+    "jan": "4549337553903",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 18000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "3",
+    "wood": "oak",
+    "jan": "4549337553910",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 26000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337553927",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 30000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "5",
+    "wood": "oak",
+    "jan": "4549337553934",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 33000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337553941",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 36000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337553958",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 19000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "2",
+    "wood": "walnut",
+    "jan": "4549337553965",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 21000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "3",
+    "wood": "walnut",
+    "jan": "4549337553972",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 30000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337553989",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 34000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "5",
+    "wood": "walnut",
+    "jan": "4549337553996",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 37000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337554009",
+    "width_cm": 42.0,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 40000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337554016",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 17000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "2",
+    "wood": "walnut",
+    "jan": "4549337554023",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 19000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "3",
+    "wood": "walnut",
+    "jan": "4549337554030",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 28000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337554047",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "5",
+    "wood": "walnut",
+    "jan": "4549337554054",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 35000
+   },
+   {
+    "order_type": "tier",
+    "size": "regular",
+    "set": "add",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337554061",
+    "width_cm": 40.0,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 38000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337554078",
+    "width_cm": 81.5,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 17000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337554085",
+    "width_cm": 81.5,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 28000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337554092",
+    "width_cm": 81.5,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 35000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337554108",
+    "width_cm": 79.5,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 15000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337554115",
+    "width_cm": 79.5,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 26000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337555044",
+    "width_cm": 79.5,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337555051",
+    "width_cm": 81.5,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 19000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337555068",
+    "width_cm": 81.5,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 30000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337555075",
+    "width_cm": 81.5,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 38000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337555082",
+    "width_cm": 79.5,
+    "depth_cm": 28.5,
+    "height_cm": 42.0,
+    "ship_size": 1,
+    "price": 17000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337555099",
+    "width_cm": 79.5,
+    "depth_cm": 28.5,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 28000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337555105",
+    "width_cm": 79.5,
+    "depth_cm": 28.5,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 35000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337555112",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 19000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "2",
+    "wood": "oak",
+    "jan": "4549337555129",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 26000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "3",
+    "wood": "oak",
+    "jan": "4549337555136",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337555143",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 40000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "5",
+    "wood": "oak",
+    "jan": "4549337555150",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 42000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337555167",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 46000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "1",
+    "wood": "oak",
+    "jan": "4549337555174",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 17000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "2",
+    "wood": "oak",
+    "jan": "4549337555181",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 24000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "3",
+    "wood": "oak",
+    "jan": "4549337555198",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 30000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "4",
+    "wood": "oak",
+    "jan": "4549337555204",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 38000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "5",
+    "wood": "oak",
+    "jan": "4549337555211",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 40000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "6",
+    "wood": "oak",
+    "jan": "4549337556591",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 42000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337556607",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 21000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "2",
+    "wood": "walnut",
+    "jan": "4549337556614",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 28000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "3",
+    "wood": "walnut",
+    "jan": "4549337556621",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 34000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337556652",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 42000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "5",
+    "wood": "walnut",
+    "jan": "4549337556669",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 44000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "basic",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337556690",
+    "width_cm": 81.5,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 48000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "1",
+    "wood": "walnut",
+    "jan": "4549337556706",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 42.0,
+    "ship_size": 2,
+    "price": 19000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "2",
+    "wood": "walnut",
+    "jan": "4549337556713",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 81.5,
+    "ship_size": 2,
+    "price": 26000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "3",
+    "wood": "walnut",
+    "jan": "4549337556720",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 121.0,
+    "ship_size": 3,
+    "price": 32000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "4",
+    "wood": "walnut",
+    "jan": "4549337556737",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 160.5,
+    "ship_size": 3,
+    "price": 40000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "5",
+    "wood": "walnut",
+    "jan": "4549337556744",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 200.0,
+    "ship_size": 4,
+    "price": 42000
+   },
+   {
+    "order_type": "tier",
+    "size": "wide",
+    "set": "add",
+    "tiers": "6",
+    "wood": "walnut",
+    "jan": "4549337556751",
+    "width_cm": 79.5,
+    "depth_cm": 40.0,
+    "height_cm": 239.5,
+    "ship_size": 4,
+    "price": 46000
+   }
+  ]
+ },
+ "unreadable": [
+  "02_15_07③SUS_ステンレス棚板オーダー発注書（.xlsm）",
+  "02_15_07④SUS_ライトグレー＆ダークグレー棚板オーダー発注書（.xlsm）"
+ ]
+}
