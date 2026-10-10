@@ -1,5 +1,5 @@
 {
- "at": "2026-10-07",
+ "at": "2026-10-10",
  "source": "無印良品ネットストア 各カテゴリの新着順で「NEW」表記の商品",
  "cats": [
   [
@@ -31,6 +31,11 @@
    "kitchen",
    "キッチン",
    "D00005"
+  ],
+  [
+   "apparel",
+   "衣服",
+   "D00001"
   ]
  ],
  "items": [
@@ -621,6 +626,559 @@
    "name": "ナイロン カトラリーカバー 約幅5.5×高さ13cm",
    "price": 490,
    "from": false
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 軽量ダウンポケッタブルノーカラーボリュームブルゾン",
+   "price": 9990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 ふんわり中わた撥水ノーカラーベスト",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ 両面起毛ハイネック長袖Tシャツ 110~150",
+   "price": 1490,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 コットンブークレ 長袖フーディ",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 ふんわり中わた撥水ジップアップブルゾン",
+   "price": 6990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ 洗える中わた撥水キルトジャケット 110~150",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 裏起毛 厚手 三分丈レギンス",
+   "price": 990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 防風裏起毛ストレッチテーパードパンツ",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ 洗える中わた撥水フード付きジャケット 110~150",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 軽量ダウンポケッタブルフード付きジャケット",
+   "price": 12900,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 洗いざらし太番手クルーネック長袖Tシャツ",
+   "price": 1990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ 防風裏起毛ストレッチワイドジョガーパンツ 110~150",
+   "price": 2990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 コットンブークレ 長袖ワンピース",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 ウール混レギュラーカラー長袖シャツ",
+   "price": 9990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ 裏ボアコーデュロイジャケット 110~150",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 コットン混ベロアリブストレートレギンス",
+   "price": 1990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 昔ながらの紡績機を使った ムラ糸長袖シャツ",
+   "price": 12900,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "ベビー 両面起毛ハイネック長袖Tシャツ 80~100",
+   "price": 1490,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 素材に還る ニットコンビブラウスTシャツ",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 昔ながらの紡績機を使ったムラ糸モックネック長袖Tシャツ",
+   "price": 5990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ ジャージーストレッチコーデュロイレギンスパンツ 110~150",
+   "price": 1990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 素材に還る ニットコンビワンピース",
+   "price": 5990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 昔ながらの製法で編み立てたスウェットパンツ",
+   "price": 7990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ 素材に還るフリースベスト 110~150",
+   "price": 1990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 ウール混ジャージー Vネックベスト",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 昔ながらの製法で編み立てた天竺クルーネック長袖Tシャツ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ ストレッチ裏起毛スリムフィットパンツ 110~150",
+   "price": 1990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 素材に還るフリースカーディガン",
+   "price": 2990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 昔ながらの製法で編み立てた天竺ハイネック長袖Tシャツ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ アラン柄ボアジャケット 110~150",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 素材に還るフリースロングベスト",
+   "price": 2990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 カシミヤミドルゲージモックネックセーター",
+   "price": 29900,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "ベビー おなかすっぽりストレッチコーデュロイレギンス 80~100",
+   "price": 990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 素材に還るフリースベスト",
+   "price": 2990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 カシミヤミドルゲージクルーネックセーター",
+   "price": 29900,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "ベビー ボアフリースベスト 80~100",
+   "price": 1990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 ボアフリースベスト",
+   "price": 2990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 裏起毛スウェットワイドパンツ",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "ベビー 素材に還るフリースベスト 80~100",
+   "price": 1990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 素材に還る ふんわり中わたキルティングジャケット",
+   "price": 6990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 裏起毛スウェットプルオーバーパーカ",
+   "price": 2990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "ベビー 洗える中わた撥水キルトジャケット 80~100",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 起毛ジャージーテーラードジャケット",
+   "price": 7990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 コーデュロイ リラックスイージーパンツ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "ベビー 洗える中わた撥水ジャケット 80~100",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 撥水コットン混ツイルステンカラーコート",
+   "price": 8990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 起毛ジャージーブルゾン",
+   "price": 6990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "キッズ 手にも使えるレッグウォーマー(2足組)(10月中旬発売予定)",
+   "price": 990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00002?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 撥水UVカット フードがしまえるロングコート",
+   "price": 7990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 起毛ジャージー イージータックパンツ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 ウール混ジャージー フレアスカート",
+   "price": 6990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 洗えるウールハイゲージポロ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 起毛ジャージー タックワイドパンツ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 洗えるウールハイゲージクルーネックセーター",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 起毛ジャージー クロップドパンツ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 首のチクチクを抑えたハイネックセーター",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 モール糸を使った 二重ガーゼ長袖パジャマ",
+   "price": 5990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 両面起毛フランネル長袖シャツ",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 静電気が起きにくい 着る毛布パジャマ",
+   "price": 6990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 両面起毛フランネルジップブルゾン",
+   "price": 5990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 洗えるウールミドルゲージVネックカーディガン(10月中旬発売予定)",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 両面起毛フランネルシャツジャケット",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 あったか綿 はらまき(10月12日順次発売予定)",
+   "price": 1490,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 軽量ダウンポケッタブルノーカラーベスト",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 足なり直角 再生ポリエステル ボアフリース ルームソックス(10月中旬発売予定)",
+   "price": 990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 軽量ダウンポケッタブルノーカラージャケット",
+   "price": 6990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 ニットフリースIラインスカート(10月中旬発売予定)",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 乾きやすいストレッチ長袖シャツ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "毛布素材でできた イヤーマフフリー(10月上旬発売予定)",
+   "price": 1990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 コットンフランネル5Pパンツ",
+   "price": 4990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "婦人 ニットフリースワイドテーパードパンツ(10月中旬発売予定)",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/D00001?sort=new"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 再生コットン混パンツ",
+   "price": 9990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 コットンヤクイージーパンツ",
+   "price": 7990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 裏起毛スウェットフルジップパーカ",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 木の実から作ったカポック混太番手クルーネック長袖Tシャツ",
+   "price": 3990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 天竺編みクルーネック長袖Tシャツ",
+   "price": 1490,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 天竺編みクルーネック長袖Tシャツ(ボーダー)",
+   "price": 1490,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 昔ながらの紡績機を使った ムラ糸プルオーバーシャツ",
+   "price": 12900,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
+  },
+  {
+   "cat": "apparel",
+   "name": "紳士 コットンヤクダボパンツ",
+   "price": 9990,
+   "from": false,
+   "url": "https://www.muji.com/jp/ja/store/cmdty/section/S1090201"
   }
  ]
 }

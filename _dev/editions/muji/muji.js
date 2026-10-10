@@ -156,6 +156,7 @@ document.body.appendChild(home);
  var CI={furniture:'<path d="M7 11V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v5"/><path d="M5 11h14v4H5z"/><path d="M6 15v5M18 15v5"/>',
   storage:'<rect x="4" y="6" width="16" height="13" rx="1.5"/><path d="M4 11h16M10 8.5h4M10 14h4"/>',
   bedding:'<path d="M3 18v-6h18v6M3 15h18M3 18v2M21 18v2"/><rect x="5" y="8" width="6" height="4" rx="1.5"/>',
+  apparel:'<path d="M9 4 3 7l2 4 2-1v10h10V10l2 1 2-4-6-3c-.5 1.5-1.6 2.5-3 2.5S9.5 5.5 9 4z"/>',
   interior:'<rect x="5" y="5" width="14" height="14" rx="4"/><path d="M5 12c3 2 11 2 14 0"/>',
   light:'<path d="M9 3h6l3 7H6z"/><path d="M12 10v8M8 20h8"/>',
   kitchen:'<path d="M4 10h16v3a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M2 10h20M9 7c0-1 1-1 1-2M14 7c0-1 1-1 1-2"/>'};
@@ -167,9 +168,9 @@ document.body.appendChild(home);
  function draw(){var L=S.c==="all"?MIX:N.items.filter(function(it){return it.cat===S.c}),M=S.more?L:L.slice(0,6);
   box.innerHTML='<div class="nwh"><b id="nwt">新商品</b><small>'+at+'時点・ネットストア（毎朝10時に更新）</small></div>'+
    '<div class="nwc">'+[["all","すべて",N.items.length]].concat(N.cats.map(function(c){return[c[0],c[1],N.items.filter(function(it){return it.cat===c[0]}).length]})).filter(function(c){return c[2]>0}).map(function(c){return'<button type="button" data-c="'+c[0]+'" class="'+(S.c===c[0]?"on":"")+'">'+esc2(c[1])+'<i>'+c[2]+'</i></button>'}).join("")+'</div>'+
-   '<div class="nwl">'+M.map(function(it){return'<a class="nwi" href="https://www.muji.com/jp/ja/store/cmdty/detail/'+esc2(it.jan)+'" target="_blank" rel="noopener"><span class="nwp">'+ic(it.cat)+'</span><span class="nwm"><b>'+esc2(it.name)+'</b><small>'+esc2(cn[it.cat]||"")+'</small></span><span class="nwy">¥'+Number(it.price).toLocaleString("ja-JP")+(it.from?"〜":"")+'</span></a>'}).join("")+'</div>'+
+   '<div class="nwl">'+M.map(function(it){return'<a class="nwi" href="'+(it.jan?'https://www.muji.com/jp/ja/store/cmdty/detail/'+esc2(it.jan):esc2(it.url||"https://www.muji.com/jp/ja/store/"))+'" target="_blank" rel="noopener"><span class="nwp">'+ic(it.cat)+'</span><span class="nwm"><b>'+esc2(it.name)+'</b><small>'+esc2(cn[it.cat]||"")+'</small></span><span class="nwy">¥'+Number(it.price).toLocaleString("ja-JP")+(it.from?"〜":"")+'</span></a>'}).join("")+'</div>'+
    (L.length>6?'<button type="button" class="nwm2">'+(S.more?"少なく表示":"すべて見る（"+L.length+"件）")+'</button>':"")+
-   '<p class="nwn">商品をタップするとネットストアの商品ページが開き、写真・在庫・最新の価格を確認できます。</p>'}
+   '<p class="nwn">商品をタップするとネットストアの商品ページが開き、写真・在庫・最新の価格を確認できます。衣服は、衣服の新着ページが開きます。</p>'}
  box.addEventListener("click",function(e){var b=e.target.closest(".nwc button");if(b){S.c=b.getAttribute("data-c");S.more=false;draw();return}if(e.target.closest(".nwm2")){S.more=!S.more;draw()}});
  draw()})();
 try{home.querySelector(".phlogo").innerHTML=vimWord()}catch(e){}
