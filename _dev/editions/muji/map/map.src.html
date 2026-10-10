@@ -52,7 +52,7 @@ svg.map{display:block;width:180%;height:auto;max-width:none}
 <span><svg viewBox="0 0 24 24"><g class="ic"><rect x="4" y="5" width="16" height="16"/><path d="M9 5v16M15 5v16M8 2v2M16 2v2"/></g></svg>エレベーター</span></div>
 <p class="note">売り場をタップすると、置いてある商品の目安が出ます。上の検索に商品名を入れると、該当する売り場が光ります。</p>
 </main>
-<div class="sheet" id="mp-sh" hidden><button type="button" id="mp-x" aria-label="閉じる">×</button><b id="mp-n"></b><p id="mp-d"></p><span class="go" id="mp-g"></span></div>
+<div class="sheet" id="mp-sh" hidden><button type="button" id="mp-x" aria-label="閉じる">×</button><b id="mp-n"></b><p id="mp-d"></p></div>
 <script>(function(){
 var $=function(i){return document.getElementById(i)};
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -114,8 +114,6 @@ svg.push('<circle cx="519" cy="980" r="22" fill="#3b4a5e"/><path d="M519 966c6 7
 S.forEach(function(s,ix){var t=s.l.length===1?'<text x="0" y="46">'+esc(s.l[0])+'</text>':'<text x="0" y="38">'+esc(s.l[0])+'</text><text x="0" y="54">'+esc(s.l[1])+'</text>';
  var fs=s.l.join("").length>9?' style="font-size:12.5px"':'';
  svg.push('<g class="sp" data-i="'+ix+'" tabindex="0" role="button" aria-label="'+esc(s.n)+'" transform="translate('+s.x+' '+s.y+')"><circle class="ring" r="68"/><circle class="c" r="62"/><g transform="translate(-28 -42) scale(2.33)">'+ico(s.i).replace('class="ic"','class="ic" style="stroke-width:1.3"')+'</g><g'+fs+'>'+t.replace(/y="46"/,'y="40"').replace(/y="38"/,'y="33"').replace(/y="54"/,'y="51"')+'</g></g>');});
-/* 現在地 */
-svg.push('<g><rect x="962" y="1140" width="114" height="34" fill="#fff"/><path d="M984 1151l8 15h-16z" fill="#555"/><text x="1030" y="1165" fill="#333" font-size="21" font-weight="800" text-anchor="middle" style="font-size:21px;fill:#333">現在地</text></g>');
 $("mp-svg").innerHTML=svg.join("");
 var Z=window.innerWidth>=700?100:180;function zoom(d){Z=Math.max(100,Math.min(320,Z+d));$("mp-svg").style.width=Z+"%";$("mp-zv").textContent=Z+"%"}
 $("mp-svg").style.width=Z+"%";$("mp-zv").textContent=Z+"%";
@@ -133,8 +131,7 @@ $("mp-ch").addEventListener("click",function(e){var b=e.target.closest("button")
 $("mp-q").addEventListener("input",function(){q=this.value;apply()});
 /* 詳細 */
 function pick(g){var s=S[+g.dataset.i];document.querySelectorAll(".sp.sel").forEach(function(x){x.classList.remove("sel")});g.classList.add("sel");
- $("mp-n").textContent=s.n;$("mp-d").textContent=s.d;$("mp-g").textContent="現在地から："+where(s);$("mp-sh").hidden=false;var w=$("mp-w"),r=$("mp-svg").getBoundingClientRect(),k=r.width/1180;try{w.scrollTo({left:Math.max(0,(s.x-150)*k-w.clientWidth/2),behavior:"smooth"})}catch(e){}}
-function where(s){var dx=s.x-1030,dy=s.y-1157;var h=Math.abs(dx)<120&&Math.abs(dy)<150?"すぐ近く":(Math.abs(dx)+Math.abs(dy)<500?"近く":"店内の奥の方");var d=(dy<-250?"奥（レジ側）":dy>-80?"手前":"中ほど")+"・"+(dx<-450?"左（入口側の端）":dx>120?"右":"中ほど");return h+"（"+d+"）。※おおよその目安"}
+ $("mp-n").textContent=s.n;$("mp-d").textContent=s.d;$("mp-sh").hidden=false;var w=$("mp-w"),r=$("mp-svg").getBoundingClientRect(),k=r.width/1180;try{w.scrollTo({left:Math.max(0,(s.x-150)*k-w.clientWidth/2),behavior:"smooth"})}catch(e){}}
 $("mp-svg").addEventListener("click",function(e){var g=e.target.closest(".sp");if(g)pick(g)});
 $("mp-svg").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){var g=e.target.closest&&e.target.closest(".sp");if(g){e.preventDefault();pick(g)}}});
 $("mp-x").onclick=function(){$("mp-sh").hidden=true;document.querySelectorAll(".sp.sel").forEach(function(x){x.classList.remove("sel")})};
