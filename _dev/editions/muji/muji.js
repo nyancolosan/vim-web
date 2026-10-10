@@ -120,7 +120,7 @@ var IC={
 /* --- 全画面で重ねるページ（curtain.html・knowledge.html）--- */
 var subs={},cur=null,timer=null;
 function closeSub(back){var was=cur;if(cur&&subs[cur])subs[cur].el.hidden=true;cur=null;document.documentElement.style.overflow="";if(back!==false)showHome(was==="curtain"||was==="idee"||was==="shelf"?"living":"top")}
-function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb.html",idee:"idee.html",shelf:"shelf.html",clothing:"clothing.html",map:"map.html"}[k],title={curtain:"オーダーカーテン見積",know:"素材図鑑",hb:"H&B",idee:"IDEE",shelf:"オーダー収納の見積り",clothing:"衣服",map:"店舗マップ（試験運用）"}[k];
+function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb.html",idee:"idee.html",shelf:"shelf.html",clothing:"clothing.html",map:"map.html"}[k],title={curtain:"オーダーカーテン見積",know:"素材図鑑",hb:"H&B",idee:"IDEE",shelf:"オーダー収納の見積り",clothing:"衣服",map:"店舗マップ（β版・AM川口のみ）"}[k];
  hideHome();var st=q("stm");if(st)st.hidden=true;
  if(!subs[k]){var el=document.createElement("div");el.className="mjsub-ov";el.setAttribute("role","dialog");el.setAttribute("aria-label",title);
   el.innerHTML='<div class="mjsubf" hidden>'+title+'をここで開けませんでした。<br><a href="'+src+'" target="_blank" rel="noopener">別のタブで開く</a><br><button type="button" class="ib">メニューに戻る</button></div><iframe src="'+src+'" title="'+title+'"></iframe>';
@@ -137,9 +137,9 @@ home.innerHTML='<div class="phin"><div class="phlogo" role="img" aria-label="MUJ
  '<section class="nw" id="nw" aria-labelledby="nwt"></section><div class="phst" id="phst"></div><p class="phsup">supported by VIM</p></div>';
 /* はじめの画面：H&B・住空間・素材図鑑。住空間を押すと、家具を置く／オーダーカーテンの2つが出る */
 var MENU={top:[["hb",IC.hb,"H&amp;B（ヘルス&amp;ビューティー）","肌の悩みや好みから、おすすめのスキンケアと使い方を出す"],
-  ["clothing",IC.cloth,"衣服（モック）","サイズ診断・実寸比較・お手入れ・在庫と取り置き・コーデ。あったら便利な機能を試せる"],
+  ["clothing",IC.cloth,"衣服","婦人・紳士・こどもの商品一覧、サイズ診断、お手入れ、コーデ。ネットストアのデータ"],
   ["living",IC.living,"住空間","部屋に家具を置く・カーテンや収納の見積り・IDEE"],
-  ["map",IC.map,"店舗マップ（試験運用）","売り場の場所を、案内板と同じ見た目の図で探す"],
+  ["map",IC.map,"店舗マップ（β版・AM川口のみ）","図面から区画に分けた売場図。売場に名称を付けて探せる"],
   ["know",IC.know,"素材図鑑","木材・繊維・樹脂・金属・焼き物など、素材の特長と接客のひとこと"],
   ["memo",IC.memo,"接客メモ","お客さまの部屋・好み・提案した商品を残して、次の来店で見返す"]],
  living:[["room",IC.room,"部屋に家具を置く","間取りに無印良品の家具を実寸で置いて、3Dで確かめる"],

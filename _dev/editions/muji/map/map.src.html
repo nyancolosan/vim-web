@@ -1,4 +1,4 @@
-<title>店舗マップ（試験運用）</title>
+<title>店舗マップ（β版・AM川口のみ）</title>
 <style>
 :root{--bg:#6b1424;--ink:#fff;--sub:#e6c9cf;color-scheme:dark;--f-body:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
@@ -9,135 +9,89 @@ button,input{font:inherit;color:inherit}button{cursor:pointer}
 .hd{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 14px;display:flex;align-items:center;gap:10px;min-height:58px;border-bottom:1px solid rgba(255,255,255,.18)}
 .back{display:flex;align-items:center;gap:2px;border:1px solid rgba(255,255,255,.5);background:transparent;border-radius:999px;min-height:40px;padding:0 14px 0 8px;font-weight:700;font-size:.85rem}
 .hdt{margin-left:auto;text-align:right;line-height:1.25}.hdt b{display:block;font-size:.95rem}.hdt small{color:var(--sub);font-size:.7rem}
-main{max-width:640px;margin:0 auto;padding:0 14px}
-@media(min-width:900px){main{max-width:760px}}
+main{max-width:1100px;margin:0 auto;padding:0 14px}
 .mock{margin:12px 0 0;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-size:.76rem;line-height:1.6}
-.ttl{font-size:clamp(28px,9vw,44px);font-weight:800;letter-spacing:.12em;text-align:center;margin:18px 0 6px}
+.ttl{font-size:clamp(26px,8vw,40px);font-weight:800;letter-spacing:.12em;text-align:center;margin:16px 0 2px}
+.sub{text-align:center;color:var(--sub);font-size:.8rem;margin:0 0 8px}
 .sr{display:flex;gap:8px;margin:10px 0}
 .sr input{flex:1;min-width:0;font-size:16px;padding:10px 12px;border:0;border-radius:10px;background:#fff;color:#333}
-.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch}
-.chips button{flex:none;border:1px solid rgba(255,255,255,.5);background:transparent;border-radius:999px;padding:6px 12px;font-size:.78rem}
-.chips button.on{background:#fff;color:#6b1424;font-weight:700}
+.tools{display:flex;align-items:center;gap:8px;margin:2px 0 8px;font-size:.8rem;flex-wrap:wrap}
+.tools button{min-width:38px;height:38px;border-radius:19px;border:1px solid rgba(255,255,255,.5);background:transparent;padding:0 12px}
+.tools button.on{background:#fff;color:#6b1424;font-weight:700}
+.tools small{margin-left:auto;color:var(--sub);font-size:.7rem}
 .mw{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
 svg.map{display:block;width:180%;height:auto;max-width:none}
-.zm{display:flex;align-items:center;gap:8px;margin:2px 0 8px;font-size:.8rem}.zm button{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.5);background:transparent;font-size:1.1rem}.zm small{margin-left:auto;color:var(--sub);font-size:.7rem}
-.sp{cursor:pointer}.sp circle.c{fill:#575356;stroke:none;transition:fill .15s}
-.sp:hover circle.c{fill:#6a6568}
-.sp.hit circle.c{fill:#fff}.sp.hit .ic{stroke:#6b1424}.sp.hit text{fill:#6b1424}
-.sp.dim{opacity:.28}
-.sp.sel circle.ring{stroke:#fff;stroke-width:5;fill:none}
-.sp circle.ring{fill:none;stroke:none}
-.ic{fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.sp text{fill:#fff;font-size:15px;text-anchor:middle;font-weight:600}
-.pulse{animation:pl 1.4s ease-out infinite}@keyframes pl{0%{r:62;opacity:.9}100%{r:84;opacity:0}}
-.lg{display:grid;grid-template-columns:1fr 1fr;gap:12px 8px;margin:14px 4px 0;padding-top:14px;border-top:1px solid rgba(255,255,255,.4);font-weight:700;font-size:.95rem}
-.lg span{display:flex;align-items:center;gap:10px}.lg svg{width:30px;height:30px;flex:none}
+.zn{cursor:pointer}
+.zn polygon{fill:#a7a4a5;stroke:#6b1424;stroke-width:2.5;transition:fill .15s}
+.zn:hover polygon{fill:#bdbabb}
+.zn text{fill:#fff;font-weight:700;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:#4a4547;stroke-width:3px;stroke-linejoin:round}
+.zn.un text{fill:#e9e6e7;font-weight:500}
+.zn.hit polygon{fill:#fff}.zn.hit text{fill:#6b1424;stroke:#fff}
+.zn.dim{opacity:.3}
+.zn.sel polygon{stroke:#fff;stroke-width:4}
+.ov .zn polygon{fill-opacity:.55}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;color:#333;border-radius:18px 18px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 24px rgba(0,0,0,.35);max-width:640px;margin:0 auto}
-.sheet b{display:block;font-size:1.1rem;color:#9f2a37}.sheet p{margin:6px 0 0;font-size:.86rem;color:#555}
-.sheet button{position:absolute;right:10px;top:8px;border:0;background:none;font-size:1.6rem;color:#888;line-height:1;min-width:40px;min-height:40px}
-.sheet .go{display:inline-block;margin-top:10px;font-size:.78rem;color:#8a5a00;background:#fff6e0;border-radius:8px;padding:5px 9px}
+.sheet h3{margin:0 0 6px;font-size:.8rem;color:#777;font-weight:600}
+.sheet .nm{display:flex;gap:8px}
+.sheet input{flex:1;min-width:0;font-size:16px;padding:10px 12px;border:1.5px solid #ddd;border-radius:10px;color:#333;background:#fff}
+.sheet .sv{border:0;background:#9f2a37;color:#fff;font-weight:700;border-radius:10px;padding:0 18px;min-height:44px}
+.sheet .rs{border:0;background:none;color:#9f2a37;font-size:.8rem;margin-top:8px;padding:6px 0;text-decoration:underline}
+.sheet p{margin:6px 0 0;font-size:.74rem;color:#8a5a00}
+.sheet .x{position:absolute;right:8px;top:6px;border:0;background:none;font-size:1.6rem;color:#888;line-height:1;min-width:40px;min-height:40px}
 .note{font-size:.72rem;color:var(--sub);margin:14px 2px 0;line-height:1.7}
+.note button{border:0;background:none;color:#fff;text-decoration:underline;padding:0;font-size:.72rem}
 </style>
 <header class="hd"><button class="back" id="mp-back" type="button"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button>
-<div class="hdt"><b>店舗マップ（試験運用）</b><small id="mp-st">店舗番号 ――</small></div></header>
+<div class="hdt"><b>店舗マップ（β版・AM川口のみ）</b><small id="mp-st">店舗番号 ――</small></div></header>
 <main>
-<p class="mock">試験運用です。いまは、店内の案内板（写真）の売り場図をもとにした1店舗ぶんの図を、すべての店舗番号で表示します。店舗ごとの図は、図面をいただいたら入れ替えます。</p>
 <div class="ttl">無印良品</div>
-<div class="sr"><input id="mp-q" type="search" placeholder="売り場や商品を探す（例：カーテン、スーツケース、シャツ）" aria-label="売り場を探す"></div>
-<div class="chips" id="mp-ch"></div>
-<div class="zm"><button type="button" id="mp-zo" aria-label="縮小">－</button><span id="mp-zv">180%</span><button type="button" id="mp-zi" aria-label="拡大">＋</button><small>指でスクロールして見られます</small></div>
-<div class="mw" id="mp-w"><svg class="map" id="mp-svg" viewBox="150 420 1180 1000" role="img" aria-label="売り場図"></svg></div>
-<div class="lg"><span><svg viewBox="0 0 24 24"><g class="ic"><circle cx="16" cy="6" r="2"/><path d="M16 9v8M13 12h3M3 14h10M5 14v6"/></g></svg>サービスカウンター</span>
-<span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#3b4a5e"/><path d="M12 5c3 3.5 4.5 6 4.5 8a4.5 4.5 0 0 1-9 0c0-2 1.5-4.5 4.5-8z" fill="#fff"/></svg>給水機</span>
-<span><svg viewBox="0 0 24 24"><g class="ic"><rect x="4" y="5" width="16" height="16"/><path d="M9 5v16M15 5v16M8 2v2M16 2v2"/></g></svg>エレベーター</span></div>
-<p class="note">売り場をタップすると、置いてある商品の目安が出ます。上の検索に商品名を入れると、該当する売り場が光ります。</p>
+<p class="sub">イオンモール川口　売場図</p>
+<div class="sr"><input id="mp-q" type="search" placeholder="売場の名称で探す（例：キッチン、こども）" aria-label="売場を探す"></div>
+<div class="tools"><button type="button" id="mp-zo" aria-label="縮小">－</button><span id="mp-zv">180%</span><button type="button" id="mp-zi" aria-label="拡大">＋</button><button type="button" id="mp-pl" aria-pressed="false">図面を重ねる</button><small>売場をタップして名称を付けられます</small></div>
+<div class="mw" id="mp-w"><svg class="map" id="mp-svg" viewBox="0 0 995 566" role="img" aria-label="売場図"></svg></div>
+<p class="note">図面を読み取って区画に分けた、β版です（AM川口のみ）。売場をタップすると名称を付けたり変えたりできます。名称はこの端末に保存され、店舗番号ごとに分けて残ります。名称が「未設定」の区画は、図面に文字がなく判別できなかったところです。<br><button type="button" id="mp-all">すべての名称を初期に戻す</button></p>
 </main>
-<div class="sheet" id="mp-sh" hidden><button type="button" id="mp-x" aria-label="閉じる">×</button><b id="mp-n"></b><p id="mp-d"></p></div>
+<div class="sheet" id="mp-sh" hidden><button type="button" class="x" id="mp-x" aria-label="閉じる">×</button><h3>売場の名称</h3><div class="nm"><input id="mp-in" type="text" maxlength="24" aria-label="売場の名称" placeholder="名称を入れる"><button type="button" class="sv" id="mp-sv">保存</button></div><button type="button" class="rs" id="mp-rs">初期の名称に戻す</button><p id="mp-inf" hidden>※この名称は、図面の家具の配置から推測したものです。違うときは付け替えてください。</p></div>
 <script>(function(){
+var D=/*%%ZONES%%*/null,PLAN="%%PLAN%%";
 var $=function(i){return document.getElementById(i)};
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-/* アイコン（24x24 の線画） */
-var P={
-food:'<path d="M3 11h18a9 9 0 0 1-18 0z"/><path d="M8 7c0-1.5 1-1.5 1-3M13 7c0-1.5 1-1.5 1-3"/>',
-store:'<rect x="4" y="3" width="16" height="18"/><path d="M12 3v18M4 9h16M4 15h16M9 6h.01M15 6h.01M9 12h.01M15 12h.01"/>',
-living:'<rect x="2.5" y="8" width="11" height="9" rx="2"/><path d="M17 4v16M20 4v16M17 8h3M6 20h6"/>',
-cnt:'<rect x="9" y="3" width="10" height="6" rx="1"/><path d="M3 14h18v3H3zM5 17v3M19 17v3M14 9v2"/>',
-bed:'<path d="M3 19V8M3 14h18v5M3 17h18"/><rect x="5" y="9.5" width="5" height="3.5" rx="1"/>',
-trv:'<rect x="7" y="7" width="10" height="13" rx="2"/><path d="M10 7V4h4v3M10 10v7M14 10v7"/>',
-kit:'<circle cx="9.5" cy="13" r="6.5"/><circle cx="9.5" cy="13" r="3"/><path d="M20 4v16M18 4v4.5a2 2 0 0 0 4 0V4"/>',
-cln:'<path d="M15 3l-4 9"/><path d="M6.5 13h10L19 21H4z"/><path d="M9 13l-1 8M13 13l1 8"/>',
-brf:'<path d="M5 4h14v6l-3 10h-3.5L12 13l-.5 7H8L5 10z"/>',
-kid:'<path d="M8 3 3.5 6 5.5 9 8 8v13h8V8l2.5 1 2-3L16 3c-1 2-3 2-4 2s-3 0-4-2z"/>',
-cam:'<path d="M8.5 3 7.5 9 4 21h16L16.5 9l-1-6M7.5 9h9"/>',
-blo:'<path d="M8 3 3.5 6 5.5 9 8 8v13h8V8l2.5 1 2-3L16 3c-1 2-3 2-4 2s-3 0-4-2z"/><path d="M12 5v6M12 14h.01M12 17h.01"/>',
-shirt:'<path d="M8 3 3.5 6 5.5 9 8 8v13h8V8l2.5 1 2-3L16 3l-4 3z"/><path d="M12 6v15M12 10h.01M12 14h.01M12 18h.01"/>',
-pen:'<rect x="9" y="3" width="11" height="18" rx="1"/><path d="M12 8h5M5 4l1 12 1.5-12"/>',
-cos:'<rect x="3.5" y="9" width="6" height="12" rx="1"/><rect x="5.5" y="4" width="2" height="5"/><rect x="11.5" y="11" width="4" height="10" rx="1"/><path d="M17.5 8h3.5v13h-3.5z"/>',
-aro:'<rect x="8" y="13" width="8" height="8" rx="2"/><path d="M12 13V3M12 13 8 5M12 13l4-8"/>',
-fit:'<path d="M12 8V6.5a2 2 0 1 1 2 2M12 8 3 16h18z"/>',
-reg:'<path d="M6 4l6 8 6-8M12 12v9M7 14h10M7 18h10"/>'};
-function ico(k){return'<g class="ic">'+P[k]+'</g>'}
-/* x,y は図の座標。r は円の大きさ。 */
-var S=[
-{id:"food",n:"食品",i:"food",x:410,y:578,l:["食品"],d:"カレー・レトルト・お菓子・飲料・乾物など。",k:"カレー お菓子 レトルト 飲料 コーヒー 食べ物"},
-{id:"store",n:"収納用品",i:"store",x:953,y:562,l:["収納用品"],d:"ポリプロピレン収納・ファイルボックス・ラック・スタッキングシェルフなど。",k:"収納 ボックス ケース ラック 棚 シェルフ"},
-{id:"living",n:"リビング用品",i:"living",x:1118,y:683,l:["リビング用品"],d:"クッション・スリッパ・カーテン・ラグなど、くらしを整える小物。",k:"クッション カーテン スリッパ ラグ マット"},
-{id:"cnt",n:"インテリア相談カウンター",i:"cnt",x:1212,y:810,l:["インテリア","相談カウンター"],d:"家具・収納・カーテンのご相談とオーダーの受付。オーダーカーテンやオーダー収納の見積りもこちら。",k:"相談 見積 オーダー カーテン 家具 ソファ テーブル"},
-{id:"bed",n:"寝具",i:"bed",x:985,y:897,l:["寝具"],d:"ベッド・マットレス・枕・掛ふとん・シーツ類。",k:"ベッド マットレス 枕 布団 ふとん シーツ ベッドカバー"},
-{id:"trv",n:"トラベル用品",i:"trv",x:415,y:783,l:["トラベル用品"],d:"スーツケース・トラベルポーチ・携帯用品。",k:"スーツケース 旅行 トラベル バッグ ポーチ"},
-{id:"kit",n:"キッチン用品・食器",i:"kit",x:652,y:783,l:["キッチン用品","食器"],d:"食器・鍋・フライパン・カトラリー・調理小物。",k:"食器 皿 鍋 フライパン カトラリー 調理 キッチン マグ"},
-{id:"cln",n:"掃除用品・洗濯用品",i:"cln",x:652,y:940,l:["掃除用品","洗濯用品"],d:"ほうき・モップ・洗濯ハンガー・ピンチ・洗濯ネット。",k:"掃除 洗濯 ハンガー ほうき モップ"},
-{id:"brf",n:"紳士インナー",i:"brf",x:418,y:920,l:["紳士インナー"],d:"紳士の下着・肌着・靴下・ルームウェア。",k:"紳士 メンズ インナー 下着 肌着 靴下 トランクス"},
-{id:"kid",n:"こども服",i:"kid",x:270,y:915,l:["こども服"],d:"ベビー・キッズの衣料。",k:"こども キッズ ベビー 子供服 子ども"},
-{id:"cam",n:"婦人インナー",i:"cam",x:270,y:1080,l:["婦人インナー"],d:"婦人の下着・肌着・キャミソール・靴下。",k:"婦人 レディース インナー 下着 肌着 キャミソール"},
-{id:"blo",n:"婦人服",i:"blo",x:255,y:1285,l:["婦人服"],d:"婦人のトップス・ボトムス・ワンピース・アウター。",k:"婦人 レディース 服 ワンピース ブラウス スカート ニット"},
-{id:"shirt",n:"紳士服",i:"shirt",x:422,y:1205,l:["紳士服"],d:"紳士のシャツ・ニット・パンツ・アウター。",k:"紳士 メンズ 服 シャツ ニット パンツ スーツ"},
-{id:"pen",n:"文房具",i:"pen",x:554,y:1085,l:["文房具"],d:"ノート・ペン・ファイル・デスク小物。",k:"文房具 ノート ペン 文具 ファイル"},
-{id:"cos",n:"コスメ・ケア用品",i:"cos",x:766,y:1120,l:["コスメ・ケア用品"],d:"スキンケア・メイク・ボディケア・ヘアケア。H&Bの商品はこちら。",k:"コスメ スキンケア 化粧水 美容液 クリーム ケア 化粧 ヘアケア ボディ H&B"},
-{id:"aro",n:"アロマ・ルームフレグランス",i:"aro",x:893,y:1112,l:["アロマ","ルームフレグランス"],d:"アロマディフューザー・精油・ルームフレグランス・お香。",k:"アロマ 香り ディフューザー 精油 お香 フレグランス"}];
-var FUNC={reg:"レジ",fit:"試着室",svc:"サービスカウンター"};
-var svg=[];
-/* 床・通路 */
-svg.push('<polygon points="245,540 515,525 518,450 690,442 692,560 745,568 745,640 860,628 865,452 1000,448 1085,540 1300,815 1230,892 1180,1000 950,1092 840,1200 690,1200 690,1128 490,1128 490,1375 190,1385 175,1155 195,1150 195,748 250,745" fill="#a7a4a5"/>');
-svg.push('<g fill="#8f8c8d"><rect x="370" y="708" width="90" height="296"/><rect x="487" y="712" width="98" height="292"/><rect x="607" y="712" width="93" height="292"/><rect x="725" y="718" width="120" height="292"/><polygon points="880,718 1000,718 1065,1005 960,1005"/><rect x="370" y="1050" width="120" height="75"/><rect x="495" y="1052" width="195" height="70" opacity=".0"/><rect x="700" y="1055" width="115" height="140"/></g>');
-svg.push('<g fill="#f1efef"><rect x="330" y="648" width="740" height="58"/><rect x="330" y="648" width="42" height="725"/><rect x="330" y="1005" width="650" height="46"/><polygon points="847,718 880,718 975,1005 935,1005"/><polygon points="1002,718 1062,718 1137,985 1085,1008"/><polygon points="700,1050 960,1050 975,1005 700,1005"/><rect x="490" y="1050" width="210" height="76" opacity=".0"/></g>');
-/* エレベーター */
-svg.push('<g fill="none" stroke="#a7a4a5" stroke-width="10"><path d="M660 1125H562V1380H660"/></g><g class="ic" transform="translate(0 0)">');
-[1215,1278,1340].forEach(function(y){svg.push('<g transform="translate(588 '+(y-24)+') scale(1.7)"><path d="M3 1v4M1.5 3.5 3 5l1.5-1.5M9 5V1M7.5 2.5 9 1l1.5 1.5" stroke-width="1"/><rect x="1" y="6.500" width="4" height="8" fill="none"/><rect x="7" y="6.500" width="4" height="8" fill="none"/></g>');svg.push('<rect x="650" y="'+(y-16)+'" width="12" height="30" fill="#f1efef" stroke="none"/>')});
-svg.push('</g>');
-/* レジ・サービスカウンター・試着室・給水機 */
-svg.push('<g class="ic" transform="translate(568 512) scale(1.9)" style="stroke-width:1.5">'+P.reg+'</g><text x="590" y="592" fill="#fff" font-size="15" text-anchor="middle" font-weight="600">レジ</text>');
-svg.push('<g class="ic" transform="translate(655 590) scale(2.3)" style="stroke-width:1.3"><circle cx="16" cy="6" r="2"/><path d="M16 9v8M13 12h3M3 14h10M5 14v6"/></g>');
-svg.push('<g class="ic" transform="translate(214 766) scale(1.6)" style="stroke-width:1.5">'+P.fit+'</g><text x="242" y="835" fill="#fff" font-size="14" text-anchor="middle" font-weight="600">試着室</text>');
-svg.push('<circle cx="519" cy="980" r="22" fill="#3b4a5e"/><path d="M519 966c6 7 9 12 9 16a9 9 0 0 1-18 0c0-4 3-9 9-16z" fill="#fff" transform="translate(0 0) scale(1)" opacity=".95"/>');
-/* 売り場 */
-S.forEach(function(s,ix){var t=s.l.length===1?'<text x="0" y="46">'+esc(s.l[0])+'</text>':'<text x="0" y="38">'+esc(s.l[0])+'</text><text x="0" y="54">'+esc(s.l[1])+'</text>';
- var fs=s.l.join("").length>9?' style="font-size:12.5px"':'';
- svg.push('<g class="sp" data-i="'+ix+'" tabindex="0" role="button" aria-label="'+esc(s.n)+'" transform="translate('+s.x+' '+s.y+')"><circle class="ring" r="68"/><circle class="c" r="62"/><g transform="translate(-28 -42) scale(2.33)">'+ico(s.i).replace('class="ic"','class="ic" style="stroke-width:1.3"')+'</g><g'+fs+'>'+t.replace(/y="46"/,'y="40"').replace(/y="38"/,'y="33"').replace(/y="54"/,'y="51"')+'</g></g>');});
-$("mp-svg").innerHTML=svg.join("");
-var Z=window.innerWidth>=700?100:180;function zoom(d){Z=Math.max(100,Math.min(320,Z+d));$("mp-svg").style.width=Z+"%";$("mp-zv").textContent=Z+"%"}
+var store="";function key(){return"mj-map-names-"+(store||"x")}
+var NAMES={};
+function load(){NAMES={};try{NAMES=JSON.parse(localStorage.getItem(key())||"{}")||{}}catch(e){NAMES={}}}
+function save(){try{localStorage.setItem(key(),JSON.stringify(NAMES))}catch(e){}}
+function nm(z){return NAMES[z.id]||z.n}
+function cen(p){var x=0,y=0,a=0;for(var i=0;i<p.length;i++){var j=(i+1)%p.length,c=p[i][0]*p[j][1]-p[j][0]*p[i][1];a+=c;x+=(p[i][0]+p[j][0])*c;y+=(p[i][1]+p[j][1])*c}a/=2;return a?[x/(6*a),y/(6*a)]:p[0]}
+function bb(p){var xs=p.map(function(q){return q[0]}),ys=p.map(function(q){return q[1]});return[Math.max.apply(0,xs)-Math.min.apply(0,xs),Math.max.apply(0,ys)-Math.min.apply(0,ys)]}
+function draw(){var o=['<image id="mp-img" href="'+PLAN+'" x="0" y="0" width="995" height="566" opacity="0" />'];
+ o.push('<polygon id="mp-ol" points="'+D.outline.map(function(p){return p.join(",")}).join(" ")+'" fill="#f1efef"/>');
+ D.zones.forEach(function(z,i){var n=nm(z),c=cen(z.p),b=bb(z.p),fs=Math.min(14,b[0]*.9/n.length),lines=[n];
+  if(fs<10&&n.length>4){var h=Math.ceil(n.length/2);lines=[n.slice(0,h),n.slice(h)];fs=Math.min(13,b[0]*.9/h)}
+  fs=Math.max(7,fs);var lh=fs*1.15;
+  o.push('<g class="zn'+(n==="未設定"?" un":"")+'" data-i="'+i+'" tabindex="0" role="button" aria-label="'+esc(n)+'"><polygon points="'+z.p.map(function(p){return p.join(",")}).join(" ")+'"/><text x="'+c[0].toFixed(1)+'" y="'+(c[1]-(lines.length-1)*lh/2+fs*.35).toFixed(1)+'" font-size="'+fs.toFixed(1)+'">'+lines.map(function(l,k){return'<tspan x="'+c[0].toFixed(1)+'" dy="'+(k?lh:0)+'">'+esc(l)+'</tspan>'}).join("")+'</text></g>')});
+ $("mp-svg").innerHTML=o.join("");mark();syncPlan()}
+var Z=window.innerWidth>=700?100:180,PL=false,sel=-1,q="";
+function zoom(d){Z=Math.max(100,Math.min(400,Z+d));$("mp-svg").style.width=Z+"%";$("mp-zv").textContent=Z+"%"}
 $("mp-svg").style.width=Z+"%";$("mp-zv").textContent=Z+"%";
 $("mp-zi").onclick=function(){zoom(40)};$("mp-zo").onclick=function(){zoom(-40)};
-/* 検索・絞り込み */
-var CH=[["all","すべて",null],["w","衣服",["brf","kid","cam","blo","shirt"]],["l","住まい",["store","living","cnt","bed","kit","cln"]],["o","その他",["food","trv","pen","cos","aro"]]];
-var cur="all",q="";
-$("mp-ch").innerHTML=CH.map(function(c){return'<button type="button" data-c="'+c[0]+'"'+(c[0]==="all"?' class="on"':'')+'>'+c[1]+'</button>'}).join("");
-function apply(){var set=null;CH.forEach(function(c){if(c[0]===cur)set=c[2]});
- var words=q.replace(/　/g," ").trim().toLowerCase().split(/\s+/).filter(Boolean);
- document.querySelectorAll(".sp").forEach(function(g){var s=S[+g.dataset.i],h=(s.n+" "+s.d+" "+s.k).toLowerCase();
-  var okc=!set||set.indexOf(s.id)>=0,okq=words.every(function(w){return h.indexOf(w)>=0});
-  g.classList.toggle("dim",!okc||(words.length>0&&!okq));g.classList.toggle("hit",words.length>0&&okq&&okc)})}
-$("mp-ch").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;cur=b.dataset.c;[].forEach.call($("mp-ch").children,function(x){x.classList.toggle("on",x===b)});apply()});
-$("mp-q").addEventListener("input",function(){q=this.value;apply()});
-/* 詳細 */
-function pick(g){var s=S[+g.dataset.i];document.querySelectorAll(".sp.sel").forEach(function(x){x.classList.remove("sel")});g.classList.add("sel");
- $("mp-n").textContent=s.n;$("mp-d").textContent=s.d;$("mp-sh").hidden=false;var w=$("mp-w"),r=$("mp-svg").getBoundingClientRect(),k=r.width/1180;try{w.scrollTo({left:Math.max(0,(s.x-150)*k-w.clientWidth/2),behavior:"smooth"})}catch(e){}}
-$("mp-svg").addEventListener("click",function(e){var g=e.target.closest(".sp");if(g)pick(g)});
-$("mp-svg").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){var g=e.target.closest&&e.target.closest(".sp");if(g){e.preventDefault();pick(g)}}});
-$("mp-x").onclick=function(){$("mp-sh").hidden=true;document.querySelectorAll(".sp.sel").forEach(function(x){x.classList.remove("sel")})};
-/* 店舗番号 */
-function setStore(n){if(/^\d{6}$/.test(String(n||"")))$("mp-st").textContent="店舗番号 "+n}
+function syncPlan(){var im=$("mp-img"),ol=$("mp-ol"),m=$("mp-svg");if(!im)return;im.setAttribute("opacity",PL?"1":"0");ol.setAttribute("opacity",PL?"0":"1");m.classList.toggle("ov",PL)}
+$("mp-pl").onclick=function(){PL=!PL;this.classList.toggle("on",PL);this.setAttribute("aria-pressed",PL);syncPlan()};
+function mark(){var w=q.replace(/　/g," ").trim().toLowerCase().split(/\s+/).filter(Boolean);
+ document.querySelectorAll(".zn").forEach(function(g){var z=D.zones[+g.dataset.i],h=nm(z).toLowerCase(),ok=w.length&&w.every(function(x){return h.indexOf(x)>=0});
+  g.classList.toggle("hit",!!ok);g.classList.toggle("dim",w.length>0&&!ok);g.classList.toggle("sel",+g.dataset.i===sel)})}
+$("mp-q").addEventListener("input",function(){q=this.value;mark()});
+function pick(i){sel=i;var z=D.zones[i];$("mp-in").value=nm(z)==="未設定"?"":nm(z);$("mp-inf").hidden=!(z.inf&&!NAMES[z.id]);$("mp-sh").hidden=false;mark()}
+$("mp-svg").addEventListener("click",function(e){var g=e.target.closest(".zn");if(g)pick(+g.dataset.i)});
+$("mp-svg").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){var g=e.target.closest&&e.target.closest(".zn");if(g){e.preventDefault();pick(+g.dataset.i)}}});
+function close(){$("mp-sh").hidden=true;sel=-1;mark()}
+$("mp-x").onclick=close;
+function commit(){if(sel<0)return;var z=D.zones[sel],v=$("mp-in").value.trim();if(!v||v===z.n)delete NAMES[z.id];else NAMES[z.id]=v;save();draw();close()}
+$("mp-sv").onclick=commit;$("mp-in").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();commit()}});
+$("mp-rs").onclick=function(){if(sel<0)return;delete NAMES[D.zones[sel].id];save();draw();close()};
+$("mp-all").onclick=function(){if(confirm("すべての売場の名称を初期に戻します。よろしいですか？")){NAMES={};save();draw()}};
+function setStore(n){if(/^\d{6}$/.test(String(n||""))){store=String(n);$("mp-st").textContent="店舗番号 "+n;load();draw()}}
 try{setStore(localStorage.getItem("mj-store"))}catch(e){}
+load();draw();
 window.addEventListener("message",function(e){var d=e.data||{};if(d.mj==="store")setStore(d.no)});
 function tell(m){try{parent.postMessage({mj:m},"*")}catch(e){}}
 $("mp-back").addEventListener("click",function(){tell("sub-close")});tell("sub-ready");

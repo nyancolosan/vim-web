@@ -1,4 +1,4 @@
-<title>衣服（モック）</title>
+<title>衣服</title>
 <style>
 :root{--bg:#fff;--card:#fff;--ink:#333;--sub:#6f696a;--line:#e3dfdf;--acc:#9f2a37;--accink:#fff;--accbg:#f9eef0;--ok:#1b5e20;--soft:#faf7f7;--rc:12px;color-scheme:light;--f-body:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
@@ -34,108 +34,128 @@ table{border-collapse:collapse;width:100%;font-size:.82rem}th,td{border:1px soli
 .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.74rem;margin:2px 4px 2px 0;background:#fff}
 .sz{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.sz button{border:1px solid var(--line);background:#fff;border-radius:8px;min-width:48px;min-height:40px}.sz button.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
 </style>
+<style>
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin-top:10px;-webkit-overflow-scrolling:touch}
+.chips button{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:.8rem}
+.chips button.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+.sr{width:100%;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-top:10px}
+.it{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:11px 0;border-top:1px solid var(--line)}.it:first-child{border-top:0}
+.it b{font-weight:600;font-size:.88rem;line-height:1.5}.it .pr{font-weight:700;color:var(--acc);white-space:nowrap}.it small{color:var(--sub);font-size:.72rem}
+.bd{display:inline-block;font-size:.66rem;border-radius:4px;padding:0 6px;margin-left:6px;font-weight:700;vertical-align:1px}.bd.s{background:#fdeaea;color:#b3261e}.bd.n{background:#e8f3ea;color:#1b5e20}.bd.p{background:#fff6e0;color:#8a5a00}
+.ext{display:inline-block;margin-top:10px;font-size:.8rem;color:var(--acc);font-weight:700}
+.src{font-size:.7rem;color:var(--sub);line-height:1.7;margin:10px 0 0}
+.on-m{background:var(--accbg)}
+.sm td.hl,.sm th.hl{background:var(--accbg);color:var(--acc);font-weight:700}
+</style>
+
 <main>
 <header class="hd">
   <button class="back" id="cl-back" type="button" aria-label="MUJI STORE app のメニューに戻る"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button>
-  <span class="hdt"><b>衣服</b><small>モック・MUJI STORE app</small></span>
+  <span class="hdt"><b>衣服</b><small>ネットストアの商品データ</small></span>
 </header>
-<p class="mock"><b>これはモック（試作）です。</b>数値・在庫・商品名はすべてサンプルで、実際の商品や在庫とは関係ありません。機能の使い心地を確かめるための画面です。</p>
-<div class="seg" id="seg" role="tablist"><button data-t="size" class="on">サイズ診断</button><button data-t="cmp">実寸比較</button><button data-t="care">お手入れ</button><button data-t="stock">在庫・取り置き</button><button data-t="coord">コーデ</button></div>
+<p class="src" id="cl-src"></p>
+<div class="seg" id="seg" role="tablist" style="grid-template-columns:repeat(4,1fr)"><button data-t="list" class="on">商品</button><button data-t="size">サイズ診断</button><button data-t="care">お手入れ</button><button data-t="coord">コーデ</button></div>
 
-<section id="t-size">
-  <h2>サイズ診断</h2><p class="lead">身長・体重・着たい感じから、サイズの目安と実寸を出します。接客で「何サイズですか？」と聞かれた時に。</p>
-  <div class="f"><label>種類<select id="s-kind"><option value="top">トップス</option><option value="bottom">ボトムス</option></select></label>
-   <label>着たい感じ<select id="s-fit"><option value="0">ジャスト</option><option value="1">ゆったり</option><option value="-1">すっきり</option></select></label>
-   <label>身長（cm）<input type="number" id="s-h" inputmode="numeric" placeholder="例：162"></label>
-   <label>体重（kg）<input type="number" id="s-w" inputmode="numeric" placeholder="例：54"></label></div>
-  <button class="btn" id="s-go" type="button">サイズを出す</button>
-  <div id="s-out"></div>
+<section id="t-list">
+  <div class="chips" id="l-sec"></div>
+  <div class="chips" id="l-cat" style="margin-top:0"></div>
+  <input class="sr" id="l-q" type="search" placeholder="商品名で絞り込む（例：パーカ、ダウン、パジャマ）" aria-label="商品名で絞り込む">
+  <div class="f" style="margin-top:8px"><label>並び順<select id="l-so"><option value="0">ネットストアの掲載順</option><option value="1">価格の安い順</option><option value="2">価格の高い順</option></select></label><label>価格<select id="l-pr"><option value="0">すべて</option><option value="2000">〜2,000円</option><option value="5000">〜5,000円</option><option value="10000">〜10,000円</option></select></label></div>
+  <div class="card" id="l-out" style="padding-top:4px;padding-bottom:4px"></div>
+  <a class="ext" id="l-ext" href="#" target="_blank" rel="noopener">ネットストアで写真・在庫・サイズ別の寸法を見る →</a>
+  <p class="note">商品の写真・色・在庫・仕上がり寸法（着丈・身幅など）は、ネットストアの各商品ページの「仕様・サイズ」で確認できます。ここでは商品名・価格・サイズ展開を一覧にしています（価格は税込表示のまま）。紳士は、ネットストアの掲載45件のうち、最初の40件を収録しています。</p>
 </section>
 
-<section id="t-cmp" hidden>
-  <h2>実寸比較</h2><p class="lead">2つの服の実寸（着丈・身幅・肩幅・袖丈）を並べて、どこが何cm違うかを見ます。</p>
-  <div class="f"><label>A<select id="c-a"></select></label><label>サイズ<select id="c-as"></select></label><label>B<select id="c-b"></select></label><label>サイズ<select id="c-bs"></select></label></div>
-  <div id="c-out"></div>
+<section id="t-size" hidden>
+  <h2>サイズ診断</h2><p class="lead">身体の寸法（ヌード寸法）を入れると、当てはまるサイズを出します。無印良品の「対応サイズ」（2022年秋冬シーズン以降の新対応サイズ）の表をもとにしています。</p>
+  <div class="chips" id="s-sec"></div>
+  <div class="f" id="s-f"></div>
+  <button class="btn" id="s-go" type="button">サイズを出す</button>
+  <div id="s-out"></div>
+  <h2>対応サイズの表</h2><div class="card" id="s-tab" style="overflow-x:auto"></div>
+  <h2>仕上がり寸法の測り方</h2>
+  <div class="card"><p class="lead" style="margin:0">仕上がり寸法は、商品を水平な台に置き、しわを伸ばして測った実寸です（1〜2cm程度の誤差があります）。</p>
+  <div class="row"><div><b>トップス</b><br><span class="lead" style="margin:0">着丈：カットソー・セーターは身頃のいちばん長い所。ジャケット・シャツは襟ぐり後ろ中心から裾まで。<br>肩幅：両肩の端から端まで（ジャケット・シャツは襟ぐり後ろ中央から肩先までを2倍）。<br>胸囲・胴囲・裾囲：脇の下・いちばん細い所・裾の横幅を2倍した値。袖丈：肩先から袖口まで。</span></div></div>
+  <div class="row"><div><b>ボトムス</b><br><span class="lead" style="margin:0">ウエスト：上端の横幅を2倍した値（ヌード寸法のウエストとは基準が違います）。ヒップ：腰のいちばん広い所の横幅を2倍。<br>前股上：ワタリの縫い目からベルト上端まで。股下：内股の縫い目の長さ。ワタリ：股ぐり下の横幅。裾口幅：裾の横幅。</span></div></div></div>
+  <p class="note">対応サイズは身体の寸法の目安です。商品の形や素材で着心地は変わるので、試着で確認してください。出典：無印良品 よくある質問（婦人／紳士／男女兼用／子供ウェアのサイズ）。</p>
 </section>
 
 <section id="t-care" hidden>
   <h2>お手入れ・洗濯表示</h2><p class="lead">タグの表示の意味と、素材ごとの注意を、その場で確認できます。</p>
   <div class="card" id="care-sym"></div>
   <h2>素材ごとの注意</h2><div class="card" id="care-mat"></div>
-  <p class="note">洗濯表示の記号は日本の家庭用品品質表示法（2016年12月〜）の表示を簡単に説明したものです。商品ごとの表示を優先してください。</p>
-</section>
-
-<section id="t-stock" hidden>
-  <h2>在庫・取り置き</h2><p class="lead">サイズ・色ごとに、近くの店舗の在庫を見て、取り置きを依頼する画面のモックです。</p>
-  <div class="f"><label>商品<select id="k-item"></select></label><label>色<select id="k-col"><option>オフ白</option><option>ネイビー</option><option>グレー</option><option>黒</option></select></label></div>
-  <div class="sz" id="k-size"></div>
-  <div class="card" id="k-out"></div>
-  <h2>取り置きの依頼（このモックの中だけ）</h2><div class="card" id="k-list"><p class="note" style="margin:0">まだありません。</p></div>
+  <p class="note">洗濯表示の記号は、日本の家庭用品品質表示法（2016年12月〜）の表示を簡単に説明したものです。商品ごとの表示を優先してください。</p>
 </section>
 
 <section id="t-coord" hidden>
-  <h2>コーディネート提案</h2><p class="lead">シーンと色を選ぶと、組み合わせの例を出します。接客のきっかけに。</p>
-  <div class="f"><label>シーン<select id="o-sc"><option>通勤</option><option>休日</option><option>お出かけ</option><option>子どもの行事</option></select></label><label>ベースの色<select id="o-col"><option>ベージュ</option><option>ネイビー</option><option>グレー</option><option>黒</option></select></label></div>
-  <button class="btn" id="o-go" type="button">提案を出す</button><div id="o-out"></div>
+  <h2>コーディネート提案</h2><p class="lead">ネットストアにある商品から、シーン別の組み合わせの例を出します（当アプリの提案です）。</p>
+  <div class="chips" id="o-sec"></div><div class="chips" id="o-sc" style="margin-top:0"></div>
+  <div id="o-out"></div>
 </section>
-
-<div class="idea"><b>ほかにあったら便利そうな機能（案）</b>
-<ul><li>試着室のリクエスト・お客さまを待たせない呼び出し</li><li>サイズ展開と在庫を店舗横断で検索</li><li>タグのQRから、お手入れ方法と素材を表示</li><li>お客さまの体型・好みを接客メモに残して、次回の提案に使う</li><li>返品・交換の条件をその場で確認</li><li>季節の入れ替えに合わせた売場づくりのヒント</li></ul>
-<p class="note">どれを実際に作るか、現場の意見で決められます。</p></div>
 </main>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)};
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
-/* サンプルの服（実在の商品ではありません） */
-var SZ=["XS","S","M","L","XL"];
-var G=[
- {n:"［サンプル］コットン天竺 Tシャツ",k:"top",m:{XS:[60,44,38,17],S:[62,47,40,18],M:[65,50,42,19],L:[68,53,45,20],XL:[71,56,48,21]}},
- {n:"［サンプル］裏毛 スウェットシャツ",k:"top",m:{XS:[62,48,41,56],S:[64,51,43,58],M:[67,54,46,60],L:[70,57,49,62],XL:[73,60,52,64]}},
- {n:"［サンプル］ブロード シャツ",k:"top",m:{XS:[66,46,38,57],S:[68,49,40,59],M:[71,52,42,61],L:[74,55,44,63],XL:[77,58,46,65]}}];
-var BOT={XS:{w:"58–64",l:"92"},S:{w:"62–68",l:"94"},M:{w:"66–72",l:"96"},L:{w:"70–76",l:"98"},XL:{w:"74–80",l:"100"}};
+var D=/*%%CLOTHING%%*/null;
+var yen=function(n){return"¥"+Number(n).toLocaleString("ja-JP")};
+var at=D.at.split("-");$("cl-src").textContent=D.src+"（"+(+at[0])+"年"+(+at[1])+"月"+(+at[2])+"日時点）。"+D.secs.map(function(s){return s.n+" "+s.cats.reduce(function(a,c){return a+c.i.length},0)+"点"}).join("・")+"。";
 /* タブ */
-$("seg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;[].forEach.call($("seg").children,function(x){x.classList.toggle("on",x===b)});["size","cmp","care","stock","coord"].forEach(function(t){$("t-"+t).hidden=t!==b.dataset.t});window.scrollTo(0,0)});
-/* サイズ診断 */
-$("s-go").onclick=function(){var h=+$("s-h").value,w=+$("s-w").value,fit=+$("s-fit").value,k=$("s-kind").value;
- if(!(h>=100&&h<=220)||!(w>=20&&w<=200)){$("s-out").innerHTML='<div class="card">身長（100〜220cm）と体重（20〜200kg）を入れてください。</div>';return}
- var i=h<150?0:h<158?1:h<166?2:h<174?3:4,bmi=w/((h/100)*(h/100));if(bmi>=25)i++;else if(bmi<18.5)i--;if(k==="top")i+=fit;i=Math.max(0,Math.min(4,i));
- var s=SZ[i],body;
- if(k==="top"){var m=G[0].m[s];body='<table><tr><th class="l">サンプルのTシャツ（'+s+'）</th><th>着丈</th><th>身幅</th><th>肩幅</th><th>袖丈</th></tr><tr><td class="l">実寸（cm）</td><td>'+m.join('</td><td>')+'</td></tr></table>'}
- else{var b=BOT[s];body='<table><tr><th class="l">サンプルのパンツ（'+s+'）</th><th>ウエスト</th><th>股下</th></tr><tr><td class="l">実寸（cm）</td><td>'+b.w+'</td><td>'+b.l+'</td></tr></table>'}
- $("s-out").innerHTML='<div class="card"><div class="lead" style="margin:0">サイズの目安</div><b class="big">'+s+'</b>　<span class="lead">BMI '+bmi.toFixed(1)+'</span>'+body+
-  '<div class="say"><b>接客のひとこと</b><br>「'+(fit>0?"ゆったり着たいとのことなので、普段より少し大きめの":fit<0?"すっきり着たいとのことなので、少し小さめの":"ジャストの")+s+'をおすすめします。肩幅と着丈は実寸で確認して、試着もどうぞ。」</div>'+
-  '<p class="note">身長と体重からの目安です。体型や好みで変わります。試着で確認してください。</p></div>'};
-/* 実寸比較 */
-function fillCmp(){var o=G.map(function(g,i){return'<option value="'+i+'">'+esc(g.n)+'</option>'}).join("");$("c-a").innerHTML=o;$("c-b").innerHTML=o;$("c-b").value="1";
- var s=SZ.map(function(x){return'<option>'+x+'</option>'}).join("");$("c-as").innerHTML=s;$("c-bs").innerHTML=s;$("c-as").value="M";$("c-bs").value="M"}
-function cmp(){var a=G[+$("c-a").value],b=G[+$("c-b").value],x=a.m[$("c-as").value],y=b.m[$("c-bs").value],L=["着丈","身幅","肩幅","袖丈"];
- $("c-out").innerHTML='<div class="card"><table><tr><th class="l"></th><th>A</th><th>B</th><th>差（B−A）</th></tr>'+L.map(function(l,i){var d=y[i]-x[i];return'<tr><td class="l">'+l+'</td><td>'+x[i]+'cm</td><td>'+y[i]+'cm</td><td class="'+(d>0?"up":d<0?"dn":"")+'">'+(d>0?"+":"")+d+'cm</td></tr>'}).join("")+'</table>'+
-  '<div class="say"><b>接客のひとこと</b><br>「Bのほうが着丈が'+Math.abs(y[0]-x[0])+'cm'+(y[0]>=x[0]?"長く":"短く")+'、身幅は'+Math.abs(y[1]-x[1])+'cm'+(y[1]>=x[1]?"ゆったり":"すっきり")+'しています。」</div></div>'}
-["c-a","c-as","c-b","c-bs"].forEach(function(i){$(i).addEventListener("change",cmp)});fillCmp();cmp();
+$("seg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;[].forEach.call($("seg").children,function(x){x.classList.toggle("on",x===b)});["list","size","care","coord"].forEach(function(t){$("t-"+t).hidden=t!==b.dataset.t});window.scrollTo(0,0)});
+function chips(el,list,cur,fn){el.innerHTML=list.map(function(c){return'<button type="button" data-v="'+esc(c[0])+'"'+(c[0]===cur?' class="on"':'')+'>'+esc(c[1])+'</button>'}).join("");el.onclick=function(e){var b=e.target.closest("button");if(b)fn(b.getAttribute("data-v"))}}
+var SECS=D.secs.map(function(s){return[s.id,s.n]});
+function sec(id){return D.secs.filter(function(s){return s.id===id})[0]}
+/* 商品一覧 */
+var L={s:"w",c:"all"};
+function drawList(){var S=sec(L.s);chips($("l-sec"),SECS,L.s,function(v){L.s=v;L.c="all";drawList()});
+ chips($("l-cat"),[["all","すべて"]].concat(S.cats.map(function(c){return[c.n,c.n+"（"+c.i.length+"）"]})),L.c,function(v){L.c=v;drawList()});
+ $("l-ext").href=S.url;
+ var q=$("l-q").value.replace(/　/g," ").trim().toLowerCase().split(/\s+/).filter(Boolean),pmax=+$("l-pr").value,so=+$("l-so").value,rows=[];
+ S.cats.forEach(function(c){if(L.c!=="all"&&L.c!==c.n)return;c.i.forEach(function(it){var h=(it[0]+" "+c.n).toLowerCase();if(q.every(function(w){return h.indexOf(w)>=0})&&(!pmax||it[1]<=pmax))rows.push({n:it[0],p:it[1],f:it[2],z:it[3]||"",c:c.n})})});
+ if(so===1)rows.sort(function(a,b){return a.p-b.p});else if(so===2)rows.sort(function(a,b){return b.p-a.p});
+ var BD={s:'<span class="bd s">SALE</span>',n:'<span class="bd n">NEW</span>',p:'<span class="bd p">発売予定</span>'};
+ $("l-out").innerHTML=rows.length?rows.map(function(r){return'<div class="it"><b>'+esc(r.n)+(BD[r.f]||"")+'</b><span class="pr">'+yen(r.p)+'</span><small>'+esc(r.c)+(r.z?"　サイズ "+esc(r.z):"")+'</small></div>'}).join(""):'<p class="note" style="margin:12px 0">該当する商品がありません。</p>'}
+$("l-q").addEventListener("input",drawList);$("l-pr").addEventListener("change",drawList);$("l-so").addEventListener("change",drawList);
+drawList();
+/* サイズ診断（無印良品の対応サイズ・新対応サイズ。cm） */
+var NS=["XS","S","M","L","XL","XXL"];
+var T={w:{n:"婦人",cols:[["h","身長",[[149,153],[151,157],[155,161],[159,165],[163,169],[167,173]]],["b","バスト（ジャケット類の基準）",[[73,77],[75,81],[80,86],[85,91],[90,96],[95,101]]],["w","ウエスト（ボトムスの基準）",[[56,60],[58,64],[63,69],[68,74],[73,79],[78,84]]],["p","ヒップ（ボトムスの基準）",[[81,85],[83,89],[88,94],[93,99],[98,104],[103,109]]]],sz:NS},
+ m:{n:"紳士",cols:[["h","身長",[[155,163],[160,168],[166,174],[172,180],[178,186],[180,188]]],["b","チェスト",[[76,84],[80,88],[88,96],[96,104],[104,112],[112,120]]],["w","ウエスト",[[64,72],[68,76],[76,84],[84,92],[92,100],[100,108]]],["p","ヒップ",[[78,86],[82,90],[90,98],[98,106],[106,114],[114,122]]]],sz:NS}};
+var KID={sz:["50","60","70","80","90","100","110","120","130","140","150"],h:[[45,55],[55,65],[65,75],[75,85],[85,95],[95,105],[105,115],[115,125],[125,135],[135,145],[145,155]],age:["〜3ヶ月頃","3〜6ヶ月","6ヶ月〜1歳","1〜1歳半","1歳半〜2歳半","3〜4歳","4〜6歳","6〜7歳","8〜9歳","10〜12歳","13〜14歳"],kg:["3","6","9","11","11","13","16","—","—","—","—"].map(function(x){return x}),
+ b:[null,null,null,null,null,null,[53,59],[57,63],[61,67],[65,71],[70,78]],wg:[null,null,null,null,null,null,[47,53],[49,55],[51,57],[54,60],[57,63]],wb:[null,null,null,null,null,null,[49,55],[51,57],[53,59],[56,62],[59,65]]};
+KID.kg=["3","6","9","11","11→13","13→16","—","—","—","—","—"];
+KID.kg=["3","6","9","11","13","16","","","","",""];
+var SS="w";
+function drawSize(){chips($("s-sec"),[["w","婦人"],["m","紳士"],["k","こども"]],SS,function(v){SS=v;$("s-out").innerHTML="";drawSize()});
+ if(SS==="k"){$("s-f").innerHTML='<label style="grid-column:1/3">身長（cm）<input type="number" id="s-h" inputmode="decimal" placeholder="例：118"></label>';
+  $("s-tab").innerHTML='<table class="sm"><tr><th class="l">サイズ</th><th>年齢の目安</th><th>身長</th><th>体重</th><th>バスト</th><th>ウエスト（女児）</th><th>ウエスト（男児）</th></tr>'+KID.sz.map(function(s,i){return'<tr><td class="l">'+s+'</td><td>'+KID.age[i]+'</td><td>'+KID.h[i][0]+'〜'+KID.h[i][1]+'</td><td>'+(KID.kg[i]?KID.kg[i]+'kg':'—')+'</td><td>'+(KID.b[i]?KID.b[i][0]+'〜'+KID.b[i][1]:'—')+'</td><td>'+(KID.wg[i]?KID.wg[i][0]+'〜'+KID.wg[i][1]:'—')+'</td><td>'+(KID.wb[i]?KID.wb[i][0]+'〜'+KID.wb[i][1]:'—')+'</td></tr>'}).join("")+'</table><p class="note">50〜100は新生児・ベビー、110〜150はキッズ。体重は目安（kg）。</p>'}
+ else{var t=T[SS];$("s-f").innerHTML=t.cols.map(function(c){return'<label>'+esc(c[1])+'（cm）<input type="number" id="s-'+c[0]+'" inputmode="decimal" placeholder="わかる所だけ"></label>'}).join("");
+  $("s-tab").innerHTML='<table class="sm"><tr><th class="l"></th>'+t.sz.map(function(s){return'<th>'+s+'</th>'}).join("")+'</tr>'+t.cols.map(function(c){return'<tr><td class="l">'+esc(c[1])+'</td>'+c[2].map(function(r){return'<td>'+r[0]+'〜'+r[1]+'</td>'}).join("")+'</tr>'}).join("")+'</table>'}}
+function near(v,rs){var best=-1,bd=1e9,hit=[];rs.forEach(function(r,i){if(!r)return;if(v>=r[0]&&v<=r[1]){hit.push(i);var d=Math.abs(v-(r[0]+r[1])/2);if(d<bd){bd=d;best=i}}});return{hit:hit,best:best}}
+$("s-go").onclick=function(){var o;
+ if(SS==="k"){var h=+$("s-h").value;if(!(h>=40&&h<=170)){$("s-out").innerHTML='<div class="card">身長（40〜170cm）を入れてください。</div>';return}
+  var r=near(h,KID.h);if(r.best<0){$("s-out").innerHTML='<div class="card">表の範囲（45〜155cm）の外です。</div>';return}
+  var i=r.best;o='<div class="card"><div class="lead" style="margin:0">身長'+h+'cmに当てはまるサイズ</div><b class="big">'+KID.sz[i]+'</b>'+(r.hit.length>1?'<p class="lead" style="margin:4px 0 0">'+r.hit.map(function(x){return KID.sz[x]}).join("・")+' の範囲に重なっています（成長を見込むなら大きい方）。</p>':"")+'<p class="lead" style="margin:6px 0 0">年齢の目安：'+KID.age[i]+(KID.kg[i]?'　体重の目安：'+KID.kg[i]+'kg':'')+'</p></div>'}
+ else{var t=T[SS],rows=[],any=false;t.cols.forEach(function(c){var el=$("s-"+c[0]),v=+el.value;if(!el.value)return;any=true;var r=near(v,c[2].map(function(x){return x}));rows.push('<tr><td class="l">'+esc(c[1])+' '+v+'cm</td><td>'+(r.hit.length?'<b>'+t.sz[r.best]+'</b>'+(r.hit.length>1?'<br><span class="lead" style="margin:0">'+r.hit.map(function(x){return t.sz[x]}).join("・")+'に重なる</span>':""):'表の範囲外')+'</td></tr>')});
+  if(!any){$("s-out").innerHTML='<div class="card">わかる寸法を1つ以上入れてください。</div>';return}
+  o='<div class="card"><div class="lead" style="margin:0">'+t.n+'：入れた寸法ごとに当てはまるサイズ</div><table class="sm" style="margin-top:6px">'+rows.join("")+'</table><p class="note">太字は、その範囲の真ん中にいちばん近いサイズです。複数の寸法で違うサイズが出たら、ジャケット・トップスはバスト（チェスト）、ボトムスはウエストとヒップを優先して、着たい感じで選びます。</p></div>'}
+ $("s-out").innerHTML=o};
+drawSize();
 /* お手入れ */
 var SY=[["洗濯桶＋数字（例：40）","洗濯機で洗える。数字は水温の上限（℃）。桶に手のマークは「手洗いのみ」、×は家庭で洗えない。"],["三角（△）","漂白剤が使える。斜線入りは酸素系のみ、×は漂白不可。"],["四角＋丸（タンブル）","乾燥機が使える。×は乾燥機に入れない。"],["四角＋縦線／横線","縦線は吊り干し、横線は平干し。斜線入りは日陰で干す。"],["アイロン＋点の数","点1つは低温（110℃まで）、2つは中温（150℃まで）、3つは高温（200℃まで）。×はかけない。"],["丸（ドライ）","ドライクリーニングができる。×は不可。"]];
 $("care-sym").innerHTML=SY.map(function(r){return'<div class="row"><div><b>'+r[0]+'</b><br><span class="lead" style="margin:0">'+r[1]+'</span></div></div>'}).join("");
 var MT=[["綿","洗濯で縮みやすい。初回は色落ちに注意し、ほかの衣類と分けて洗う。"],["麻（リネン）","洗うほどやわらかくなる。シワになりやすく、濡れたまま放置すると色移りしやすい。"],["ウール","縮み・毛玉に注意。ネットに入れ、中性洗剤の弱水流（ウォッシャブル表示のもの）。"],["ポリエステル","乾きが早く、シワになりにくい。静電気が出やすい。"],["カシミヤ","手洗いまたはクリーニング。ブラッシングで毛並みを整える。"],["レーヨン","水に濡れると縮み・シワが出やすい。洗濯表示を必ず確認。"]];
 $("care-mat").innerHTML=MT.map(function(r){return'<div class="row"><div><b>'+r[0]+'</b><br><span class="lead" style="margin:0">'+r[1]+'</span></div></div>'}).join("");
-/* 在庫・取り置き（モック） */
-$("k-item").innerHTML=G.map(function(g,i){return'<option value="'+i+'">'+esc(g.n)+'</option>'}).join("");
-var KS="M",STORES=["銀座","有楽町","新宿","池袋","渋谷"],RES=[];
-function seed(it,col,sz){var h=0,t=it+col+sz;for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))%97;return h}
-function stock(){$("k-size").innerHTML=SZ.map(function(s){return'<button type="button" data-s="'+s+'" class="'+(s===KS?"on":"")+'">'+s+'</button>'}).join("");
- var it=$("k-item").value,col=$("k-col").value;
- $("k-out").innerHTML='<b>'+esc(G[+it].n)+'／'+esc(col)+'／'+KS+'</b>'+STORES.map(function(st,i){var n=seed(it+st,col,KS)%9,lv=n>=4?["在庫あり","t1"]:n>=1?["残りわずか","t2"]:["在庫なし","t3"];
-  return'<div class="row"><span>'+st+'店</span><span><span class="tag '+lv[1]+'">'+lv[0]+'</span>'+(n>0?' <button type="button" class="pill" data-r="'+i+'">取り置きを依頼</button>':"")+'</span></div>'}).join("")+'<p class="note">サンプルの在庫です。実際の在庫とは関係ありません。</p>'}
-$("k-size").addEventListener("click",function(e){var b=e.target.closest("[data-s]");if(!b)return;KS=b.dataset.s;stock()});
-$("k-item").addEventListener("change",stock);$("k-col").addEventListener("change",stock);
-$("k-out").addEventListener("click",function(e){var b=e.target.closest("[data-r]");if(!b)return;var it=$("k-item").value,r=STORES[+b.dataset.r]+"店："+G[+it].n+"／"+$("k-col").value+"／"+KS;RES.push(r);
- $("k-list").innerHTML=RES.map(function(x){return'<div class="row"><span>'+esc(x)+'</span><span class="tag t2">依頼中（モック）</span></div>'}).join("")+'<p class="note">モックのため、実際には取り置きされません。</p>'});
-stock();
-/* コーデ */
-var CO={"通勤":[["ブロードシャツ","ストレッチパンツ","ローファー"],["ニット","テーパードパンツ","トートバッグ"],["ジャケット","ブラウス","スカート"]],"休日":[["スウェット","デニムパンツ","スニーカー"],["Tシャツ","ワイドパンツ","キャンバストート"],["リネンシャツ","ショートパンツ","サンダル"]],"お出かけ":[["ワンピース","カーディガン","フラットシューズ"],["シャツ","プリーツスカート","ショルダーバッグ"],["ニットベスト","シャツ","ワイドパンツ"]],"子どもの行事":[["ジャケット","ブラウス","テーパードパンツ"],["シャツ","ニット","スラックス"],["ワンピース","ジャケット","パンプス"]]};
-$("o-go").onclick=function(){var sc=$("o-sc").value,c=$("o-col").value,L=CO[sc];
- $("o-out").innerHTML=L.map(function(r,i){return'<div class="card"><b>提案'+(i+1)+'　'+esc(sc)+'</b><div style="margin-top:6px">'+r.map(function(x,j){return'<span class="pill">'+esc(j===0?c+"の"+x:x)+'</span>'}).join("")+'</div></div>'}).join("")+'<div class="say"><b>接客のひとこと</b><br>「'+esc(sc)+'でお使いなら、'+esc(c)+'を軸にすると、手持ちの服とも合わせやすいです。」</div><p class="note">サンプルの組み合わせです。実際の商品を使った提案は、商品データがそろってから対応します。</p>'};
+/* コーデ（ネットストアの商品から組んだ例） */
+var ALL={};D.secs.forEach(function(s){s.cats.forEach(function(c){c.i.forEach(function(it){ALL[it[0]]=it[1]})})});
+var CO={w:{"通勤":[["洗いざらし ブロードレギュラーカラー長袖シャツ","ストレッチチノ リラックステーパードパンツ","撥水コットン混ツイルステンカラーコート"],["ウール混ジャージー Vネックベスト","洗いざらし ブロードスタンドカラー長袖ロングシャツ","ふんわりしぼガーゼ ロングパンツ"]],"休日":[["コットンブークレ 長袖フーディ","洗いざらし デニムイージーテーパードパンツ","軽量ダウンポケッタブルノーカラーベスト"],["裏毛スウェットカーディガン","強撚天竺編みクルーネック長袖Tシャツ","裏毛スウェットワイドパンツ"]],"お出かけ":[["素材に還る ニットコンビワンピース","軽量ダウンポケッタブルノーカラージャケット"],["コットンブークレ 長袖ワンピース","素材に還るフリースカーディガン"]]},
+ m:{"通勤":[["紳士 洗えるウールハイゲージクルーネックセーター","紳士 防風裏起毛ストレッチテーパードパンツ","紳士 ふんわり中わた撥水ノーカラーベスト"],["紳士 両面起毛フランネル長袖シャツ","紳士 起毛ジャージー イージータックパンツ","紳士 起毛ジャージーブルゾン"]],"休日":[["紳士 裏起毛スウェットプルオーバーパーカ","紳士 コーデュロイ リラックスイージーパンツ","紳士 起毛ジャージーブルゾン"],["紳士 起毛天竺編みクルーネック長袖Tシャツ","紳士 裏起毛スウェットワイドパンツ","紳士 ニットフリースフルジップジャケット"]]},
+ k:{"休日":[["キッズ 裏毛スウェットフルジップパーカ","キッズ ストレッチ裏起毛スリムフィットパンツ","キッズ 洗える中わた撥水キルトジャケット"],["キッズ 両面起毛クルーネック長袖Tシャツ","キッズ 防風裏起毛ストレッチワイドジョガーパンツ","キッズ アラン柄ボアジャケット"]],"ベビー":[["ベビー 両面起毛ハイネック長袖Tシャツ","おなかすっぽりストレッチコーデュロイレギンス","洗える中わた撥水ジャケット"],["あたまするっと 裏毛スウェットプルオーバー","おなかすっぽり裏毛ジョガーパンツ","ボアフリースベスト"]]}};
+var CS="w",CC=null;
+function drawCo(){chips($("o-sec"),SECS,CS,function(v){CS=v;CC=null;drawCo()});var sc=Object.keys(CO[CS]);if(!CC||sc.indexOf(CC)<0)CC=sc[0];
+ chips($("o-sc"),sc.map(function(x){return[x,x]}),CC,function(v){CC=v;drawCo()});
+ $("o-out").innerHTML=CO[CS][CC].map(function(r,i){var tot=0;return'<div class="card"><b>提案'+(i+1)+'</b>'+r.map(function(n){var p=ALL[n];if(p!=null)tot+=p;return'<div class="it"><b>'+esc(n)+'</b><span class="pr">'+(p!=null?yen(p):"")+'</span></div>'}).join("")+'<div class="row"><span>合計</span><b class="up" style="color:var(--acc)">'+yen(tot)+'</b></div></div>'}).join("")+'<p class="note">ネットストアの商品から組んだ例です。色・サイズ・在庫は商品ページで確認してください。</p>'}
+drawCo();
 function tell(m){try{parent.postMessage({mj:m},"*")}catch(e){}}
 $("cl-back").addEventListener("click",function(){tell("sub-close")});tell("sub-ready");
-})();
-</script>
+})();</script>
