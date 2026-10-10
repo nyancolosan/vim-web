@@ -115,11 +115,12 @@ var IC={
  memo:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6h20l6 6v30H12z"/><path d="M32 6v6h6"/><path d="M18 21h14M18 28h14M18 35h8"/></svg>',
  cmp:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="14" width="16" height="26" rx="2"/><rect x="27" y="8" width="16" height="32" rx="2"/><path d="M10 22h6M32 16h6M32 24h6" opacity=".6"/></svg>',
  cloth:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7l-11 6 4 8 5-2v21h18V19l5 2 4-8-11-6c-1 3-3 5-7 5s-6-2-7-5z"/></svg>',
+ map:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12l10-4 12 4 10-4v28l-10 4-12-4-10 4z"/><path d="M18 8v28M30 12v28"/></svg>',
  menu:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>'};
 /* --- 全画面で重ねるページ（curtain.html・knowledge.html）--- */
 var subs={},cur=null,timer=null;
 function closeSub(back){var was=cur;if(cur&&subs[cur])subs[cur].el.hidden=true;cur=null;document.documentElement.style.overflow="";if(back!==false)showHome(was==="curtain"||was==="idee"||was==="shelf"?"living":"top")}
-function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb.html",idee:"idee.html",shelf:"shelf.html",clothing:"clothing.html"}[k],title={curtain:"オーダーカーテン見積",know:"素材図鑑",hb:"H&B",idee:"IDEE",shelf:"オーダー収納の見積り",clothing:"衣服"}[k];
+function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb.html",idee:"idee.html",shelf:"shelf.html",clothing:"clothing.html",map:"map.html"}[k],title={curtain:"オーダーカーテン見積",know:"素材図鑑",hb:"H&B",idee:"IDEE",shelf:"オーダー収納の見積り",clothing:"衣服",map:"店舗マップ（試験運用）"}[k];
  hideHome();var st=q("stm");if(st)st.hidden=true;
  if(!subs[k]){var el=document.createElement("div");el.className="mjsub-ov";el.setAttribute("role","dialog");el.setAttribute("aria-label",title);
   el.innerHTML='<div class="mjsubf" hidden>'+title+'をここで開けませんでした。<br><a href="'+src+'" target="_blank" rel="noopener">別のタブで開く</a><br><button type="button" class="ib">メニューに戻る</button></div><iframe src="'+src+'" title="'+title+'"></iframe>';
@@ -127,17 +128,18 @@ function openSub(k){var src={curtain:"curtain.html",know:"knowledge.html",hb:"hb
   subs[k]={el:el,ready:false};var me=subs[k];setTimeout(function(){if(!me.ready)el.querySelector(".mjsubf").hidden=false},6000)}
  cur=k;subs[k].el.hidden=false;document.documentElement.style.overflow="hidden"}
 window.addEventListener("message",function(e){var d=e.data||{},k=null;Object.keys(subs).forEach(function(x){try{if(subs[x].el.querySelector("iframe").contentWindow===e.source)k=x}catch(_){}});
- if(d.mj==="sub-ready"&&k){subs[k].ready=true;subs[k].el.querySelector(".mjsubf").hidden=true}
+ if(d.mj==="sub-ready"&&k){if(k==="map"){try{e.source.postMessage({mj:"store",no:getStore()},"*")}catch(_){}}subs[k].ready=true;subs[k].el.querySelector(".mjsubf").hidden=true}
  if(d.mj==="sub-close")closeSub()});
 /* --- はじめの選択画面 --- */
 var home=document.createElement("div");home.id="ideahome";home.setAttribute("role","dialog");home.setAttribute("aria-label","MUJI STORE app メニュー");
 home.innerHTML='<div class="phin"><div class="phlogo" role="img" aria-label="MUJI STORE app"></div>'+
  '<p class="phq" id="phq">今日は何をしますか？</p><div class="phgrid" id="phgrid"></div>'+
- '<section class="nw" id="nw" aria-labelledby="nwt"></section><p class="phsup">supported by VIM</p></div>';
+ '<section class="nw" id="nw" aria-labelledby="nwt"></section><div class="phst" id="phst"></div><p class="phsup">supported by VIM</p></div>';
 /* はじめの画面：H&B・住空間・素材図鑑。住空間を押すと、家具を置く／オーダーカーテンの2つが出る */
 var MENU={top:[["hb",IC.hb,"H&amp;B（ヘルス&amp;ビューティー）","肌の悩みや好みから、おすすめのスキンケアと使い方を出す"],
   ["clothing",IC.cloth,"衣服（モック）","サイズ診断・実寸比較・お手入れ・在庫と取り置き・コーデ。あったら便利な機能を試せる"],
   ["living",IC.living,"住空間","部屋に家具を置く・カーテンや収納の見積り・IDEE"],
+  ["map",IC.map,"店舗マップ（試験運用）","売り場の場所を、案内板と同じ見た目の図で探す"],
   ["know",IC.know,"素材図鑑","木材・繊維・樹脂・金属・焼き物など、素材の特長と接客のひとこと"],
   ["memo",IC.memo,"接客メモ","お客さまの部屋・好み・提案した商品を残して、次の来店で見返す"]],
  living:[["room",IC.room,"部屋に家具を置く","間取りに無印良品の家具を実寸で置いて、3Dで確かめる"],
@@ -176,13 +178,25 @@ document.body.appendChild(home);
 try{home.querySelector(".phlogo").innerHTML=vimWord()}catch(e){}
 function showHome(lv){home.hidden=false;menu(typeof lv==="string"?lv:"top");document.documentElement.style.overflow="hidden"}
 function hideHome(){home.hidden=true;document.documentElement.style.overflow=""}
-home.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(!b)return;var g=b.getAttribute("data-go");if(g==="top"||g==="living"){menu(g);home.scrollTop=0}else if(g==="room")hideHome();else if(g==="memo"){hideHome();window.ideaMemo&&ideaMemo.open()}else if(g==="cmp"){hideHome();window.ideaCmp&&ideaCmp.open()}else openSub(g)});
+home.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(!b)return;var g=b.getAttribute("data-go");if(g==="logout"){setStore("");lgno.value="";lger.hidden=true;lgn.hidden=false;stBar();return}if(g==="top"||g==="living"){menu(g);home.scrollTop=0}else if(g==="room")hideHome();else if(g==="memo"){hideHome();window.ideaMemo&&ideaMemo.open()}else if(g==="cmp"){hideHome();window.ideaCmp&&ideaCmp.open()}else openSub(g)});
+/* --- 店舗ログイン（オープニングのあと。6桁の店舗番号） --- */
+function getStore(){try{var v=localStorage.getItem("mj-store");return /^\d{6}$/.test(v||"")?v:""}catch(_){return window.__mjStore||""}}
+function setStore(v){window.__mjStore=v;try{if(v)localStorage.setItem("mj-store",v);else localStorage.removeItem("mj-store")}catch(_){}}
+var lgn=document.createElement("div");lgn.id="idealogin";lgn.setAttribute("role","dialog");lgn.setAttribute("aria-label","店舗ログイン");
+lgn.innerHTML='<form class="lgin" novalidate><div class="lgl" role="img" aria-label="MUJI STORE app">MUJI STORE<span>app</span></div><h2>店舗ログイン</h2><p>店舗番号（6桁の数字）を入力してください</p><input id="lgno" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" placeholder="123456" aria-label="店舗番号"><p class="lger" id="lger" role="alert" hidden></p><button type="submit" class="lgb">ログイン</button><small>supported by VIM</small></form>';
+document.body.appendChild(lgn);
+var lgno=lgn.querySelector("#lgno"),lger=lgn.querySelector("#lger");
+lgno.addEventListener("input",function(){this.value=this.value.replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-65248)}).replace(/\D/g,"").slice(0,6);lger.hidden=true});
+lgn.querySelector("form").addEventListener("submit",function(e){e.preventDefault();var v=lgno.value;if(!/^\d{6}$/.test(v)){lger.textContent="6桁の数字で入力してください（例：123456）";lger.hidden=false;lgno.focus();return}
+ setStore(v);lgn.hidden=true;stBar();var hh=(location.hash||"").slice(1);if(hh==="curtain"||hh==="know"||hh==="hb"||hh==="idee"||hh==="shelf"||hh==="clothing"||hh==="map")openSub(hh)});
+function stBar(){var b=home.querySelector("#phst");if(!b)return;var n=getStore();b.innerHTML=n?'<span>店舗番号 <b>'+n+'</b></span><button type="button" data-go="logout">店舗を変更</button>':""}
 /* ヘッダーに「メニュー」、ロゴを押してもメニューへ */
 var hb=document.querySelector("h1 .hbt"),th=q("thb");
 if(hb&&!q("ideamenu")){var b=document.createElement("button");b.id="ideamenu";b.className="hb";b.type="button";b.setAttribute("aria-label","メニュー");b.innerHTML=IC.menu+"メニュー";b.onclick=showHome;hb.insertBefore(b,th&&th.parentNode===hb?th:null)}
 var lg=document.querySelector("h1 .vlogo");if(lg){lg.style.cursor="pointer";lg.addEventListener("click",showHome)}
 window.ideaMenu=showHome;window.mjCurtainOpen=function(){openSub("curtain")};
-var h=(location.hash||"").slice(1);if(h==="curtain"||h==="know"||h==="hb"||h==="idee"||h==="shelf"||h==="clothing")openSub(h);else if(h==="room")hideHome();else if(h==="living")showHome("living");else showHome();
+if(getStore())lgn.hidden=true;else lgn.hidden=false;stBar();
+var h=(location.hash||"").slice(1);if(!getStore()){showHome()}else if(h==="curtain"||h==="know"||h==="hb"||h==="idee"||h==="shelf"||h==="clothing"||h==="map")openSub(h);else if(h==="room")hideHome();else if(h==="living")showHome("living");else showHome();
 })();
 window.mujiOpen=open;window.__toItem=toItem;
 })();

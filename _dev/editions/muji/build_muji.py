@@ -73,3 +73,7 @@ from build_shelf import build as build_shelf
 open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "shelf.html"), "w", encoding="utf-8").write(build_shelf())
 # アイコンは idea/make_idea.py が idea/idea-icon.svg に書き出す
 print("ok", len(s.encode()) // 1024, "KB,", len(cat), "items")
+# 店舗マップ（試験運用。同じフォルダの map.html として一緒に公開する）
+sys.path.insert(0, os.path.join(E, "map"))
+from build_map import build as build_map
+open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "map.html"), "w", encoding="utf-8").write(build_map())
