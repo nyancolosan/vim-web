@@ -22,7 +22,7 @@ main{max-width:1100px;margin:0 auto;padding:0 14px}
 .mw{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
 svg.map{display:block;width:180%;height:auto;max-width:none}
 .zn{cursor:pointer}
-.zn polygon{fill:#a7a4a5;stroke:#6b1424;stroke-width:2.5;transition:fill .15s}
+.zn polygon{fill:#a7a4a5;stroke:#6b1424;stroke-width:2;transition:fill .15s}
 .zn:hover polygon{fill:#bdbabb}
 .zn text{fill:#fff;font-weight:700;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:#4a4547;stroke-width:3px;stroke-linejoin:round}
 .zn.un text{fill:#e9e6e7;font-weight:500}
@@ -48,7 +48,7 @@ svg.map{display:block;width:180%;height:auto;max-width:none}
 <p class="sub">イオンモール川口　売場図</p>
 <div class="sr"><input id="mp-q" type="search" placeholder="売場の名称で探す（例：キッチン、こども）" aria-label="売場を探す"></div>
 <div class="tools"><button type="button" id="mp-zo" aria-label="縮小">－</button><span id="mp-zv">180%</span><button type="button" id="mp-zi" aria-label="拡大">＋</button><button type="button" id="mp-pl" aria-pressed="false">図面を重ねる</button><small>売場をタップして名称を付けられます</small></div>
-<div class="mw" id="mp-w"><svg class="map" id="mp-svg" viewBox="0 0 995 566" role="img" aria-label="売場図"></svg></div>
+<div class="mw" id="mp-w"><svg class="map" id="mp-svg" viewBox="25 20 950 535" role="img" aria-label="売場図"></svg></div>
 <p class="note">図面を読み取って区画に分けた、β版です（AM川口のみ）。売場をタップすると名称を付けたり変えたりできます。名称はこの端末に保存され、店舗番号ごとに分けて残ります。名称が「未設定」の区画は、図面に文字がなく判別できなかったところです。<br><button type="button" id="mp-all">すべての名称を初期に戻す</button></p>
 </main>
 <div class="sheet" id="mp-sh" hidden><button type="button" class="x" id="mp-x" aria-label="閉じる">×</button><h3>売場の名称</h3><div class="nm"><input id="mp-in" type="text" maxlength="24" aria-label="売場の名称" placeholder="名称を入れる"><button type="button" class="sv" id="mp-sv">保存</button></div><button type="button" class="rs" id="mp-rs">初期の名称に戻す</button><p id="mp-inf" hidden>※この名称は、図面の家具の配置から推測したものです。違うときは付け替えてください。</p></div>
@@ -64,9 +64,8 @@ function nm(z){return NAMES[z.id]||z.n}
 function cen(p){var x=0,y=0,a=0;for(var i=0;i<p.length;i++){var j=(i+1)%p.length,c=p[i][0]*p[j][1]-p[j][0]*p[i][1];a+=c;x+=(p[i][0]+p[j][0])*c;y+=(p[i][1]+p[j][1])*c}a/=2;return a?[x/(6*a),y/(6*a)]:p[0]}
 function bb(p){var xs=p.map(function(q){return q[0]}),ys=p.map(function(q){return q[1]});return[Math.max.apply(0,xs)-Math.min.apply(0,xs),Math.max.apply(0,ys)-Math.min.apply(0,ys)]}
 function draw(){var o=['<image id="mp-img" href="'+PLAN+'" x="0" y="0" width="995" height="566" opacity="0" />'];
- o.push('<polygon id="mp-ol" points="'+D.outline.map(function(p){return p.join(",")}).join(" ")+'" fill="#f1efef"/>');
- D.zones.forEach(function(z,i){var n=nm(z),c=cen(z.p),b=bb(z.p),fs=Math.min(14,b[0]*.9/n.length),lines=[n];
-  if(fs<10&&n.length>4){var h=Math.ceil(n.length/2);lines=[n.slice(0,h),n.slice(h)];fs=Math.min(13,b[0]*.9/h)}
+  D.zones.forEach(function(z,i){var n=nm(z),c=cen(z.p),b=bb(z.p),fs=Math.min(18,b[0]*.9/n.length),lines=[n];
+  if(fs<11&&n.length>4){var h=Math.ceil(n.length/2);lines=[n.slice(0,h),n.slice(h)];fs=Math.min(16,b[0]*.9/h)}
   fs=Math.max(7,fs);var lh=fs*1.15;
   o.push('<g class="zn'+(n==="未設定"?" un":"")+'" data-i="'+i+'" tabindex="0" role="button" aria-label="'+esc(n)+'"><polygon points="'+z.p.map(function(p){return p.join(",")}).join(" ")+'"/><text x="'+c[0].toFixed(1)+'" y="'+(c[1]-(lines.length-1)*lh/2+fs*.35).toFixed(1)+'" font-size="'+fs.toFixed(1)+'">'+lines.map(function(l,k){return'<tspan x="'+c[0].toFixed(1)+'" dy="'+(k?lh:0)+'">'+esc(l)+'</tspan>'}).join("")+'</text></g>')});
  $("mp-svg").innerHTML=o.join("");mark();syncPlan()}
@@ -74,7 +73,7 @@ var Z=window.innerWidth>=700?100:180,PL=false,sel=-1,q="";
 function zoom(d){Z=Math.max(100,Math.min(400,Z+d));$("mp-svg").style.width=Z+"%";$("mp-zv").textContent=Z+"%"}
 $("mp-svg").style.width=Z+"%";$("mp-zv").textContent=Z+"%";
 $("mp-zi").onclick=function(){zoom(40)};$("mp-zo").onclick=function(){zoom(-40)};
-function syncPlan(){var im=$("mp-img"),ol=$("mp-ol"),m=$("mp-svg");if(!im)return;im.setAttribute("opacity",PL?"1":"0");ol.setAttribute("opacity",PL?"0":"1");m.classList.toggle("ov",PL)}
+function syncPlan(){var im=$("mp-img"),m=$("mp-svg");if(!im)return;im.setAttribute("opacity",PL?"1":"0");m.classList.toggle("ov",PL)}
 $("mp-pl").onclick=function(){PL=!PL;this.classList.toggle("on",PL);this.setAttribute("aria-pressed",PL);syncPlan()};
 function mark(){var w=q.replace(/　/g," ").trim().toLowerCase().split(/\s+/).filter(Boolean);
  document.querySelectorAll(".zn").forEach(function(g){var z=D.zones[+g.dataset.i],h=nm(z).toLowerCase(),ok=w.length&&w.every(function(x){return h.indexOf(x)>=0});
