@@ -67,5 +67,9 @@ open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "idee.html"), "
 sys.path.insert(0, os.path.join(E, "clothing"))
 from build_clothing import build as build_clothing
 open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "clothing.html"), "w", encoding="utf-8").write(build_clothing())
+# オーダー収納の見積り（同じフォルダの shelf.html として一緒に公開する）
+sys.path.insert(0, os.path.join(E, "shelf"))
+from build_shelf import build as build_shelf
+open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "shelf.html"), "w", encoding="utf-8").write(build_shelf())
 # アイコンは idea/make_idea.py が idea/idea-icon.svg に書き出す
 print("ok", len(s.encode()) // 1024, "KB,", len(cat), "items")
