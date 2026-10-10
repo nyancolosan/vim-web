@@ -10,37 +10,26 @@ BRAND = L["BRAND"]   # アイコン・オープニングの地色（ロゴ画像
 tmp = os.path.join(tempfile.gettempdir(), "vim-base.html")
 subprocess.run([sys.executable, os.path.join(D, "make_beta.py"), tmp], check=True, capture_output=True)
 s = open(tmp, encoding="utf-8").read()
-s = s.replace('<title>VIM Beta</title>', '<title>idea</title>', 1)
+s = s.replace('<title>VIM Beta</title>', '<title>MUJI STORE app</title>', 1)
 s = s.replace('<div class="betatag" aria-hidden="true">BETA</div>', '', 1)
-s = s.replace('<meta name="apple-mobile-web-app-title" content="VIM"><meta name="application-name" content="VIM">', '<meta name="apple-mobile-web-app-title" content="idea"><meta name="application-name" content="idea">', 1)
-s = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="idea：無印良品の店舗スタッフ向け。H&B・住空間（部屋に家具を置く・オーダーカーテンの見積り）・素材図鑑">', s, count=1)
-s = s.replace('aria-label="VIM visual × interior × modeling"', 'aria-label="idea"')
-# 2) ロゴを idea に（画面・見積書・PDF で使う VIM_W を差し替え、下の英字 VIM_T はなし。枠は VIM と同じ）
-s, n = re.subn(r"VIM_W='[^']*'", lambda m: "VIM_W='%s'" % L["WORD"], s, count=1); assert n == 1
+s = s.replace('<meta name="apple-mobile-web-app-title" content="VIM"><meta name="application-name" content="VIM">', '<meta name="apple-mobile-web-app-title" content="MUJI STORE app"><meta name="application-name" content="MUJI STORE app">', 1)
+s = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="MUJI STORE app：無印良品の店舗スタッフ向け。H&B・住空間（部屋に家具を置く・オーダーカーテンの見積り）・素材図鑑">', s, count=1)
+s = s.replace('aria-label="VIM visual × interior × modeling"', 'aria-label="MUJI STORE app"')
+WORD_TXT = ('<text x="622" y="618" text-anchor="middle" font-family="Helvetica Neue,Arial,Hiragino Sans,sans-serif" font-weight="800" font-size="150" textLength="740" lengthAdjust="spacingAndGlyphs">MUJI STORE</text>'
+            '<text x="622" y="708" text-anchor="middle" font-family="Helvetica Neue,Arial,Hiragino Sans,sans-serif" font-weight="700" font-size="86" textLength="250" lengthAdjust="spacingAndGlyphs">app</text>')
+# 2) ロゴ（仮：テキスト。ロゴが決まったら差し替える）（画面・見積書・PDF で使う VIM_W を差し替え、下の英字 VIM_T はなし。枠は VIM と同じ）
+s, n = re.subn(r"VIM_W='[^']*'", lambda m: "VIM_W='%s'" % WORD_TXT, s, count=1); assert n == 1
 s, n = re.subn(r"VIM_T='<path fill-rule=\"evenodd\" d=\"[^\"]*\"/>'", "VIM_T=''", s, count=1); assert n == 1
 # 3) オープニング：暗がりで懐中電灯の「i」が立ち上がり、カチッと光が3本はじけて「dea」が照らされる
 a = s.index('<div id="opening"'); b = s.index('<script>(function(){var o=document.getElementById("opening")', a)
-cx, ity = L["ITOP"]; ry = L["RAYTOP"]; base = L["BASE"]
-OP = ('<style>#opening{background:%(B)s!important}'
-      '#opening .id-svg{width:min(62vw,340px);height:auto;overflow:visible}'
-      '#opening .id-sup{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom,0px));text-align:center;color:#fff;font:600 11px/1 Poppins,"Hiragino Sans",system-ui,sans-serif;letter-spacing:.18em;animation:idFade .6s ease 2.1s both}'
-      '#opening .id-i{animation:idRise .7s cubic-bezier(.2,.8,.2,1) .1s both,idClick .22s ease-in-out .95s both;transform-box:view-box;transform-origin:%(cx).1fpx %(base).1fpx}'
-      '#opening .id-r{transform-box:view-box;transform-origin:%(cx).1fpx %(ity).1fpx;animation:idRay .45s cubic-bezier(.2,1.4,.4,1) both,idPulse .5s ease-in-out 1.85s}'
-      '#opening .id-r1{animation-delay:1.05s,1.85s}#opening .id-r2{animation-delay:1.15s,1.9s}#opening .id-r3{animation-delay:1.25s,1.95s}'
-      '#opening .id-glow{transform-box:view-box;transform-origin:%(cx).1fpx %(ity).1fpx;animation:idGlow 1.1s ease-out 1.0s both}'
-      '#opening .id-l{opacity:.18;animation:idLit .5s ease both}#opening .id-l1{animation-delay:1.2s}#opening .id-l2{animation-delay:1.3s}#opening .id-l3{animation-delay:1.4s}'
-      '@keyframes idRise{from{opacity:0;transform:translateY(60px)}}@keyframes idClick{50%%{transform:scaleY(.93)}}'
-      '@keyframes idRay{from{opacity:0;transform:scale(.4)}}@keyframes idPulse{50%%{transform:scale(1.12)}}'
-      '@keyframes idGlow{0%%{opacity:0;transform:scale(.3)}35%%{opacity:.9}100%%{opacity:0;transform:scale(1.6)}}'
-      '@keyframes idLit{from{opacity:.18}to{opacity:1}}@keyframes idFade{from{opacity:0;transform:translateY(8px)}}'
-      '#opening.op-rm *{animation:none!important;opacity:1!important}#opening.op-rm .id-glow{opacity:0!important}</style>'
-      '<div id="opening" translate="no" aria-hidden="true"><svg class="id-svg" viewBox="320 360 605 420" aria-hidden="true">'
-      '<defs><radialGradient id="idgl" gradientUnits="userSpaceOnUse" cx="%(cx).1f" cy="%(ity).1f" r="230"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".4" stop-color="#ffe9c4" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>'
-      '<circle class="id-glow" cx="%(cx).1f" cy="%(ity).1f" r="230" fill="url(#idgl)"/><g fill="#fff">'
-      '<path class="id-l id-l1" d="%(D0)s"/><path class="id-l id-l2" d="%(D1)s"/><path class="id-l id-l3" d="%(D2)s"/>'
-      '<path class="id-r id-r1" d="%(R0)s"/><path class="id-r id-r2" d="%(R1)s"/><path class="id-r id-r3" d="%(R2)s"/>'
-      '<path class="id-i" d="%(I)s"/></g></svg><div class="id-sup">supported by VIM</div></div>') % dict(
-      B=BRAND, cx=cx, ity=ity, base=base, I=L["I"], D0=L["DEA"][0], D1=L["DEA"][1], D2=L["DEA"][2], R0=L["RAYS"][0], R1=L["RAYS"][1], R2=L["RAYS"][2])
+OP = ('<style>#opening{background:%s!important}'
+      '#opening .id-tx{display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;font-family:"Helvetica Neue",Arial,"Hiragino Sans",sans-serif;animation:idFade .8s cubic-bezier(.2,.8,.2,1) .1s both}'
+      '#opening .id-tx b{font-size:clamp(30px,9vw,52px);font-weight:800;letter-spacing:.06em;line-height:1.1}'
+      '#opening .id-tx span{font-size:clamp(18px,5.4vw,28px);font-weight:700;letter-spacing:.18em}'
+      '#opening .id-sup{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom,0px));text-align:center;color:#fff;font:600 11px/1 Poppins,"Hiragino Sans",system-ui,sans-serif;letter-spacing:.14em;opacity:.8}'
+      '@keyframes idFade{from{opacity:0;transform:translateY(8px)}}'
+      '#opening.op-rm *{animation:none!important;opacity:1!important}</style>'
+      '<div id="opening" translate="no" aria-hidden="true"><div class="id-tx"><b>MUJI STORE</b><span>app</span></div><div class="id-sup">supported by VIM</div></div>') % BRAND
 s = s[:a] + OP + s[b:]
 s = s.replace('it.f4?(F4OPT[it.f4]||[])', 'it.f4?((typeof F4OPT!=="undefined"&&F4OPT||{})[it.f4]||[])', 1)
 s = s.replace('T=rm?600:3400', 'T=rm?600:3100', 1)
@@ -74,5 +63,9 @@ open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "hb.html"), "w"
 sys.path.insert(0, os.path.join(E, "idee"))
 from build_idee import build as build_idee
 open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "idee.html"), "w", encoding="utf-8").write(build_idee())
+# 衣服（モック。同じフォルダの clothing.html として一緒に公開する）
+sys.path.insert(0, os.path.join(E, "clothing"))
+from build_clothing import build as build_clothing
+open(os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "clothing.html"), "w", encoding="utf-8").write(build_clothing())
 # アイコンは idea/make_idea.py が idea/idea-icon.svg に書き出す
 print("ok", len(s.encode()) // 1024, "KB,", len(cat), "items")

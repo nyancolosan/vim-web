@@ -1,4 +1,4 @@
-# AGENTS.md（Codex 向け）— idea（無印良品スタッフ向けアプリ）
+# AGENTS.md（Codex 向け）— MUJI STORE app（旧 idea。無印良品スタッフ向けアプリ）
 
 Claude と Codex の分担：Codex は「決まった実装」を、Claude は「設計・確認・公開」を担当する。受け渡しは GitHub のブランチ／プルリクで行う。
 
@@ -16,7 +16,7 @@ Claude と Codex の分担：Codex は「決まった実装」を、Claude は�
 - `muji.js` … メニュー・商品検索・はじめの画面 / `muji2.js` … 商品の比較・接客メモ
 - `mujim.js` … 3D家具の形（`F4.<名前>`）と、商品名→形の対応 `mjShape`
 - `catalog.json` … ネットストアの家具・観葉植物 / `muji.css` … 追加の見た目
-- `curtain/` `knowledge/` `hb/` `idee/` … 別ページ（`*.src.html` を `build_*.py` で組み立てる）
+- `curtain/` `knowledge/` `hb/` `idee/` `clothing/`（衣服・モック）… 別ページ（`*.src.html` を `build_*.py` で組み立てる）
 - `ia/` … IAモード（売上管理）
 
 ## 守ること

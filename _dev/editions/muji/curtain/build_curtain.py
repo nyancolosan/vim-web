@@ -6,7 +6,7 @@ C = os.path.dirname(os.path.abspath(__file__))
 
 EMBED_HEAD = '''<header class="hd">
   <button class="back" id="cu-back" type="button" aria-label="住空間のメニューに戻る"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>戻る</button>
-  <span class="hdt"><b>オーダーカーテン見積</b><small>idea・住空間</small></span>
+  <span class="hdt"><b>オーダーカーテン見積</b><small>MUJI STORE app・住空間</small></span>
 </header>'''
 EMBED_CSS = '''.back{display:flex;align-items:center;gap:2px;border:1px solid var(--line);background:var(--card);color:var(--acc);border-radius:999px;min-height:40px;padding:0 14px 0 8px;font-weight:700;font-size:.85rem}
 '''

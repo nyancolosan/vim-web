@@ -1,4 +1,4 @@
-# CLAUDE.md — idea（無印良品スタッフ向けアプリ）
+# CLAUDE.md — MUJI STORE app（旧 idea。無印良品スタッフ向けアプリ）
 
 ## Codex との分担（Claude の消費を抑える）
 - Codex に任せる：仕様が決まっている実装、機械的な大量編集、データ整形、テストの修正。指示は `AGENTS.md` を前提に `codex/<名前>` ブランチ＋プルリクで出す。

@@ -185,6 +185,12 @@ table{border-collapse:collapse;width:100%;font-size:.8rem;font-variant-numeric:t
 .qi .sp{font-size:.76rem;color:var(--sub);grid-column:2}
 .qi .pr{text-align:right;font-weight:700;white-space:nowrap}
 .qi .pr small{display:block;font-weight:400;color:var(--sub);font-size:.7rem}
+.qi .sp.setr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.qi .tagset{font-size:.68rem;font-weight:700;background:var(--accbg);color:var(--acc);border-radius:999px;padding:1px 8px}
+.qi select.setsel{font:inherit;font-size:.76rem;max-width:100%;border:1px solid var(--line);border-radius:8px;padding:5px 6px;background:#fff;color:var(--ink);min-height:34px}
+.qi .setb{grid-column:1/4;border-radius:10px;padding:9px 11px;font-size:.78rem;line-height:1.6;border:1px solid var(--line)}
+.qi .setb b{display:block;margin-bottom:2px}.qi .setb button{margin-top:6px;font:inherit;font-size:.76rem;border:1px solid currentColor;background:#fff;color:inherit;border-radius:8px;min-height:34px;padding:2px 12px}
+.setb.ng{background:#fdecea;color:#b3261e;border-color:#f0b9b4!important}.setb.warn{background:#fff6e0;color:#8a5a00;border-color:#f0d9a0!important}.setb.ok{background:#e8f3ea;color:#1b5e20;border-color:#b9d9bd!important}.setb.info{background:#f4f1f1;color:var(--sub)}
+.qal{border-radius:10px;padding:10px 12px;font-size:.8rem;line-height:1.6;background:#fdecea;color:#b3261e;border:1px solid #f0b9b4;margin-bottom:10px;font-weight:700}
 .qi .ac{grid-column:2/4;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .qi .ac a{font-size:.78rem;color:var(--acc)}
 .qi .ac .rm{margin-left:auto;color:var(--sub)}
@@ -215,7 +221,7 @@ textarea#qtxt{width:100%;min-height:160px;font:inherit;font-size:13px;padding:8p
 
 <main>
 <header class="hd">
-  <span class="vlogo" role="img" aria-label="idea"><svg viewBox="235 455 775 275" aria-hidden="true"><g fill="currentColor">%%VIMW%%</g></svg></span>
+  <span class="vlogo" role="img" aria-label="MUJI STORE app"><svg viewBox="235 455 775 275" aria-hidden="true"><g fill="currentColor">%%VIMW%%</g></svg></span>
   <span class="hdt"><b>オーダーカーテン見積</b><small>ネットストア価格（税込）</small></span>
 </header>
 
@@ -543,8 +549,8 @@ var WIN={haki:["掃き出し窓","床"],koshi:["腰窓","窓枠の下"],de:["出
 var EYEW=[100,140,180,220];
 var S={mood:"",cat:"shade",q:"",fab:"nijuori",color:"ベージュ",style:"np",lined:false,w:100,h:200,eyeW:100,qty:2,open:2,hang:"front",room:"",lines:[],cust:"",staff:"",shop:"",tab:"make",
  view:"list",ordered:false,szmode:"calc",win:"haki",rail:180,mh:200};
-var SAMPLE=[{fab:"nijuori",color:"ベージュ",style:"np",lined:false,w:100,h:200,hang:"front",qty:2,room:"リビング 掃き出し窓（例）"},
- {fab:"pollen",color:"オフ白",style:"np",lined:false,w:100,h:198,hang:"ceil",qty:2,room:"リビング レース（例）"}];
+var SAMPLE=[{fab:"nijuori",color:"ベージュ",style:"np",lined:false,w:100,h:200,hang:"front",qty:2,room:"リビング 掃き出し窓（例）",sid:"smp"},
+ {fab:"pollen",color:"オフ白",style:"np",lined:false,w:100,h:198,hang:"ceil",qty:2,room:"リビング レース（例）",sid:"smp"}];
 try{var sv=JSON.parse(localStorage.getItem("mujiCurtainQuote")||"null");if(sv&&typeof sv==="object")Object.keys(S).forEach(function(k){if(k in sv)S[k]=sv[k]});else S.lines=SAMPLE.slice()}catch(e){S.lines=SAMPLE.slice()}
 if(!M.fab(S.fab)){S.fab="nijuori";S.color="ベージュ"}
 function save(){try{localStorage.setItem("mujiCurtainQuote",JSON.stringify(S))}catch(e){}}
@@ -734,22 +740,50 @@ function renderSum(){var b=$("add");$("sum").hidden=S.tab==="memo"||(S.tab==="ma
 $("add").onclick=function(){if(S.tab==="quote"){go("make");showList();return}if(S.tab==="make"&&S.view==="list"){go("quote");return}
  if(!S.ordered||M.quote(cur()).err){openSheet();return}addLine()};
 function addLine(){var o=curOut();if(M.quote(o).err)return;if(!o.room)o.room="窓"+(S.lines.length+1);
- S.lines.push(o);S.room="";S.ordered=false;save();renderQuote();renderItem();renderSum();toast("見積に追加しました（"+S.lines.length+"件）")}
+ S.lines.push(o);var ni=S.lines.length-1,msg="見積に追加しました（"+S.lines.length+"件）";
+ for(var j=0;j<ni;j++){var x=S.lines[j];if(!x.sid&&isLace(x)!==isLace(o)&&String(x.room).trim()===String(o.room).trim()){pair(ni,j);var c=setCheck(ni);msg="同じ設置場所の厚手とレースをセットにしました"+(c&&c.lv==="ng"?"（⚠ レースが厚手より長い丈です）":"");break}}
+ S.room="";S.ordered=false;save();renderQuote();renderItem();renderSum();toast(msg)}
 
+/* ---------- セット（厚手カーテン＋レースカーテン） ---------- */
+function isLace(l){var f=M.fab(l.fab);return!!f&&f.cat==="lace"}
+function newSid(){return"s"+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function partner(i){var l=S.lines[i];if(!l||!l.sid)return -1;for(var k=0;k<S.lines.length;k++)if(k!==i&&S.lines[k].sid===l.sid)return k;return -1}
+function unpair(i){var l=S.lines[i];if(!l||!l.sid)return;var sid=l.sid;S.lines.forEach(function(x){if(x.sid===sid)delete x.sid})}
+function pair(i,k){unpair(i);unpair(k);var z=newSid();S.lines[i].sid=z;S.lines[k].sid=z}
+function setNo(i){var sid=S.lines[i]&&S.lines[i].sid;if(!sid||partner(i)<0)return 0;var seen=[];S.lines.forEach(function(x,j){if(x.sid&&seen.indexOf(x.sid)<0&&partner(j)>=0)seen.push(x.sid)});return seen.indexOf(sid)+1}
+/* レースの丈の確認：レースが厚手より長いとアラート。おすすめは厚手より1〜2cm短く */
+function setCheck(i){var k=partner(i);if(k<0)return null;var a=S.lines[i],b=S.lines[k];if(isLace(a)===isLace(b))return null;
+ var L=isLace(a)?a:b,T=isLace(a)?b:a,d=T.h-L.h,rec=(T.h-2)+"〜"+(T.h-1)+"cm";
+ if(d<0)return{lv:"ng",t:"⚠ レースの丈が厚手より長くなっています",m:"レース 丈"+L.h+"cm ＞ 厚手 丈"+T.h+"cm（"+(-d)+"cm 長い）。レースが厚手の裾から出てしまいます。おすすめは厚手より−1〜2cm（"+rec+"）です。",fix:true};
+ if(d===0)return{lv:"warn",t:"レースと厚手が同じ丈です",m:"レースが厚手の裾からのぞくことがあります。おすすめは厚手より−1〜2cm（"+rec+"）です。",fix:true};
+ if(d<=2)return{lv:"ok",t:"おすすめの丈です",m:"レース 丈"+L.h+"cm は、厚手 丈"+T.h+"cm より "+d+"cm 短く、おすすめの範囲（−1〜2cm）です。"};
+ return{lv:"info",t:"レースが厚手より "+d+"cm 短い丈です",m:"おすすめは厚手より−1〜2cm（"+rec+"）です。お部屋のイメージに合わせて決めてください。",fix:true}}
+function setFix(i){var k=partner(i);if(k<0)return;var a=S.lines[i],b=S.lines[k],L=isLace(a)?a:b,T=isLace(a)?b:a;
+ for(var d=1;d<=2;d++){var o=JSON.parse(JSON.stringify(L));o.h=T.h-d;if(!M.quote(o).err){L.h=o.h;save();renderQuote();toast("レースの丈を "+L.h+"cm（厚手−"+d+"cm）に直しました");return}}
+ toast("この丈ではオーダーできません。丈の範囲を確認してください")}
+function setUI(i){var l=S.lines[i],lace=isLace(l),k=partner(i),opts='<option value="">'+(lace?"セットにする厚手を選ぶ…":"セットにするレースを選ぶ…")+'</option>';
+ S.lines.forEach(function(x,j){if(j===i||isLace(x)===lace)return;opts+='<option value="'+j+'"'+(j===k?" selected":"")+'>'+(j+1)+". "+esc(x.room)+"／"+esc(M.fab(x.fab).n)+" 丈"+x.h+'cm</option>'});
+ if(k>=0)opts+='<option value="x">セットにしない</option>';
+ var n=setNo(i),h='<span class="sp setr">'+(n?'<span class="tagset">セット'+n+'（厚手＋レース）</span>':"")+'<select class="setsel" data-s="'+i+'" aria-label="'+(lace?"厚手カーテンとセットにする":"レースカーテンとセットにする")+'">'+opts+'</select></span>';
+ var c=setCheck(i);if(c&&lace)h+='<div class="setb '+c.lv+'"><b>'+c.t+'</b>'+esc(c.m)+(c.fix?'<br><button type="button" data-fx="'+i+'">レースの丈をおすすめ（厚手−1cm）に直す</button>':"")+'</div>';
+ return h}
+function setAlerts(){var n=0;S.lines.forEach(function(l,i){if(isLace(l)){var c=setCheck(i);if(c&&c.lv==="ng")n++}});return n}
 /* ---------- 見積 ---------- */
 function hangText(l){return l.style==="eye"?"ポール":HANG[l.hang]}
 function renderQuote(){
- var tot=0,rows=S.lines.map(function(l,i){var r=M.quote(l),sub=(r.price||0)*l.qty;tot+=sub;
+ var tot=0,na=setAlerts(),rows=S.lines.map(function(l,i){var r=M.quote(l),sub=(r.price||0)*l.qty;tot+=sub;
   return'<div class="qi"><span class="cs weave" style="background-color:'+swatch(l.color)+'"></span><span class="nm">'+esc(l.room)+'</span><span class="pr yen">'+(r.err?"—":yen(sub))+'<small>'+(r.err?"":yen(r.price)+"×"+l.qty+"枚")+'</small></span>'+
-  '<span class="sp">'+esc(title(l))+'</span><span class="sp">幅'+l.w+'×丈'+l.h+'cm・'+hangText(l)+'・JAN '+(r.jan||"")+(r.err?'　<b style="color:#b3261e">'+esc(r.err)+'</b>':"")+'</span>'+
+  '<span class="sp">'+esc(title(l))+'</span><span class="sp">幅'+l.w+'×丈'+l.h+'cm・'+hangText(l)+'・JAN '+(r.jan||"")+(r.err?'　<b style="color:#b3261e">'+esc(r.err)+'</b>':"")+'</span>'+setUI(i)+
   '<span class="ac"><a href="'+(r.url||"#")+'" target="_blank" rel="noopener">商品ページ</a><button type="button" class="lnk" data-e="'+i+'">選び直す</button><button type="button" class="lnk rm" data-d="'+i+'">削除</button></span></div>'}).join("");
- $("qlist").innerHTML=rows||'<div class="empty">まだ明細がありません。「つくる」で生地を選び、オーダー内容を入れて「見積に追加」を押してください。</div>';
+ $("qlist").innerHTML=(na?'<div class="qal" role="alert">⚠ セットの丈を確認してください：レースが厚手より長い組み合わせが '+na+' 組あります。おすすめは厚手より−1〜2cmです。</div>':"")+(rows||'<div class="empty">まだ明細がありません。「つくる」で生地を選び、オーダー内容を入れて「見積に追加」を押してください。</div>');
  $("qsum").textContent=yen(tot);$("qcount").textContent=S.lines.length+"件";
  $("bdg").hidden=!S.lines.length;$("bdg").textContent=S.lines.length;
  renderDoc(tot);renderSum()}
-$("qlist").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
- if(b.dataset.d!=null){S.lines.splice(+b.dataset.d,1);save();renderQuote();toast("削除しました")}
- if(b.dataset.e!=null){var l=S.lines.splice(+b.dataset.e,1)[0];S.fab=l.fab;S.color=l.color;S.style=l.style;S.lined=l.lined;S.cat=M.fab(l.fab).cat;S.qty=l.qty;S.hang=l.hang;S.room=l.room;
+$("qlist").addEventListener("change",function(e){var t=e.target;if(!t||t.dataset.s==null)return;var i=+t.dataset.s;
+ if(t.value==="x"){unpair(i)}else if(t.value!==""){pair(i,+t.value)}else return;save();renderQuote();var c=setCheck(i);toast(t.value==="x"?"セットを解除しました":c&&c.lv==="ng"?"⚠ レースが厚手より長い丈です":"セットにしました")});
+$("qlist").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;if(b.dataset.fx!=null){setFix(+b.dataset.fx);return}
+ if(b.dataset.d!=null){unpair(+b.dataset.d);S.lines.splice(+b.dataset.d,1);save();renderQuote();toast("削除しました")}
+ if(b.dataset.e!=null){unpair(+b.dataset.e);var l=S.lines.splice(+b.dataset.e,1)[0];S.fab=l.fab;S.color=l.color;S.style=l.style;S.lined=l.lined;S.cat=M.fab(l.fab).cat;S.qty=l.qty;S.hang=l.hang;S.room=l.room;
   if(l.style==="eye")S.eyeW=l.w;else S.w=l.w;S.h=l.h;S.szmode="direct";S.ordered=true;save();go("make");showItem();renderQuote();toast("明細を戻しました。直して見積に追加し直してください")}});
 function today(){var d=new Date();return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"}
 function renderDoc(tot){
@@ -757,11 +791,11 @@ function renderDoc(tot){
  '<div class="to">'+esc(S.cust||"　　　　")+' 様</div><div style="font-size:.76rem;color:var(--sub)">オーダーカーテンのお見積りです。</div>'+
  '<div class="big"><span>お見積金額（税込）</span><b class="yen">'+yen(tot)+'</b></div>'+
  '<div class="tw"><table><tr><th>設置場所</th><th>商品</th><th>サイズ</th><th>単価</th><th>枚</th><th>金額</th></tr>'+
- S.lines.map(function(l){var r=M.quote(l);return'<tr><td>'+esc(l.room)+'</td><td>'+esc(title(l))+'<br><span style="color:var(--sub)">JAN '+(r.jan||"")+'</span></td><td>幅'+l.w+'×丈'+l.h+'<br>'+hangText(l)+'</td><td>'+(r.err?"—":yen(r.price))+'</td><td>'+l.qty+'</td><td>'+(r.err?"—":yen(r.price*l.qty))+'</td></tr>'}).join("")+
+ S.lines.map(function(l){var r=M.quote(l),sn=setNo(S.lines.indexOf(l));return'<tr><td>'+esc(l.room)+(sn?'<br><span style="color:var(--sub)">セット'+sn+'</span>':"")+'</td><td>'+esc(title(l))+'<br><span style="color:var(--sub)">JAN '+(r.jan||"")+'</span></td><td>幅'+l.w+'×丈'+l.h+'<br>'+hangText(l)+'</td><td>'+(r.err?"—":yen(r.price))+'</td><td>'+l.qty+'</td><td>'+(r.err?"—":yen(r.price*l.qty))+'</td></tr>'}).join("")+
  '</table></div><div class="nt">・価格は無印良品ネットストアの2026年10月7日時点の価格（税込）です。お届け前に変わることがあります。<br>・受注生産のため、ご注文後のサイズ変更・キャンセル・返品はできません。<br>・お届けまで約10〜14日。サイズにより生地のハギ合わせが入ります。<br>・仕上がり総丈は、正面付けで注文丈＋4cm、天井付けで＋1cm、ハトメで約＋2.5cmです。</div>'}
 ["cust","staff","shop"].forEach(function(k){$(k).value=S[k]||"";$(k).addEventListener("input",function(){S[k]=this.value;save();renderDoc(quoteTotal())})});
 function qText(){var tot=0,t="【御見積書】"+today()+"\n"+(S.cust?S.cust+" 様\n":"")+(S.shop?S.shop+(S.staff?"　担当："+S.staff:"")+"\n":"")+"\n";
- S.lines.forEach(function(l,i){var r=M.quote(l);tot+=(r.price||0)*l.qty;t+=(i+1)+". "+l.room+"\n   "+title(l)+"\n   幅"+l.w+"×丈"+l.h+"cm・"+hangText(l)+"\n   "+yen(r.price||0)+" × "+l.qty+"枚 = "+yen((r.price||0)*l.qty)+"（JAN "+r.jan+"）\n"});
+ S.lines.forEach(function(l,i){var r=M.quote(l);tot+=(r.price||0)*l.qty;t+=(i+1)+". "+l.room+(setNo(i)?"（セット"+setNo(i)+"）":"")+"\n   "+title(l)+"\n   幅"+l.w+"×丈"+l.h+"cm・"+hangText(l)+"\n   "+yen(r.price||0)+" × "+l.qty+"枚 = "+yen((r.price||0)*l.qty)+"（JAN "+r.jan+"）\n"});
  return t+"\n合計（税込） "+yen(tot)+"\n※ネットストア 2026/10/7時点の価格"}
 $("cpy").onclick=function(){var t=qText(),ta=$("qtxt");
  try{navigator.clipboard.writeText(t).then(function(){toast("コピーしました")},function(){ta.hidden=false;ta.value=t;ta.select();toast("下の文章を選択してコピーしてください")})}
